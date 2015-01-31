@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.entities.ui.UiImageEntity;
+import com.mygdx.game.components.primitive.TextureComponent;
+import com.mygdx.game.components.ui.UiPositionComponent;
+import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.systems.ui.UiSystem;
 
 public class MacroFantasy extends ApplicationAdapter {
@@ -26,7 +28,18 @@ public class MacroFantasy extends ApplicationAdapter {
 
 		TextureRegion crateTextureRegion = new TextureRegion(crateTexture);
 		
-		UiImageEntity testButton = new UiImageEntity(200, 200, crateTextureRegion);
+		UiButtonEntity testButton = new UiButtonEntity(200, 200, crateTextureRegion) {
+			
+			@Override
+			public boolean mD(int x, int y) {
+				UiPositionComponent position = this.getComponent(UiPositionComponent.class);
+				TextureComponent texture = this.getComponent(TextureComponent.class);
+				position.x = x - texture.region.getRegionWidth()/2;
+				position.y = y - texture.region.getRegionHeight()/2;
+				return true;
+			}
+			
+		};
 
 		engine.addEntity(testButton);
 

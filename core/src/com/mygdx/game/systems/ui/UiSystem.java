@@ -26,18 +26,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.mygdx.game.components.primitive.TextureComponent;
+import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
+import com.mygdx.game.entities.ui.UiButtonEntity;
+import com.mygdx.game.mouse.Mouse;
+import com.mygdx.game.mouse.Mouse.MousePos;
 
 public class UiSystem extends EntitySystem {
-	private ImmutableArray<Entity> entities;
+	private ImmutableArray<Entity> uiImages;
+	private ImmutableArray<Entity> uiButtons;
 
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 
 	private ComponentMapper<UiPositionComponent> pm = ComponentMapper.getFor(UiPositionComponent.class);
-	private ComponentMapper<TextureComponent> vm = ComponentMapper.getFor(TextureComponent.class);
-
+	private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
+	private ComponentMapper<UiMouseActivityComponent> mm = ComponentMapper.getFor(UiMouseActivityComponent.class);
+	
 	public UiSystem (OrthographicCamera camera) {
 		batch = new SpriteBatch();
 
@@ -46,7 +53,8 @@ public class UiSystem extends EntitySystem {
 
 	@Override
 	public void addedToEngine (Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
+		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
+		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class, UiMouseActivityComponent.class));
 	}
 
 	@Override
@@ -58,24 +66,54 @@ public class UiSystem extends EntitySystem {
 	public void update (float deltaTime) {
 		UiPositionComponent position;
 		TextureComponent visual;
+		UiMouseActivityComponent mouse;
 
 		camera.update();
 
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
-
-		for (int i = 0; i < entities.size(); ++i) {
-			Entity e = entities.get(i);
+ 		// Draw UI
+		for (int i = 0; i < uiImages.size(); ++i) {
+			Entity e = uiImages.get(i);
 
 			position = pm.get(e);
-			visual = vm.get(e);
+			visual = tm.get(e);
 			
-			if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-				position.x = Gdx.input.getX() - visual.region.getRegionWidth()/2;
-				position.y = Gdx.graphics.getHeight() - Gdx.input.getY() - visual.region.getRegionHeight()/2;
-		    }
-
 			batch.draw(visual.region, position.x, position.y);
+		}
+		// Handle mouse events
+		for (int i = 0; i < uiButtons.size(); ++i) {
+			Entity e = uiButtons.get(i);
+
+			position = pm.get(e);
+			visual = tm.get(e);
+			mouse = mm.get(e);
+			
+			MousePos mousePos = Mouse.getMouse();
+			
+			boolean isInBounds = position.x <= mousePos.x &&
+								 position.y <= mousePos.y &&
+								 position.x + visual.region.getRegionWidth() >= mousePos.x  &&
+								 position.y + visual.region.getRegionHeight() >= mousePos.y;
+								 
+			UiButtonEntity btn = (UiButtonEntity) e;
+			
+			if(isInBounds && mouse.mouseActive){
+				btn.mI(mousePos.x, mousePos.y);
+		    }
+			else if(mouse.mouseActive) {
+				btn.mO(mousePos.x, mousePos.y);
+			}
+			
+			if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				if(btn.mD(mousePos.x, mousePos.y))
+					break;
+			}
+			if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				if(btn.mU(mousePos.x, mousePos.y))
+					break;
+			}
+			
 		}
 
 		batch.end();
