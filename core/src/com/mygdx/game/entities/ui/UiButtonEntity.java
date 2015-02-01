@@ -1,22 +1,24 @@
 package com.mygdx.game.entities.ui;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.components.primitive.TextureComponent;
+import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 
 public class UiButtonEntity extends Entity {
 
-	public UiButtonEntity(int x, int y, TextureRegion region) {
+	public UiButtonEntity(int x, int y, List<TextureRegion> region) {
 		this.add(new UiPositionComponent(x, y));
-		this.add(new TextureComponent(region));
+		this.add(new MultiTextureComponent(region));
 		this.add(new UiMouseActivityComponent());
 	}
 	
-	public UiButtonEntity(int x, int y, int z, TextureRegion region) {
+	public UiButtonEntity(int x, int y, int z, List<TextureRegion> region) {
 		this.add(new UiPositionComponent(x, y, z));
-		this.add(new TextureComponent(region));
+		this.add(new MultiTextureComponent(region));
 		this.add(new UiMouseActivityComponent());
 	}
 	
@@ -29,11 +31,11 @@ public class UiButtonEntity extends Entity {
 	}
 	
 	public void mI(int x, int y) {
-		
+		this.getComponent(MultiTextureComponent.class).frame = 1;
 	}
 	
 	public void mO(int x, int y) {
-		
+		this.getComponent(MultiTextureComponent.class).frame = 0;
 	}
 	
 }

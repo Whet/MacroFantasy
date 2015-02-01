@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.primitive.TextureComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.UiButtonEntity;
+import com.mygdx.game.screens.MainMenu;
 import com.mygdx.game.systems.ui.UiSystem;
 
 public class MacroFantasy extends ApplicationAdapter {
@@ -17,32 +18,15 @@ public class MacroFantasy extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		OrthographicCamera camera = new OrthographicCamera(640, 480);
-		camera.position.set(320, 240, 0);
+		
+		OrthographicCamera camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-		Texture crateTexture = new Texture("crate.png");
-
 		engine = new Engine();
-		engine.addSystem(new UiSystem(camera));
-
-		TextureRegion crateTextureRegion = new TextureRegion(crateTexture);
 		
-		UiButtonEntity testButton = new UiButtonEntity(200, 200, crateTextureRegion) {
-			
-			@Override
-			public boolean mD(int x, int y) {
-				UiPositionComponent position = this.getComponent(UiPositionComponent.class);
-				TextureComponent texture = this.getComponent(TextureComponent.class);
-				position.x = x - texture.region.getRegionWidth()/2;
-				position.y = y - texture.region.getRegionHeight()/2;
-				return true;
-			}
-			
-		};
-
-		engine.addEntity(testButton);
-
+		MainMenu menu = new MainMenu(engine, camera);
+		menu.load();
 	}
 
 	@Override
