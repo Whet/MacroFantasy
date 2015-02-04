@@ -17,12 +17,14 @@ import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.CardEntity;
+import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
 
 public class GameMenu extends Screen {
 	
 	public static final int CARD_CHOICES = 3;
+	private static final int PARTY_MEMBERS = 5;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -69,8 +71,28 @@ public class GameMenu extends Screen {
 	}
 
 	private void createCharacterInfo() {
-		// TODO Auto-generated method stub
+		Texture head = new Texture("headPlaceholder.png");
+		Texture body = new Texture("bodyPlaceholder.png");
+		TextureRegion headTexture = new TextureRegion(head);
+		TextureRegion bodyTexture = new TextureRegion(body);
+		List<TextureRegion> bodyRegions = new ArrayList<TextureRegion>();
+		bodyRegions.add(bodyTexture);
+		bodyRegions.add(headTexture);
 		
+		CharacterImageEntity character1 = new CharacterImageEntity(50, Gdx.graphics.getHeight() - 200, bodyRegions);
+		engine.addEntity(character1);
+		
+		CharacterImageEntity character2 = new CharacterImageEntity(50, Gdx.graphics.getHeight() - 600, bodyRegions);
+		engine.addEntity(character2);
+		
+		CharacterImageEntity character3 = new CharacterImageEntity(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions);
+		engine.addEntity(character3);
+		
+		CharacterImageEntity character4 = new CharacterImageEntity(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions);
+		engine.addEntity(character4);
+		
+		CharacterImageEntity character5 = new CharacterImageEntity(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions);
+		engine.addEntity(character5);
 	}
 
 	private void createButtons() {
@@ -139,7 +161,6 @@ public class GameMenu extends Screen {
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = true;
 		}
-		System.out.println("Show");
 	}
 	
 	public void hideCards() {
@@ -152,7 +173,6 @@ public class GameMenu extends Screen {
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
 		}
-		System.out.println("Hide");
 	}
 
 }

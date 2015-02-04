@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.components.primitive.MultiRegionComponent;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
@@ -43,6 +44,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	
 	private ImmutableArray<Entity> uiImages;
 	private ImmutableArray<Entity> uiButtons;
+	private ImmutableArray<Entity> multiImages;
 
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -50,6 +52,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ComponentMapper<UiPositionComponent> pm = ComponentMapper.getFor(UiPositionComponent.class);
 	private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
 	private ComponentMapper<MultiTextureComponent> tmm = ComponentMapper.getFor(MultiTextureComponent.class);
+	private ComponentMapper<MultiRegionComponent> mrm = ComponentMapper.getFor(MultiRegionComponent.class);
 	private ComponentMapper<UiMouseActivityComponent> mm = ComponentMapper.getFor(UiMouseActivityComponent.class);
 	private ComponentMapper<TextComponent> txtm = ComponentMapper.getFor(TextComponent.class);
 	private ComponentMapper<CardDisplayComponent> cm = ComponentMapper.getFor(CardDisplayComponent.class);
@@ -66,6 +69,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	public void addedToEngine (Engine engine) {
 		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
 		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
+		multiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class));
 	}
 
 	@Override
@@ -78,6 +82,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		UiPositionComponent position;
 		TextureComponent visual;
 		MultiTextureComponent multiVisual;
+		MultiRegionComponent multiRegion;
 		UiMouseActivityComponent mouse;
 		TextComponent text;
 		CardDisplayComponent card = null;
@@ -97,6 +102,17 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			
 			if(visual.visible)
 				batch.draw(visual.region, position.x, position.y);
+		}
+		for (int i = 0; i < multiImages.size(); ++i) {
+			Entity e = multiImages.get(i);
+
+			position = pm.get(e);
+			multiRegion = mrm.get(e);
+			
+			if(multiRegion.visible)
+				for(TextureRegion region:multiRegion.regions) {
+					batch.draw(region, position.x, position.y);
+				}
 		}
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
