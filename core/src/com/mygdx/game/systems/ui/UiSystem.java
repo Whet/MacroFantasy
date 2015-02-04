@@ -160,7 +160,10 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			if(bar.visible) {
 				shape.setColor(bar.colour);
 				shape.set(ShapeRenderer.ShapeType.Filled);
-				shape.rect(position.x, position.y, bar.width * (e.getValue() / bar.max), bar.height);
+				
+				float percent = e.getValue() / (float)bar.max;
+				float drawWidth = bar.width * percent;
+				shape.rect(position.x, position.y, drawWidth, bar.height);
 			}
 		}
 		

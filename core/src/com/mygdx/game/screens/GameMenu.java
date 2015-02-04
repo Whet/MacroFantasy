@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -99,7 +100,7 @@ public class GameMenu extends Screen {
 		characterImg.setCharacter(character);
 		engine.addEntity(characterImg);
 		
-		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 120, y - 120, 100, 10, 0, character.getMaxHealth()) {
+		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 10, y - 15, 100, 10, 0, character.getMaxHealth()) {
 			
 			@Override
 			public int getValue() {
@@ -110,28 +111,36 @@ public class GameMenu extends Screen {
 			}
 		};
 		engine.addEntity(healthBar);
-		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 120, y - 120, 100, 10, 0, character.getMaxMana()) {
+		healthBar.setCharacter(character);
+		healthBar.getComponent(BarComponent.class).colour = Color.RED;
+		
+		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 10, y - 30, 100, 10, 0, character.getMaxMana()) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
 				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxMana();
-				return this.getComponent(CharacterComponent.class).character.getMaxMana();
+				return this.getComponent(CharacterComponent.class).character.getMana();
 			}
 		};
 		engine.addEntity(manaBar);
-		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 120, y - 120, 100, 10, 0, character.getMaxHunger()) {
+		manaBar.setCharacter(character);
+		manaBar.getComponent(BarComponent.class).colour = Color.CYAN;
+		
+		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 10, y - 45, 100, 10, 0, character.getMaxHunger()) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
 				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHunger();
-				return this.getComponent(CharacterComponent.class).character.getMaxHunger();
+				return this.getComponent(CharacterComponent.class).character.getHunger();
 			}
 		};
 		engine.addEntity(foodBar);
+		foodBar.setCharacter(character);
+		foodBar.getComponent(BarComponent.class).colour = Color.GREEN;
 	}
 
 	private void createButtons() {
