@@ -1,15 +1,12 @@
 package com.mygdx.game.actor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
-public class Character {
+public abstract class Character {
 
 	Random rn = new Random();
-
+	
 	//Name
 	private String name;
 	private NameGenerator nameGen;
@@ -20,11 +17,10 @@ public class Character {
 	private int hunger, maxHunger;
 	private int gold;
 	private int happiness;
-	private HashMap<String, Integer> essentialStats;
 
 	//Traits
 	private String race;
-	private ArrayList<String> traits;
+	protected String trait;
 
 	//Job
 	public String job;
@@ -36,8 +32,6 @@ public class Character {
 	public Character()
 	{
 		//Initialise variables
-		traits = new ArrayList<String>();
-		essentialStats = new HashMap<String, Integer>();
 		setAlive(true);
 
 		try {
@@ -48,51 +42,15 @@ public class Character {
 		}
 
 		generateRace();
-		generateTraits();
 		generateName();
 		setGold(5);
 		setHappiness(100);
 		setHunger(100);
 
-
-		essentialStats.put("health", health);
-		essentialStats.put("hunger", hunger);
-
 	}
 
 	private void generateName() {
 		setName(nameGen.compose(3));
-	}
-
-	private void generateTraits() {
-		switch(rn.nextInt(10))
-		{
-		case 1: addTrait("axeman");
-		break;
-		case 2: addTrait("mercenary");
-		essentialStats.put("gold", gold);
-		break;
-		case 3: addTrait("fireball");
-		break;
-		case 4: addTrait("moneymaker");
-		break;
-		case 5: addTrait("lich");
-		essentialStats.put("mana", mana);
-		break;
-		case 6: addTrait("fatbastard");
-		essentialStats.remove("hunger");
-		essentialStats.put("hunger", hunger+50);
-		break;
-		case 7: addTrait("magicalshield");
-		break;
-		case 8: addTrait("petdog");
-		break;
-		case 9: addTrait("fuckinguseless");
-		break;
-		case 10: addTrait("totallynotabadguy");
-		break;
-		}
-
 	}
 
 	private void generateRace()
@@ -144,23 +102,18 @@ public class Character {
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
+	
+	public void setAlive(boolean alive, String causeOfDeath) {
+		this.alive = alive;
+		this.causeOfDeath = causeOfDeath;
+	}
 
 	public void checkAlive()
 	{
-		for(Map.Entry<String, Integer> entry : essentialStats.entrySet())
-		{
-			if (entry.getValue() < 0)
-			{
-				System.out.println("Essential Stat: " + entry.getKey() + " " + entry.getValue());
-				setAlive(false);
-				setCauseOfDeath(entry.getKey());
-			}
-		}
-	}
-
-	private void setCauseOfDeath(String stat) {
-		causeOfDeath = stat;
-
+		if (getHealth() < 0)
+			setAlive(false, "health");
+		else if (getHunger() < 0)
+			setAlive(false, "hunger");
 	}
 
 	public String getCauseOfDeath() {
@@ -188,14 +141,16 @@ public class Character {
 		this.health = health;
 	}
 
-
-	public int getMaxHealth() {
-		return maxHealth;
+	public void addHealth(int increment) {
+		setHealth(getHealth() + increment);
 	}
 
-
-	public void incrementHealth(int increment) {
-		setHealth(getHealth() + increment);
+	public void subtractHealth(int increment) {
+		setHealth(getHealth() - increment);
+	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 
 	public void setMaxHealth(int max_health) {
@@ -206,21 +161,22 @@ public class Character {
 		return mana;
 	}
 
-
 	public void setMana(int mana) {
 		this.mana = mana;
 	}
 
+	public void addMana(int increment) {
+		setMana(getMana() + increment);
+	}
+
+	public void subtractMana(int increment) {
+		setMana(getMana() - increment);
+	}
 
 	public int getMaxMana() {
 		return maxMana;
 	}
-
-	public void incrementMana(int increment) {
-		setMana(getMana() + increment);
-	}
-
-
+	
 	public void setMaxMana(int max_mana) {
 		this.maxMana = max_mana;
 	}
@@ -235,8 +191,12 @@ public class Character {
 
 	}
 
-	public void incrementMaxHappiness(int increment) {
+	public void addHappiness(int increment) {
 		setHappiness(getHappiness() + increment);
+	}
+	
+	public void subtractHappiness(int increment) {
+		setHappiness(getHappiness() - increment);
 	}
 
 	public int getHunger() {
@@ -247,18 +207,21 @@ public class Character {
 		this.hunger = hunger;
 
 	}
-
-	public int getMaxHunger() {
-		return maxHunger;
+	
+	public void addHunger(int increment) {
+		setHunger(getHunger() + increment);
+	}
+	
+	public void subtractHunger(int increment) {
+		setHunger(getHunger() - increment);
 	}
 
 	public void setMaxHunger(int maxHunger) {
 		this.maxHunger = maxHunger;
 	}
 
-	public void incrementMaxHunger(int increment) {
-		setHunger(getHunger() + increment);
-
+	public int getMaxHunger() {
+		return maxHunger;
 	}
 
 	public int getGold() {
@@ -267,11 +230,14 @@ public class Character {
 
 	public void setGold(int gold) {
 		this.gold = gold;
-
 	}	
 
-	public void incrementGold(int increment) {
+	public void addtGold(int increment) {
 		setGold(getGold() + increment);
+	}	
+	
+	public void subtractGold(int increment) {
+		setGold(getGold() - increment);
 	}
 
 	public String getRace() {
@@ -282,18 +248,6 @@ public class Character {
 		this.race = race;
 	}
 
-	public ArrayList<String> getTraits() {
-		return traits;
-	}
-
-	public void setTraits(ArrayList<String> traits) {
-		this.traits = traits;
-	}
-
-	public void addTrait(String trait) {
-		traits.add(trait);
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -301,4 +255,7 @@ public class Character {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public abstract String getTrait();
+
 }
