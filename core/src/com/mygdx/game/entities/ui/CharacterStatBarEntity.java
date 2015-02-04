@@ -1,22 +1,17 @@
 package com.mygdx.game.entities.ui;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.Character;
-import com.mygdx.game.components.primitive.MultiRegionComponent;
 import com.mygdx.game.components.primitive.RemoveComponent;
-import com.mygdx.game.components.primitive.TextComponent;
+import com.mygdx.game.components.ui.BarComponent;
 import com.mygdx.game.components.ui.CharacterComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 
-public class CharacterImageEntity extends Entity {
-
-	public CharacterImageEntity(int x, int y, List<TextureRegion> region) {
+public abstract class CharacterStatBarEntity extends BarEntity {
+	
+	public CharacterStatBarEntity(int x, int y, int width, int height, int min, int max) {
 		this.add(new UiPositionComponent(x, y));
-		this.add(new MultiRegionComponent(region));
-		this.add(new TextComponent(""));
+		this.add(new BarComponent(width, height, min, max));
 		this.add(new RemoveComponent());
 	}
 	

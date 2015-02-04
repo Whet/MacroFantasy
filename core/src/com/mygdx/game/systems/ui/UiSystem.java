@@ -29,13 +29,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.components.primitive.MultiRegionComponent;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
+import com.mygdx.game.components.ui.BarComponent;
 import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
+import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
@@ -46,8 +49,10 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ImmutableArray<Entity> uiImages;
 	private ImmutableArray<Entity> uiButtons;
 	private ImmutableArray<Entity> multiImages;
-
+	private ImmutableArray<Entity> bars;
+	
 	private SpriteBatch batch;
+	private ShapeRenderer shape;
 	private OrthographicCamera camera;
 
 	private ComponentMapper<UiPositionComponent> pm = ComponentMapper.getFor(UiPositionComponent.class);
@@ -57,6 +62,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ComponentMapper<UiMouseActivityComponent> mm = ComponentMapper.getFor(UiMouseActivityComponent.class);
 	private ComponentMapper<TextComponent> txtm = ComponentMapper.getFor(TextComponent.class);
 	private ComponentMapper<CardDisplayComponent> cm = ComponentMapper.getFor(CardDisplayComponent.class);
+	private ComponentMapper<BarComponent> bm = ComponentMapper.getFor(BarComponent.class);
 	
 	private float stateTime = 0.f;
 	
@@ -64,7 +70,9 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	
 	public UiSystem (OrthographicCamera camera) {
 		batch = new SpriteBatch();
-	
+		shape = new ShapeRenderer();
+		shape.setAutoShapeType(true);
+		
 		this.camera = camera;
 		
 		Gdx.input.setInputProcessor(this);
@@ -78,6 +86,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
 		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
 		multiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class));
+		bars = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, BarComponent.class));
 	}
 
 	@Override
@@ -93,7 +102,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		MultiRegionComponent multiRegion;
 		UiMouseActivityComponent mouse;
 		TextComponent text;
-		CardDisplayComponent card = null;
+		BarComponent bar;
 		
 		stateTime += deltaTime;
 		exampleAnim.update(stateTime);
@@ -104,6 +113,10 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
+		
+		shape.begin();
+		shape.setProjectionMatrix(camera.combined);
+		
  		// Draw UI
 		for (int i = 0; i < uiImages.size(); ++i) {
 			Entity e = uiImages.get(i);
@@ -138,6 +151,18 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				font.draw(batch, text.text, position.x + region.getRegionWidth() / 6, (int)(position.y + region.getRegionHeight() * 0.65));
 			}
 		}
+		for (int i = 0; i < bars.size(); ++i) {
+			BarEntity e = (BarEntity) bars.get(i);
+
+			position = pm.get(e);
+			bar = bm.get(e);
+			
+			if(bar.visible) {
+				shape.setColor(bar.colour);
+				shape.set(ShapeRenderer.ShapeType.Filled);
+				shape.rect(position.x, position.y, bar.width * (e.getValue() / bar.max), bar.height);
+			}
+		}
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
@@ -145,7 +170,6 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			position = pm.get(e);
 			multiVisual = tmm.get(e);
 			mouse = mm.get(e);
-			card = cm.get(e);
 			
 			if(multiVisual.visible) {
 				MousePos mousePos = Mouse.getMouse();
@@ -171,6 +195,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		exampleAnim.draw(batch, 100, 100);
 		
 		batch.end();
+		shape.end();
 	}
 
 	@Override
@@ -195,11 +220,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		
 		UiPositionComponent position;
-		TextureComponent visual;
 		MultiTextureComponent multiVisual;
 		UiMouseActivityComponent mouse;
-		TextComponent text;
-		CardDisplayComponent card = null;
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
@@ -207,7 +229,6 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			position = pm.get(e);
 			multiVisual = tmm.get(e);
 			mouse = mm.get(e);
-			card = cm.get(e);
 			
 			if(multiVisual.visible) {
 				MousePos mousePos = Mouse.getMouse();
@@ -235,11 +256,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		
 		UiPositionComponent position;
-		TextureComponent visual;
 		MultiTextureComponent multiVisual;
 		UiMouseActivityComponent mouse;
-		TextComponent text;
-		CardDisplayComponent card = null;
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
@@ -247,7 +265,6 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			position = pm.get(e);
 			multiVisual = tmm.get(e);
 			mouse = mm.get(e);
-			card = cm.get(e);
 			
 			if(multiVisual.visible) {
 				MousePos mousePos = Mouse.getMouse();

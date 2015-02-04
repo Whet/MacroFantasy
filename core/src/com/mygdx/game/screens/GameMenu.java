@@ -11,23 +11,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.actor.Character;
+import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
+import com.mygdx.game.components.ui.BarComponent;
 import com.mygdx.game.components.ui.CardDisplayComponent;
+import com.mygdx.game.components.ui.CharacterComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
+import com.mygdx.game.entities.ui.CharacterStatBarEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
 
 public class GameMenu extends Screen {
 	
 	public static final int CARD_CHOICES = 3;
-	private static final int PARTY_MEMBERS = 5;
+	
+	private CharacterBank characterBank;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
+		this.characterBank = new CharacterBank();
 	}
 
 	@Override
@@ -79,20 +86,52 @@ public class GameMenu extends Screen {
 		bodyRegions.add(bodyTexture);
 		bodyRegions.add(headTexture);
 		
-		CharacterImageEntity character1 = new CharacterImageEntity(50, Gdx.graphics.getHeight() - 200, bodyRegions);
-		engine.addEntity(character1);
+		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.characters.get(0));
+		addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.characters.get(1));
+		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.characters.get(2));
+		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.characters.get(3));
+		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.characters.get(4));
 		
-		CharacterImageEntity character2 = new CharacterImageEntity(50, Gdx.graphics.getHeight() - 600, bodyRegions);
-		engine.addEntity(character2);
+	}
+
+	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, Character character) {
+		CharacterImageEntity characterImg = new CharacterImageEntity(x, y, bodyRegions);
+		characterImg.setCharacter(character);
+		engine.addEntity(characterImg);
 		
-		CharacterImageEntity character3 = new CharacterImageEntity(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions);
-		engine.addEntity(character3);
-		
-		CharacterImageEntity character4 = new CharacterImageEntity(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions);
-		engine.addEntity(character4);
-		
-		CharacterImageEntity character5 = new CharacterImageEntity(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions);
-		engine.addEntity(character5);
+		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 120, y - 120, 100, 10, 0, character.getMaxHealth()) {
+			
+			@Override
+			public int getValue() {
+				
+				// Update min and max
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHealth();
+				return this.getComponent(CharacterComponent.class).character.getHealth();
+			}
+		};
+		engine.addEntity(healthBar);
+		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 120, y - 120, 100, 10, 0, character.getMaxMana()) {
+			
+			@Override
+			public int getValue() {
+				
+				// Update min and max
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxMana();
+				return this.getComponent(CharacterComponent.class).character.getMaxMana();
+			}
+		};
+		engine.addEntity(manaBar);
+		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 120, y - 120, 100, 10, 0, character.getMaxHunger()) {
+			
+			@Override
+			public int getValue() {
+				
+				// Update min and max
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHunger();
+				return this.getComponent(CharacterComponent.class).character.getMaxHunger();
+			}
+		};
+		engine.addEntity(foodBar);
 	}
 
 	private void createButtons() {
