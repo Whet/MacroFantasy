@@ -1,0 +1,46 @@
+butts.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+butts01
+  rotate: false
+  xy: 0, 0
+  size: 79, 27
+  orig: 79, 27
+  offset: 0, 0
+  index: -1
+butts02
+  rotate: false
+  xy: 79, 0
+  size: 79, 27
+  orig: 79, 27
+  offset: 0, 0
+  index: -1
+butts03
+  rotate: false
+  xy: 158, 0
+  size: 79, 27
+  orig: 79, 27
+  offset: 0, 0
+  index: -1
+butts04
+  rotate: false
+  xy: 237, 0
+  size: 79, 27
+  orig: 79, 27
+  offset: 0, 0
+  index: -1
+butts05
+  rotate: false
+  xy: 316, 0
+  size: 79, 27
+  orig: 79, 27
+  offset: 0, 0
+  index: -1
+butts06
+  rotate: false
+  xy: 395, 0
+  size: 79, 27
+  orig: 79, 27
+  offset: 0, 0
+  index: -1

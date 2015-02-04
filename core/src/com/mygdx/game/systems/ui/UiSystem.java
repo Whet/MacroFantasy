@@ -39,6 +39,7 @@ import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
+import com.mygdx.game.sprites.SpriteAnimation;
 
 public class UiSystem extends EntitySystem implements InputProcessor {
 	
@@ -57,12 +58,19 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ComponentMapper<TextComponent> txtm = ComponentMapper.getFor(TextComponent.class);
 	private ComponentMapper<CardDisplayComponent> cm = ComponentMapper.getFor(CardDisplayComponent.class);
 	
+	private float stateTime = 0.f;
+	
+	private SpriteAnimation exampleAnim;
+	
 	public UiSystem (OrthographicCamera camera) {
 		batch = new SpriteBatch();
 	
 		this.camera = camera;
 		
 		Gdx.input.setInputProcessor(this);
+		
+		String[] frameNames = {"butts01", "butts02", "butts03", "butts04", "butts05", "butts06"};
+		exampleAnim = new SpriteAnimation("butts.txt", frameNames);
 	}
 
 	@Override
@@ -86,6 +94,9 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		UiMouseActivityComponent mouse;
 		TextComponent text;
 		CardDisplayComponent card = null;
+		
+		stateTime += deltaTime;
+		exampleAnim.update(stateTime);
 		
 		BitmapFont font = new BitmapFont();
 
@@ -156,6 +167,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				}
 			}
 		}
+		
+		exampleAnim.draw(batch, 100, 100);
 		
 		batch.end();
 	}
