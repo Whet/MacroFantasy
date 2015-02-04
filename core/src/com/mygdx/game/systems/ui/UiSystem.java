@@ -24,6 +24,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,13 +32,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
+import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
+import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
 
-public class UiSystem extends EntitySystem {
+public class UiSystem extends EntitySystem implements InputProcessor {
+	
 	private ImmutableArray<Entity> uiImages;
 	private ImmutableArray<Entity> uiButtons;
 
@@ -49,11 +53,14 @@ public class UiSystem extends EntitySystem {
 	private ComponentMapper<MultiTextureComponent> tmm = ComponentMapper.getFor(MultiTextureComponent.class);
 	private ComponentMapper<UiMouseActivityComponent> mm = ComponentMapper.getFor(UiMouseActivityComponent.class);
 	private ComponentMapper<TextComponent> txtm = ComponentMapper.getFor(TextComponent.class);
+	private ComponentMapper<CardDisplayComponent> cm = ComponentMapper.getFor(CardDisplayComponent.class);
 	
 	public UiSystem (OrthographicCamera camera) {
 		batch = new SpriteBatch();
-
+	
 		this.camera = camera;
+		
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -74,6 +81,7 @@ public class UiSystem extends EntitySystem {
 		MultiTextureComponent multiVisual;
 		UiMouseActivityComponent mouse;
 		TextComponent text;
+		CardDisplayComponent card = null;
 		
 		BitmapFont font = new BitmapFont();
 
@@ -105,13 +113,13 @@ public class UiSystem extends EntitySystem {
 			}
 		}
 		
-		// Handle mouse events
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
 
 			position = pm.get(e);
 			multiVisual = tmm.get(e);
 			mouse = mm.get(e);
+			card = cm.get(e);
 			
 			if(multiVisual.visible) {
 				MousePos mousePos = Mouse.getMouse();
@@ -131,11 +139,100 @@ public class UiSystem extends EntitySystem {
 				else if(mouse.mouseActive) {
 					btn.mO(mousePos.x, mousePos.y);
 				}
+			}
+		}
+		
+		batch.end();
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		
+		UiPositionComponent position;
+		TextureComponent visual;
+		MultiTextureComponent multiVisual;
+		UiMouseActivityComponent mouse;
+		TextComponent text;
+		CardDisplayComponent card = null;
+		
+		for (int i = 0; i < uiButtons.size(); ++i) {
+			Entity e = uiButtons.get(i);
+
+			position = pm.get(e);
+			multiVisual = tmm.get(e);
+			mouse = mm.get(e);
+			card = cm.get(e);
+			
+			if(multiVisual.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				TextureRegion region = multiVisual.regions.get(multiVisual.frame);
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + region.getRegionWidth() >= mousePos.x  &&
+									 position.y + region.getRegionHeight() >= mousePos.y;
+									 
+				UiButtonEntity btn = (UiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mD(mousePos.x, mousePos.y))
 						break;
 				}
+			}
+			
+		}
+		return true;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		
+		UiPositionComponent position;
+		TextureComponent visual;
+		MultiTextureComponent multiVisual;
+		UiMouseActivityComponent mouse;
+		TextComponent text;
+		CardDisplayComponent card = null;
+		
+		for (int i = 0; i < uiButtons.size(); ++i) {
+			Entity e = uiButtons.get(i);
+
+			position = pm.get(e);
+			multiVisual = tmm.get(e);
+			mouse = mm.get(e);
+			card = cm.get(e);
+			
+			if(multiVisual.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				TextureRegion region = multiVisual.regions.get(multiVisual.frame);
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + region.getRegionWidth() >= mousePos.x  &&
+									 position.y + region.getRegionHeight() >= mousePos.y;
+									 
+				UiButtonEntity btn = (UiButtonEntity) e;
+				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mU(mousePos.x, mousePos.y))
 						break;
@@ -143,7 +240,24 @@ public class UiSystem extends EntitySystem {
 			}
 			
 		}
+		return true;
+	}
 
-		batch.end();
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
