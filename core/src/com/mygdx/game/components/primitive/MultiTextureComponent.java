@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class MultiTextureComponent extends Component {
 	public List<TextureRegion> regions;
 	public int frame;
+	public boolean visible;
 
 	public MultiTextureComponent (List<TextureRegion> regions) {
 		this.regions = regions;
 		this.frame = 0;
+		this.visible = true;
 	}
 }

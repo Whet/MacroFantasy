@@ -88,7 +88,8 @@ public class UiSystem extends EntitySystem {
 			position = pm.get(e);
 			visual = tm.get(e);
 			
-			batch.draw(visual.region, position.x, position.y);
+			if(visual.visible)
+				batch.draw(visual.region, position.x, position.y);
 		}
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
@@ -97,9 +98,11 @@ public class UiSystem extends EntitySystem {
 			multiVisual = tmm.get(e);
 			text = txtm.get(e);
 			
-			TextureRegion region = multiVisual.regions.get(multiVisual.frame);
-			batch.draw(region, position.x, position.y);
-			font.draw(batch, text.text, position.x + region.getRegionWidth() / 6, (int)(position.y + region.getRegionHeight() * 0.65));
+			if(multiVisual.visible) {
+				TextureRegion region = multiVisual.regions.get(multiVisual.frame);
+				batch.draw(region, position.x, position.y);
+				font.draw(batch, text.text, position.x + region.getRegionWidth() / 6, (int)(position.y + region.getRegionHeight() * 0.65));
+			}
 		}
 		
 		// Handle mouse events
@@ -110,31 +113,33 @@ public class UiSystem extends EntitySystem {
 			multiVisual = tmm.get(e);
 			mouse = mm.get(e);
 			
-			MousePos mousePos = Mouse.getMouse();
-			
-			TextureRegion region = multiVisual.regions.get(multiVisual.frame);
-			
-			boolean isInBounds = position.x <= mousePos.x &&
-								 position.y <= mousePos.y &&
-								 position.x + region.getRegionWidth() >= mousePos.x  &&
-								 position.y + region.getRegionHeight() >= mousePos.y;
-								 
-			UiButtonEntity btn = (UiButtonEntity) e;
-			
-			if(isInBounds && mouse.mouseActive){
-				btn.mI(mousePos.x, mousePos.y);
-		    }
-			else if(mouse.mouseActive) {
-				btn.mO(mousePos.x, mousePos.y);
-			}
-			
-			if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-				if(btn.mD(mousePos.x, mousePos.y))
-					break;
-			}
-			if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-				if(btn.mU(mousePos.x, mousePos.y))
-					break;
+			if(multiVisual.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				TextureRegion region = multiVisual.regions.get(multiVisual.frame);
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + region.getRegionWidth() >= mousePos.x  &&
+									 position.y + region.getRegionHeight() >= mousePos.y;
+									 
+				UiButtonEntity btn = (UiButtonEntity) e;
+				
+				if(isInBounds && mouse.mouseActive){
+					btn.mI(mousePos.x, mousePos.y);
+			    }
+				else if(mouse.mouseActive) {
+					btn.mO(mousePos.x, mousePos.y);
+				}
+				
+				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					if(btn.mD(mousePos.x, mousePos.y))
+						break;
+				}
+				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					if(btn.mU(mousePos.x, mousePos.y))
+						break;
+				}
 			}
 			
 		}
