@@ -25,9 +25,11 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
+import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
@@ -46,6 +48,7 @@ public class UiSystem extends EntitySystem {
 	private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
 	private ComponentMapper<MultiTextureComponent> tmm = ComponentMapper.getFor(MultiTextureComponent.class);
 	private ComponentMapper<UiMouseActivityComponent> mm = ComponentMapper.getFor(UiMouseActivityComponent.class);
+	private ComponentMapper<TextComponent> txtm = ComponentMapper.getFor(TextComponent.class);
 	
 	public UiSystem (OrthographicCamera camera) {
 		batch = new SpriteBatch();
@@ -56,7 +59,7 @@ public class UiSystem extends EntitySystem {
 	@Override
 	public void addedToEngine (Engine engine) {
 		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
-		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class));
+		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
 	}
 
 	@Override
@@ -70,6 +73,9 @@ public class UiSystem extends EntitySystem {
 		TextureComponent visual;
 		MultiTextureComponent multiVisual;
 		UiMouseActivityComponent mouse;
+		TextComponent text;
+		
+		BitmapFont font = new BitmapFont();
 
 		camera.update();
 
@@ -89,8 +95,11 @@ public class UiSystem extends EntitySystem {
 
 			position = pm.get(e);
 			multiVisual = tmm.get(e);
+			text = txtm.get(e);
 			
-			batch.draw(multiVisual.regions.get(multiVisual.frame), position.x, position.y);
+			TextureRegion region = multiVisual.regions.get(multiVisual.frame);
+			batch.draw(region, position.x, position.y);
+			font.draw(batch, text.text, position.x + region.getRegionWidth() / 6, (int)(position.y + region.getRegionHeight() * 0.65));
 		}
 		
 		// Handle mouse events

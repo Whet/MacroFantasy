@@ -5,13 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.components.primitive.TextureComponent;
-import com.mygdx.game.components.ui.UiPositionComponent;
-import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.screens.MainMenu;
-import com.mygdx.game.systems.ui.UiSystem;
 
 public class MacroFantasy extends ApplicationAdapter {
 	Engine engine;

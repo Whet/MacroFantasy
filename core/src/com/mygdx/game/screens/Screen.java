@@ -1,7 +1,36 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.mygdx.game.components.primitive.RemoveComponent;
+import com.mygdx.game.components.primitive.TextureComponent;
+import com.mygdx.game.components.ui.UiPositionComponent;
+
 public abstract class Screen {
 
-	public abstract void load();
+	protected Engine engine;
+	protected OrthographicCamera camera;
+	
+	public Screen(Engine engine, OrthographicCamera camera) {
+		this.engine = engine;
+		this.camera = camera;
+	}
+	
+	public final void load() {
+		
+		// Remove all old entities before loading new ones
+		ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.getFor(RemoveComponent.class));
+		
+		for(int i = 0; i < entities.size(); i++) {
+			engine.removeEntity(entities.get(i));
+		}
+		
+		loadSystem();
+	}
+
+	protected abstract void loadSystem();
 	
 }
