@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 /**
  * This class is released under GNU general public license
  * 
@@ -85,30 +88,24 @@ public class NameGenerator {
 	 */
 	public void refresh() throws IOException{
 		
-		FileReader input = null;
-	    BufferedReader bufRead;
-	    String line;
-	    
-	    input = new FileReader(fileName);
+		FileHandle file = Gdx.files.internal(fileName);
+		String fileContents = file.readString();
+		String[] lines = fileContents.split("\\r?\\n");
 		
-        bufRead = new BufferedReader(input);
-        line="";   
-              
-        while(line != null){        
-        	line = bufRead.readLine();		
-			if(line != null && !line.equals("")){
-				if(line.charAt(0) == '-'){
-					pre.add(line.substring(1).toLowerCase());					
+		              
+    	for(int i=0; i<lines.length; i++) {
+			if(lines[i] != null && !lines[i].equals("")){
+				if(lines[i].charAt(0) == '-'){
+					pre.add(lines[i].substring(1).toLowerCase());					
 				}
-				else if(line.charAt(0) == '+'){
-					sur.add(line.substring(1).toLowerCase());					
+				else if(lines[i].charAt(0) == '+'){
+					sur.add(lines[i].substring(1).toLowerCase());					
 				}
 				else{ 
-					mid.add(line.toLowerCase());					
+					mid.add(lines[i].toLowerCase());	
 				}
 			}
         }        
-        bufRead.close();
 	}
 		
 	private String upper(String s){

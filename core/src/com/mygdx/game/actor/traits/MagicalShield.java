@@ -6,6 +6,7 @@ public class MagicalShield extends Character {
 		
 	public MagicalShield()
 	{
+		super();
 		trait = "MagicalShield";
 	}
 	

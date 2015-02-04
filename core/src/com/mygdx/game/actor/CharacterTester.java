@@ -14,32 +14,30 @@ import com.mygdx.game.actor.traits.TotallyNotABadGuy;
 
 public class CharacterTester {
 
-
-
 	public static void main (String[] arg) {
 
 		Random rn = new Random();
 		Character character = null;
 
-		switch(rn.nextInt(8))
-		{
-		case 1: character = new TotallyNotABadGuy();
-		break;
-		case 2: character = new Mercenary();
-		break;
-		case 3: character = new Fireball();
-		break;
-		case 4: character = new MoneyMaker();
-		break;
-		case 5: character = new FatBastard();
-		break;
-		case 6: character = new MagicalShield();
-		break;
-		case 7: character = new PetDog();
-		break;
-		case 8: character = new FuckingUseless();
-		break;
-		}
+//		switch(rn.nextInt(8))
+//		{
+//		case 1: character = new TotallyNotABadGuy();
+//		break;
+//		case 2: character = new Mercenary();
+//		break;
+//		case 3: character = new Fireball();
+//		break;
+//		case 4: character = new MoneyMaker();
+//		break;
+//		case 5: character = new FatBastard();
+//		break;
+//		case 6: character = new MagicalShield();
+//		break;
+//		case 7: character = new PetDog();
+//		break;
+//		case 8: character = new FuckingUseless();
+//		break;
+//		}
 		
 		character = new FatBastard();
 		

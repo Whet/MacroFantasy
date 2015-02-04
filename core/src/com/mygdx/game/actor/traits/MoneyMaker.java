@@ -6,6 +6,7 @@ public class MoneyMaker extends Character {
 		
 	public MoneyMaker()
 	{
+		super();
 		trait = "MoneyMaker";
 	}
 	

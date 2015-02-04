@@ -6,6 +6,7 @@ public class FatBastard extends Character {
 		
 	public FatBastard()
 	{
+		super();
 		trait = "fatBastard";
 	}
 	

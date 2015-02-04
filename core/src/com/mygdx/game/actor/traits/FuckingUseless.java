@@ -6,6 +6,7 @@ public class FuckingUseless extends Character {
 		
 	public FuckingUseless()
 	{
+		super();
 		trait = "FuckingUseless";
 	}
 	

@@ -9,7 +9,7 @@ public abstract class Character {
 	
 	//Name
 	private String name;
-	private NameGenerator nameGen;
+//	private NameGenerator nameGen;
 
 	//Stats
 	private int health, maxHealth;
@@ -34,13 +34,6 @@ public abstract class Character {
 		//Initialise variables
 		setAlive(true);
 
-		try {
-			nameGen = new NameGenerator("assets/humanNames.txt");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		generateRace();
 		generateName();
 		setGold(5);
@@ -50,7 +43,14 @@ public abstract class Character {
 	}
 
 	private void generateName() {
-		setName(nameGen.compose(3));
+		try {
+			NameGenerator nameGen = new NameGenerator("humanNames.txt");
+			setName(nameGen.compose(3));
+			System.out.println(name);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void generateRace()

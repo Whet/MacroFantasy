@@ -6,6 +6,7 @@ public class Fireball extends Character {
 		
 	public Fireball()
 	{
+		super();
 		trait = "Fireball";
 	}
 	

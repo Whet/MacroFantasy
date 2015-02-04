@@ -6,6 +6,7 @@ public class TotallyNotABadGuy extends Character {
 		
 	public TotallyNotABadGuy()
 	{
+		super();
 		trait = "TotallyNotABadGuy";
 	}
 	

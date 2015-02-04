@@ -6,6 +6,7 @@ public class Mercenary extends Character {
 		
 	public Mercenary()
 	{
+		super();
 		trait = "Mercenary";
 	}
 	
