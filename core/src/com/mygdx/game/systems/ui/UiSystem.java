@@ -35,7 +35,6 @@ import com.mygdx.game.components.primitive.TextureComponent;
 import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
-import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
