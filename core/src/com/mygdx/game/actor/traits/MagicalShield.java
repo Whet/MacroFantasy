@@ -1,8 +1,8 @@
 package com.mygdx.game.actor.traits;
 
-import com.mygdx.game.actor.Character;
+import com.mygdx.game.actor.PartyCharacter;
 
-public class MagicalShield extends Character {
+public class MagicalShield extends PartyCharacter {
 		
 	public MagicalShield()
 	{

@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.actor.Character;
+import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
@@ -107,7 +107,7 @@ public class GameMenu extends Screen {
 		
 	}
 
-	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, Character character) {
+	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, PartyCharacter character) {
 		CharacterImageEntity characterImg = new CharacterImageEntity(x, y, bodyRegions, cardMechanics);
 		characterImg.setCharacter(character);
 		engine.addEntity(characterImg);

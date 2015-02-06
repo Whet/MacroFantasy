@@ -1,6 +1,6 @@
 package com.mygdx.game.cards;
 
-import com.mygdx.game.actor.Character;
+import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.screens.GameMenu;
 
@@ -15,7 +15,7 @@ public class CardMechanics {
 		this.characterBank = characterBank;
 	}
 	
-	public void chooseCharacter(Character chosenCharacter) {
+	public void chooseCharacter(PartyCharacter chosenCharacter) {
 		gameMenu.hideCards();
 	}
 	

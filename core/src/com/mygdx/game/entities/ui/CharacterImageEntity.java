@@ -3,7 +3,7 @@ package com.mygdx.game.entities.ui;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.actor.Character;
+import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.ui.CharacterComponent;
 
@@ -16,7 +16,7 @@ public class CharacterImageEntity extends UiMultiButtonEntity {
 		this.cardMechanics = cardMechanics;
 	}
 	
-	public void setCharacter(Character character) {
+	public void setCharacter(PartyCharacter character) {
 		this.add(new CharacterComponent(character));
 	}
 	

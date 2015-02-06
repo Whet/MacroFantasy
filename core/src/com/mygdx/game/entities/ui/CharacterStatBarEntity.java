@@ -1,7 +1,7 @@
 package com.mygdx.game.entities.ui;
 
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.game.actor.Character;
+import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.components.primitive.RemoveComponent;
 import com.mygdx.game.components.ui.BarComponent;
 import com.mygdx.game.components.ui.CharacterComponent;
@@ -15,7 +15,7 @@ public abstract class CharacterStatBarEntity extends BarEntity {
 		this.add(new RemoveComponent());
 	}
 	
-	public void setCharacter(Character character) {
+	public void setCharacter(PartyCharacter character) {
 		this.add(new CharacterComponent(character));
 	}
 	
