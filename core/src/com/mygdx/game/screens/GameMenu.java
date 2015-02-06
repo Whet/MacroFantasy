@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.CharacterBank;
-import com.mygdx.game.actor.PartyCharacter.Stat;
+import com.mygdx.game.actor.enums.CharacterValues.*;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;

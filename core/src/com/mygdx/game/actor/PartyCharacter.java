@@ -2,68 +2,28 @@ package com.mygdx.game.actor;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
-import com.mygdx.game.actor.traits.CareerTrait;
-import com.mygdx.game.actor.traits.CharacterTrait;
-import com.mygdx.game.actor.traits.GeneralTrait;
+import com.mygdx.game.actor.enums.RandomEnum;
+import com.mygdx.game.actor.enums.CharacterTraits.*;
+import com.mygdx.game.actor.enums.CharacterValues.*;
 
 public class PartyCharacter {
 
 	private static final int DEFAULT_MAX = 100;
 
-	public enum Stat {
-		HEALTH, MAXHEALTH, HUNGER, MAXHUNGER, GOLD, MAXGOLD, MANA, MAXMANA, HAPPINESS, MAXHAPPINESS;
-	}
-
-	public enum Race {
-		ORC, HUMAN, ELF, HALFLING, DWARF, GNOME;
-	}
-	
-	public enum Job {
-		Healer("The healer heals the party every turn."),
-		Alchemist("The alchemist regenerates the party's mana."),
-		Cook("The cook feeds the party every turn."),
-		Bard("The bard raises the party's happiness every turn."),
-		Merchant("The merchant makes the party money every turn.");
-		
-
-		private final String description;
-		
-		Job (String description) {
-			this.description = description;
-		}
-
-		public String getDescription() {
-			return description;
-		} 
-		
-		private static final List<Job> VALUES =
-			    Collections.unmodifiableList(Arrays.asList(values()));
-		  private static final int SIZE = VALUES.size();
-		  private static final Random RANDOM = new Random();
-
-		  public static Job randomJob()  {
-		    return VALUES.get(RANDOM.nextInt(SIZE));
-		  }
-	}
-	
-	public enum CauseOfDeath {
-		HEALTH, HUNGER, GOLD
-	}
-
+	//Random Generators
 	Random rn = new Random();
-
+	private static RandomEnum<CareerTrait> rCareerTrait;
+	private static RandomEnum<CharacterTrait> rCharacterTrait;
+	private static RandomEnum<GeneralTrait> rGeneralTrait;
+	
 	//Name
 	private String name;
 	private Race race;
 
 	//Stats
-	private Stat stat;
 	private int health, maxHealth;
 	private int mana, maxMana;
 	private int hunger, maxHunger;
@@ -91,9 +51,13 @@ public class PartyCharacter {
 		characterTraits = new ArrayList<CharacterTrait>() ;
 		careerTraits = new ArrayList<CareerTrait>();
 		generalTraits = new ArrayList<GeneralTrait>();
+		
+		rCareerTrait = new RandomEnum<CareerTrait>(CareerTrait.class);
+		rCharacterTrait = new RandomEnum<CharacterTrait>(CharacterTrait.class);
+		rGeneralTrait = new RandomEnum<GeneralTrait>(GeneralTrait.class);
 
 		generateRace();
-		generateName();
+		//generateName();
 		setStat(Stat.GOLD, 5);
 		setStat(Stat.HAPPINESS, 100);
 		setStat(Stat.HUNGER, 100);
@@ -308,7 +272,7 @@ public class PartyCharacter {
 	}
 
 	public void addCareerTrait() {
-		careerTraits.add(CareerTrait.randomTrait());
+		careerTraits.add(rCareerTrait.random());
 	}
 
 	public void addCareerTrait(CareerTrait classTrait) {
@@ -320,7 +284,7 @@ public class PartyCharacter {
 	}
 
 	public void addCharacterTrait() {
-		characterTraits.add(CharacterTrait.randomTrait());
+		characterTraits.add(rCharacterTrait.random());
 	}
 
 	public void addCharacterTrait(CharacterTrait characterTrait) {
@@ -332,7 +296,7 @@ public class PartyCharacter {
 	}
 
 	public void addGeneralTrait() {
-		generalTraits.add(GeneralTrait.randomTrait());
+		generalTraits.add(rGeneralTrait.random());
 	}
 
 	public void addGeneralTrait(GeneralTrait generalTrait) {
