@@ -45,6 +45,10 @@ public class PartyCharacter {
 	{
 		//Initialise variables
 		setAlive(true);
+		jobSkills = new HashMap<Job, Integer>();
+		characterTraits = new ArrayList<CharacterTrait>() ;
+		careerTraits = new ArrayList<CareerTrait>();
+		generalTraits = new ArrayList<GeneralTrait>();
 
 		generateRace();
 		generateName();
@@ -58,7 +62,6 @@ public class PartyCharacter {
 		jobSkills.put(Job.Cook, rn.nextInt(5));
 		jobSkills.put(Job.Healer, rn.nextInt(5));
 		jobSkills.put(Job.Merchant, rn.nextInt(5));
-		
 		addCharacterTrait();
 		addCareerTrait();
 		addGeneralTrait();
