@@ -14,8 +14,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.Character;
 import com.mygdx.game.actor.CharacterBank;
+import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
+import com.mygdx.game.components.primitive.TextureComponent;
 import com.mygdx.game.components.ui.BarComponent;
 import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.CharacterComponent;
@@ -31,11 +33,14 @@ public class GameMenu extends Screen {
 	
 	public static final int CARD_CHOICES = 3;
 	
+	private UiImageEntity cardFrontEntity;
 	private CharacterBank characterBank;
+	private CardMechanics cardMechanics;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
 		this.characterBank = new CharacterBank();
+		this.cardMechanics = new CardMechanics(this, characterBank);
 	}
 
 	@Override
@@ -69,13 +74,20 @@ public class GameMenu extends Screen {
 			CardEntity card = new CardEntity(cardX + (int)(cardOffTexture.getRegionWidth() * 1.5 * i), cardY, cardRegions) {
 				@Override
 				public boolean mD(int x, int y) {
-					hideCards();
+					cardMechanics.chooseCard(this.getComponent(CardDisplayComponent.class).card);
+					showChosenCard();
 					return super.mD(x, y);
 				}
 			};
 			card.getComponent(MultiTextureComponent.class).visible = false;
 			engine.addEntity(card);
 		}
+		
+		Texture cardFront = new Texture("cardFront.png");
+		TextureRegion cardFrontTexture = new TextureRegion(cardFront);
+		cardFrontEntity = new UiImageEntity(cardX + cardFrontTexture.getRegionWidth()/2, cardY - cardFrontTexture.getRegionHeight()/4, cardFrontTexture);
+		cardFrontEntity.getComponent(TextureComponent.class).visible = false;
+		engine.addEntity(cardFrontEntity);
 	}
 
 	private void createCharacterInfo() {
@@ -96,7 +108,7 @@ public class GameMenu extends Screen {
 	}
 
 	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, Character character) {
-		CharacterImageEntity characterImg = new CharacterImageEntity(x, y, bodyRegions);
+		CharacterImageEntity characterImg = new CharacterImageEntity(x, y, bodyRegions, cardMechanics);
 		characterImg.setCharacter(character);
 		engine.addEntity(characterImg);
 		
@@ -239,13 +251,23 @@ public class GameMenu extends Screen {
 		}
 	}
 	
-	public void hideCards() {
-		ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
-		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
+	public void showChosenCard() {
+		cardFrontEntity.getComponent(TextureComponent.class).visible = true;
 		
+		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
+		for(int i = 0; i < cards.size(); i++) {
+			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
+		}
+	}
+	
+	public void hideCards() {
+		
+		cardFrontEntity.getComponent(TextureComponent.class).visible = false;
+		ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
 		for(int i = 0; i < buttons.size(); i++) {
 			buttons.get(i).getComponent(MultiTextureComponent.class).visible = true;
 		}
+		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
 		}

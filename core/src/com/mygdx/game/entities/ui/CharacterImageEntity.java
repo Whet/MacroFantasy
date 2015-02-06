@@ -2,26 +2,28 @@ package com.mygdx.game.entities.ui;
 
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.Character;
-import com.mygdx.game.components.primitive.MultiRegionComponent;
-import com.mygdx.game.components.primitive.RemoveComponent;
-import com.mygdx.game.components.primitive.TextComponent;
+import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.ui.CharacterComponent;
-import com.mygdx.game.components.ui.UiPositionComponent;
 
-public class CharacterImageEntity extends Entity {
+public class CharacterImageEntity extends UiMultiButtonEntity {
 
-	public CharacterImageEntity(int x, int y, List<TextureRegion> region) {
-		this.add(new UiPositionComponent(x, y));
-		this.add(new MultiRegionComponent(region));
-		this.add(new TextComponent(""));
-		this.add(new RemoveComponent());
+	private CardMechanics cardMechanics;
+
+	public CharacterImageEntity(int x, int y, List<TextureRegion> region, CardMechanics cardMechanics) {
+		super(x, y, region);
+		this.cardMechanics = cardMechanics;
 	}
 	
 	public void setCharacter(Character character) {
 		this.add(new CharacterComponent(character));
+	}
+	
+	@Override
+	public boolean mU(int x, int y) {
+		cardMechanics.chooseCharacter(this.getComponent(CharacterComponent.class).character);
+		return false;
 	}
 	
 }

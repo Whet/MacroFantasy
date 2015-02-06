@@ -39,6 +39,7 @@ import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.BarEntity;
+import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
@@ -48,6 +49,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	
 	private ImmutableArray<Entity> uiImages;
 	private ImmutableArray<Entity> uiButtons;
+	private ImmutableArray<Entity> uiMultiButtons;
 	private ImmutableArray<Entity> multiImages;
 	private ImmutableArray<Entity> bars;
 	
@@ -84,7 +86,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	@Override
 	public void addedToEngine (Engine engine) {
 		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
-		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
+		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class));
+		uiMultiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class, UiMouseActivityComponent.class));
 		multiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class));
 		bars = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, BarComponent.class));
 	}
@@ -224,6 +227,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		
 		UiPositionComponent position;
 		MultiTextureComponent multiVisual;
+		MultiRegionComponent multiRegion;
 		UiMouseActivityComponent mouse;
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
@@ -252,6 +256,32 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			}
 			
 		}
+		for (int i = 0; i < uiMultiButtons.size(); ++i) {
+			Entity e = uiMultiButtons.get(i);
+
+			position = pm.get(e);
+			multiRegion = mrm.get(e);
+			mouse = mm.get(e);
+			
+			if(multiRegion.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				TextureRegion region = multiRegion.regions.get(0);
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + region.getRegionWidth() >= mousePos.x  &&
+									 position.y + region.getRegionHeight() >= mousePos.y;
+									 
+				CharacterImageEntity btn = (CharacterImageEntity) e;
+				
+				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					if(btn.mD(mousePos.x, mousePos.y))
+						break;
+				}
+			}
+			
+		}
 		return true;
 	}
 
@@ -260,6 +290,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		
 		UiPositionComponent position;
 		MultiTextureComponent multiVisual;
+		MultiRegionComponent multiRegion;
 		UiMouseActivityComponent mouse;
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
@@ -280,6 +311,32 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 position.y + region.getRegionHeight() >= mousePos.y;
 									 
 				UiButtonEntity btn = (UiButtonEntity) e;
+				
+				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					if(btn.mU(mousePos.x, mousePos.y))
+						break;
+				}
+			}
+			
+		}
+		for (int i = 0; i < uiMultiButtons.size(); ++i) {
+			Entity e = uiMultiButtons.get(i);
+
+			position = pm.get(e);
+			multiRegion = mrm.get(e);
+			mouse = mm.get(e);
+			
+			if(multiRegion.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				TextureRegion region = multiRegion.regions.get(0);
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + region.getRegionWidth() >= mousePos.x  &&
+									 position.y + region.getRegionHeight() >= mousePos.y;
+									 
+				CharacterImageEntity btn = (CharacterImageEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mU(mousePos.x, mousePos.y))
