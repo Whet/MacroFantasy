@@ -2,6 +2,7 @@ package com.mygdx.game.actor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import com.mygdx.game.actor.values.CauseOfDeath;
@@ -33,7 +34,8 @@ public class PartyCharacter {
 	private ArrayList<GeneralTrait> generalTraits;
 	
 	//Job
-	public Job job;
+	private Job job;
+	private HashMap<Job, Integer> jobSkills;
 
 	//Status
 	private boolean alive;
@@ -49,6 +51,13 @@ public class PartyCharacter {
 		setGold(5);
 		setHappiness(100);
 		setHunger(100);
+		
+		assignJob();
+		jobSkills.put(Job.Alchemist, rn.nextInt(5));
+		jobSkills.put(Job.Bard, rn.nextInt(5));
+		jobSkills.put(Job.Cook, rn.nextInt(5));
+		jobSkills.put(Job.Healer, rn.nextInt(5));
+		jobSkills.put(Job.Merchant, rn.nextInt(5));
 		
 		addCharacterTrait();
 		addCareerTrait();
@@ -141,15 +150,37 @@ public class PartyCharacter {
 		return causeOfDeath;
 
 	}
-
-	public Job getJob()
-	{
+	
+	public void assignJob() {
+		this.job = Job.randomJob();
+	}
+	
+	public void assignJob(Job job) {
+		this.job = job;
+	}
+	
+	public Job getJob() {
 		return job;
 	}
-
-	public void setJob(Job job)
-	{
-		this.job = job;
+	
+	public int getAlchemistSkill() {
+		return jobSkills.get(Job.Alchemist);
+	}
+	
+	public int getBardSkill() {
+		return jobSkills.get(Job.Bard);
+	}
+	
+	public int getCookSkill() {
+		return jobSkills.get(Job.Cook);
+	}
+	
+	public int getHealerSkill() {
+		return jobSkills.get(Job.Healer);
+	}
+	
+	public int getMerchantSkill() {
+		return jobSkills.get(Job.Merchant);
 	}
 
 
