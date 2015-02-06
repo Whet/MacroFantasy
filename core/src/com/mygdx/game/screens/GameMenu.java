@@ -141,6 +141,34 @@ public class GameMenu extends Screen {
 		engine.addEntity(foodBar);
 		foodBar.setCharacter(character);
 		foodBar.getComponent(BarComponent.class).colour = Color.GREEN;
+		
+		CharacterStatBarEntity happyBar = new CharacterStatBarEntity(x + 10, y - 60, 100, 10, 0, character.getMaxHappiness()) {
+			
+			@Override
+			public int getValue() {
+				
+				// Update min and max
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHappiness();
+				return this.getComponent(CharacterComponent.class).character.getHappiness();
+			}
+		};
+		engine.addEntity(happyBar);
+		happyBar.setCharacter(character);
+		happyBar.getComponent(BarComponent.class).colour = Color.YELLOW;
+		
+		CharacterStatBarEntity goldBar = new CharacterStatBarEntity(x + 10, y - 75, 100, 10, 0, character.getMaxGold()) {
+			
+			@Override
+			public int getValue() {
+				
+				// Update min and max
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxGold();
+				return this.getComponent(CharacterComponent.class).character.getGold();
+			}
+		};
+		engine.addEntity(goldBar);
+		goldBar.setCharacter(character);
+		goldBar.getComponent(BarComponent.class).colour = Color.DARK_GRAY;
 	}
 
 	private void createButtons() {
