@@ -5,6 +5,8 @@ import java.util.Random;
 
 public abstract class Character {
 
+	private static final int DEFAULT_MAX = 100;
+	
 	Random rn = new Random();
 	
 	//Name
@@ -15,8 +17,8 @@ public abstract class Character {
 	private int health, maxHealth;
 	private int mana, maxMana;
 	private int hunger, maxHunger;
-	private int gold;
-	private int happiness;
+	private int gold, maxGold;
+	private int happiness, maxHappiness;
 
 	//Traits
 	private String race;
@@ -39,7 +41,7 @@ public abstract class Character {
 		setGold(5);
 		setHappiness(100);
 		setHunger(100);
-
+		
 	}
 
 	private void generateName() {
@@ -58,39 +60,46 @@ public abstract class Character {
 		switch(rn.nextInt(5))
 		{
 		case 0: setRace("Human");
-		setStats(100,100);
+		setStats(100, 100, 100, 100, 0);
 		break;
 
 		case 1: setRace("Gnome");
-		setStats(75, 125);
+		setStats(75, 125, 100, 100, 0);
 		break;
 
 		case 2: setRace("Elf");
-		setStats(90, 110);
+		setStats(90, 110, 100, 100, 0);
 		break;
 
 		case 3: setRace("Dwarf");
-		setStats(140, 60);
+		setStats(140, 60, 100, 100, 0);
 		break;
 
 		case 4: setRace("Halfling");
-		setStats(80, 120);
+		setStats(80, 120, 100, 100, 0);
 		break;
 
 		case 5: setRace("Orc");
-		setStats(175, 25);
+		setStats(175, 25, 100, 100, 0);
 		break;
 		}
 	}
 
 
 
-	public void setStats(int health, int mana)
+	public void setStats(int health, int mana, int hunger, int happiness, int gold)
 	{
 		this.setHealth(health);
+		this.setMana(mana);
+		this.setHunger(hunger);
+		this.setHappiness(happiness);
+		this.setGold(gold);
+		
 		this.setMaxHealth(health);
 		this.setMaxMana(mana);
-		this.setMana(mana);
+		this.setMaxHunger(hunger);
+		this.setMaxHappiness(happiness);
+		this.setMaxGold(DEFAULT_MAX);
 	}
 
 
@@ -190,6 +199,15 @@ public abstract class Character {
 		this.happiness = happiness;
 
 	}
+	
+	public void setMaxHappiness(int max_happiness) {
+		this.maxHappiness = max_happiness;
+
+	}
+	
+	public int getMaxHappiness() {
+		return this.maxHappiness;
+	}
 
 	public void addHappiness(int increment) {
 		setHappiness(getHappiness() + increment);
@@ -231,8 +249,16 @@ public abstract class Character {
 	public void setGold(int gold) {
 		this.gold = gold;
 	}	
+	
+	public void setMaxGold(int max_gold) {
+		this.maxGold = max_gold;
+	}
+	
+	public int getMaxGold() {
+		return maxGold;
+	}
 
-	public void addtGold(int increment) {
+	public void addGold(int increment) {
 		setGold(getGold() + increment);
 	}	
 	
