@@ -1,9 +1,16 @@
 package com.mygdx.game.actor;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class PartyCharacter {
+import com.mygdx.game.actor.values.CauseOfDeath;
+import com.mygdx.game.actor.values.CareerTrait;
+import com.mygdx.game.actor.values.GeneralTrait;
+import com.mygdx.game.actor.values.Job;
+import com.mygdx.game.actor.values.CharacterTrait;
+
+public class PartyCharacter {
 
 	private static final int DEFAULT_MAX = 100;
 	
@@ -11,7 +18,7 @@ public abstract class PartyCharacter {
 	
 	//Name
 	private String name;
-//	private NameGenerator nameGen;
+	private String race;
 
 	//Stats
 	private int health, maxHealth;
@@ -21,15 +28,16 @@ public abstract class PartyCharacter {
 	private int happiness, maxHappiness;
 
 	//Traits
-	private String race;
-	protected String trait;
-
+	private ArrayList<CharacterTrait> characterTraits;
+	private ArrayList<CareerTrait> careerTraits;
+	private ArrayList<GeneralTrait> generalTraits;
+	
 	//Job
-	public String job;
+	public Job job;
 
 	//Status
 	private boolean alive;
-	private String causeOfDeath;
+	private CauseOfDeath causeOfDeath;
 
 	public PartyCharacter()
 	{
@@ -41,6 +49,10 @@ public abstract class PartyCharacter {
 		setGold(5);
 		setHappiness(100);
 		setHunger(100);
+		
+		addCharacterTrait();
+		addCareerTrait();
+		addGeneralTrait();
 		
 	}
 
@@ -112,7 +124,7 @@ public abstract class PartyCharacter {
 		this.alive = alive;
 	}
 	
-	public void setAlive(boolean alive, String causeOfDeath) {
+	public void setAlive(boolean alive, CauseOfDeath causeOfDeath) {
 		this.alive = alive;
 		this.causeOfDeath = causeOfDeath;
 	}
@@ -120,22 +132,22 @@ public abstract class PartyCharacter {
 	public void checkAlive()
 	{
 		if (getHealth() < 0)
-			setAlive(false, "health");
+			setAlive(false, CauseOfDeath.HEALTH);
 		else if (getHunger() < 0)
-			setAlive(false, "hunger");
+			setAlive(false, CauseOfDeath.HUNGER);
 	}
 
-	public String getCauseOfDeath() {
+	public CauseOfDeath getCauseOfDeath() {
 		return causeOfDeath;
 
 	}
 
-	public String getJob()
+	public Job getJob()
 	{
 		return job;
 	}
 
-	public void setJob(String job)
+	public void setJob(Job job)
 	{
 		this.job = job;
 	}
@@ -282,6 +294,41 @@ public abstract class PartyCharacter {
 		this.name = name;
 	}
 
-	public abstract String getTrait();
+	public ArrayList<CareerTrait> getCareerTrait() {
+		return careerTraits;
+	}
+	
+	public void addCareerTrait() {
+		careerTraits.add(CareerTrait.randomTrait());
+	}
+
+	public void addCareerTrait(CareerTrait classTrait) {
+		careerTraits.add(classTrait);
+	}
+
+	public ArrayList<CharacterTrait> getCharacterTraits() {
+		return characterTraits;
+	}
+	
+	public void addCharacterTrait() {
+		characterTraits.add(CharacterTrait.randomTrait());
+	}
+	
+	public void addCharacterTrait(CharacterTrait characterTrait) {
+		characterTraits.add(characterTrait);
+	}
+
+	public ArrayList<GeneralTrait> getGeneralTraits() {
+		return generalTraits;
+	}
+	
+	public void addGeneralTrait() {
+		generalTraits.add(GeneralTrait.randomTrait());
+	}
+
+	public void addGeneralTrait(GeneralTrait generalTrait) {
+		generalTraits.add(generalTrait);
+	}
+
 
 }

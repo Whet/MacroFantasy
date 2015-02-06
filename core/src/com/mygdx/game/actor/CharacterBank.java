@@ -13,13 +13,7 @@ public class CharacterBank {
 		this.characters = new ArrayList<PartyCharacter>();
 		
 		for(int i = 0; i < PARTY_MEMBERS; i++) {
-			this.characters.add(new PartyCharacter() {
-				
-				@Override
-				public String getTrait() {
-					return null;
-				}
-			});
+			this.characters.add(new PartyCharacter());
 		}
 	}
 	
