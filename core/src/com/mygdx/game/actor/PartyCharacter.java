@@ -2,26 +2,68 @@ package com.mygdx.game.actor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
-import com.mygdx.game.actor.values.CauseOfDeath;
-import com.mygdx.game.actor.values.CareerTrait;
-import com.mygdx.game.actor.values.GeneralTrait;
-import com.mygdx.game.actor.values.Job;
-import com.mygdx.game.actor.values.CharacterTrait;
+import com.mygdx.game.actor.traits.CareerTrait;
+import com.mygdx.game.actor.traits.CharacterTrait;
+import com.mygdx.game.actor.traits.GeneralTrait;
 
 public class PartyCharacter {
 
 	private static final int DEFAULT_MAX = 100;
+
+	public enum Stat {
+		HEALTH, MAXHEALTH, HUNGER, MAXHUNGER, GOLD, MAXGOLD, MANA, MAXMANA, HAPPINESS, MAXHAPPINESS;
+	}
+
+	public enum Race {
+		ORC, HUMAN, ELF, HALFLING, DWARF, GNOME;
+	}
 	
+	public enum Job {
+		Healer("The healer heals the party every turn."),
+		Alchemist("The alchemist regenerates the party's mana."),
+		Cook("The cook feeds the party every turn."),
+		Bard("The bard raises the party's happiness every turn."),
+		Merchant("The merchant makes the party money every turn.");
+		
+
+		private final String description;
+		
+		Job (String description) {
+			this.description = description;
+		}
+
+		public String getDescription() {
+			return description;
+		} 
+		
+		private static final List<Job> VALUES =
+			    Collections.unmodifiableList(Arrays.asList(values()));
+		  private static final int SIZE = VALUES.size();
+		  private static final Random RANDOM = new Random();
+
+		  public static Job randomJob()  {
+		    return VALUES.get(RANDOM.nextInt(SIZE));
+		  }
+	}
+	
+	public enum CauseOfDeath {
+		HEALTH, HUNGER, GOLD
+	}
+
 	Random rn = new Random();
-	
+
 	//Name
 	private String name;
-	private String race;
+	private Race race;
 
 	//Stats
+	private Stat stat;
 	private int health, maxHealth;
 	private int mana, maxMana;
 	private int hunger, maxHunger;
@@ -32,7 +74,7 @@ public class PartyCharacter {
 	private ArrayList<CharacterTrait> characterTraits;
 	private ArrayList<CareerTrait> careerTraits;
 	private ArrayList<GeneralTrait> generalTraits;
-	
+
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -52,10 +94,10 @@ public class PartyCharacter {
 
 		generateRace();
 		generateName();
-		setGold(5);
-		setHappiness(100);
-		setHunger(100);
-		
+		setStat(Stat.GOLD, 5);
+		setStat(Stat.HAPPINESS, 100);
+		setStat(Stat.HUNGER, 100);
+
 		assignJob();
 		jobSkills.put(Job.Alchemist, rn.nextInt(5));
 		jobSkills.put(Job.Bard, rn.nextInt(5));
@@ -65,7 +107,7 @@ public class PartyCharacter {
 		addCharacterTrait();
 		addCareerTrait();
 		addGeneralTrait();
-		
+
 	}
 
 	private void generateName() {
@@ -83,27 +125,27 @@ public class PartyCharacter {
 	{
 		switch(rn.nextInt(5))
 		{
-		case 0: setRace("Human");
+		case 0: setRace(Race.HUMAN);
 		setStats(100, 100, 100, 100, 0);
 		break;
 
-		case 1: setRace("Gnome");
+		case 1: setRace(Race.GNOME);
 		setStats(75, 125, 100, 100, 0);
 		break;
 
-		case 2: setRace("Elf");
+		case 2: setRace(Race.ELF);
 		setStats(90, 110, 100, 100, 0);
 		break;
 
-		case 3: setRace("Dwarf");
+		case 3: setRace(Race.DWARF);
 		setStats(140, 60, 100, 100, 0);
 		break;
 
-		case 4: setRace("Halfling");
+		case 4: setRace(Race.HALFLING);
 		setStats(80, 120, 100, 100, 0);
 		break;
 
-		case 5: setRace("Orc");
+		case 5: setRace(Race.ORC);
 		setStats(175, 25, 100, 100, 0);
 		break;
 		}
@@ -113,17 +155,18 @@ public class PartyCharacter {
 
 	public void setStats(int health, int mana, int hunger, int happiness, int gold)
 	{
-		this.setHealth(health);
-		this.setMana(mana);
-		this.setHunger(hunger);
-		this.setHappiness(happiness);
-		this.setGold(gold);
-		
-		this.setMaxHealth(health);
-		this.setMaxMana(mana);
-		this.setMaxHunger(hunger);
-		this.setMaxHappiness(happiness);
-		this.setMaxGold(DEFAULT_MAX);
+
+		this.setStat(Stat.HEALTH, health);
+		this.setStat(Stat.MANA, mana);
+		this.setStat(Stat.HUNGER, hunger);
+		this.setStat(Stat.HAPPINESS, happiness);
+		this.setStat(Stat.GOLD, gold);
+
+		this.setStat(Stat.MAXHEALTH, health);
+		this.setStat(Stat.MAXMANA, mana);
+		this.setStat(Stat.MAXHUNGER, hunger);
+		this.setStat(Stat.MAXHAPPINESS, happiness);
+		this.setStat(Stat.MAXGOLD, DEFAULT_MAX);
 	}
 
 
@@ -135,7 +178,7 @@ public class PartyCharacter {
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
-	
+
 	public void setAlive(boolean alive, CauseOfDeath causeOfDeath) {
 		this.alive = alive;
 		this.causeOfDeath = causeOfDeath;
@@ -143,9 +186,9 @@ public class PartyCharacter {
 
 	public void checkAlive()
 	{
-		if (getHealth() < 0)
+		if (getStat(Stat.HEALTH) < 0)
 			setAlive(false, CauseOfDeath.HEALTH);
-		else if (getHunger() < 0)
+		else if (getStat(Stat.HUNGER) < 0)
 			setAlive(false, CauseOfDeath.HUNGER);
 	}
 
@@ -153,171 +196,103 @@ public class PartyCharacter {
 		return causeOfDeath;
 
 	}
-	
+
 	public void assignJob() {
 		this.job = Job.randomJob();
 	}
-	
+
 	public void assignJob(Job job) {
 		this.job = job;
 	}
-	
+
 	public Job getJob() {
 		return job;
 	}
-	
-	public int getAlchemistSkill() {
-		return jobSkills.get(Job.Alchemist);
+
+	public int getSkill(Job job) {
+		return jobSkills.get(job);
 	}
-	
-	public int getBardSkill() {
-		return jobSkills.get(Job.Bard);
+
+	public void setSkill(Job job, int skill) {
+		jobSkills.put(job, skill);
 	}
-	
-	public int getCookSkill() {
-		return jobSkills.get(Job.Cook);
+
+	public void incrementSkill(Job job, int increment) {
+		jobSkills.put(job, jobSkills.get(job) + increment);
 	}
-	
-	public int getHealerSkill() {
-		return jobSkills.get(Job.Healer);
+
+	public void setStat(Stat stat, int value) {
+		switch (stat) {
+		case HEALTH :
+			this.health = value;
+			break;
+		case MAXHEALTH :
+			this.maxHealth = value;
+			break;
+		case MANA :
+			this.mana = value;
+			break;
+		case MAXMANA :
+			this.maxMana = value;
+			break;
+		case HUNGER :
+			this.hunger = value;
+			break;
+		case MAXHUNGER :
+			this.maxHunger = value;
+			break;
+		case HAPPINESS :
+			this.happiness = value;
+			break;
+		case MAXHAPPINESS :
+			this.maxHappiness = value;
+			break;
+		case GOLD :
+			this.gold = value;
+			break;
+		case MAXGOLD :
+			this.maxGold = value;
+			break;
+		}
 	}
-	
-	public int getMerchantSkill() {
-		return jobSkills.get(Job.Merchant);
+
+	public int getStat(Stat stat) {
+		switch (stat) {
+		case HEALTH :
+			return health;
+		case MAXHEALTH :
+			return maxHealth;
+		case MANA :
+			return mana;
+		case MAXMANA :
+			return maxMana;
+		case HUNGER :
+			return hunger;
+		case MAXHUNGER :
+			return maxHunger;
+		case HAPPINESS :
+			return happiness;
+		case MAXHAPPINESS :
+			return maxHappiness;
+		case GOLD :
+			return gold;
+		case MAXGOLD :
+			return maxGold;
+		}
+		return 0;
+	}
+
+	public void incrementStat(Stat stat, int increment) {
+		setStat(stat, getStat(stat) + increment);
 	}
 
 
-	public int getHealth() {
-		return health;
-	}
-
-
-	public void setHealth(int health) {
-		this.health = health;
-	}
-
-	public void addHealth(int increment) {
-		setHealth(getHealth() + increment);
-	}
-
-	public void subtractHealth(int increment) {
-		setHealth(getHealth() - increment);
-	}
-	
-	public int getMaxHealth() {
-		return maxHealth;
-	}
-
-	public void setMaxHealth(int max_health) {
-		this.maxHealth = max_health;
-	}
-
-	public int getMana() {
-		return mana;
-	}
-
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
-
-	public void addMana(int increment) {
-		setMana(getMana() + increment);
-	}
-
-	public void subtractMana(int increment) {
-		setMana(getMana() - increment);
-	}
-
-	public int getMaxMana() {
-		return maxMana;
-	}
-	
-	public void setMaxMana(int max_mana) {
-		this.maxMana = max_mana;
-	}
-
-	public int getHappiness() {
-		return happiness;
-	}
-
-
-	public void setHappiness(int happiness) {
-		this.happiness = happiness;
-
-	}
-	
-	public void setMaxHappiness(int max_happiness) {
-		this.maxHappiness = max_happiness;
-
-	}
-	
-	public int getMaxHappiness() {
-		return this.maxHappiness;
-	}
-
-	public void addHappiness(int increment) {
-		setHappiness(getHappiness() + increment);
-	}
-	
-	public void subtractHappiness(int increment) {
-		setHappiness(getHappiness() - increment);
-	}
-
-	public int getHunger() {
-		return hunger;
-	}
-
-	public void setHunger(int hunger) {
-		this.hunger = hunger;
-
-	}
-	
-	public void addHunger(int increment) {
-		setHunger(getHunger() + increment);
-	}
-	
-	public void subtractHunger(int increment) {
-		setHunger(getHunger() - increment);
-	}
-
-	public void setMaxHunger(int maxHunger) {
-		this.maxHunger = maxHunger;
-	}
-
-	public int getMaxHunger() {
-		return maxHunger;
-	}
-
-	public int getGold() {
-		return gold;
-	}
-
-	public void setGold(int gold) {
-		this.gold = gold;
-	}	
-	
-	public void setMaxGold(int max_gold) {
-		this.maxGold = max_gold;
-	}
-	
-	public int getMaxGold() {
-		return maxGold;
-	}
-
-	public void addGold(int increment) {
-		setGold(getGold() + increment);
-	}	
-	
-	public void subtractGold(int increment) {
-		setGold(getGold() - increment);
-	}
-
-	public String getRace() {
+	public Race getRace() {
 		return race;
 	}
 
-	public void setRace(String race) {
-		this.race = race;
+	public void setRace(Race human) {
+		this.race = human;
 	}
 
 	public String getName() {
@@ -331,7 +306,7 @@ public class PartyCharacter {
 	public ArrayList<CareerTrait> getCareerTrait() {
 		return careerTraits;
 	}
-	
+
 	public void addCareerTrait() {
 		careerTraits.add(CareerTrait.randomTrait());
 	}
@@ -343,11 +318,11 @@ public class PartyCharacter {
 	public ArrayList<CharacterTrait> getCharacterTraits() {
 		return characterTraits;
 	}
-	
+
 	public void addCharacterTrait() {
 		characterTraits.add(CharacterTrait.randomTrait());
 	}
-	
+
 	public void addCharacterTrait(CharacterTrait characterTrait) {
 		characterTraits.add(characterTrait);
 	}
@@ -355,7 +330,7 @@ public class PartyCharacter {
 	public ArrayList<GeneralTrait> getGeneralTraits() {
 		return generalTraits;
 	}
-	
+
 	public void addGeneralTrait() {
 		generalTraits.add(GeneralTrait.randomTrait());
 	}

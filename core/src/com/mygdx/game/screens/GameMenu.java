@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.CharacterBank;
+import com.mygdx.game.actor.PartyCharacter.Stat;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
@@ -112,70 +113,70 @@ public class GameMenu extends Screen {
 		characterImg.setCharacter(character);
 		engine.addEntity(characterImg);
 		
-		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 10, y - 15, 100, 10, 0, character.getMaxHealth()) {
+		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 10, y - 15, 100, 10, 0, character.getStat(Stat.HEALTH)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHealth();
-				return this.getComponent(CharacterComponent.class).character.getHealth();
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXHEALTH);
+				return this.getComponent(CharacterComponent.class).character.getStat(Stat.HEALTH);
 			}
 		};
 		engine.addEntity(healthBar);
 		healthBar.setCharacter(character);
 		healthBar.getComponent(BarComponent.class).colour = Color.RED;
 		
-		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 10, y - 30, 100, 10, 0, character.getMaxMana()) {
+		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 10, y - 30, 100, 10, 0, character.getStat(Stat.MAXMANA)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxMana();
-				return this.getComponent(CharacterComponent.class).character.getMana();
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXMANA);
+				return this.getComponent(CharacterComponent.class).character.getStat(Stat.MANA);
 			}
 		};
 		engine.addEntity(manaBar);
 		manaBar.setCharacter(character);
 		manaBar.getComponent(BarComponent.class).colour = Color.CYAN;
 		
-		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 10, y - 45, 100, 10, 0, character.getMaxHunger()) {
+		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 10, y - 45, 100, 10, 0, character.getStat(Stat.MAXHUNGER)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHunger();
-				return this.getComponent(CharacterComponent.class).character.getHunger();
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXHUNGER);
+				return this.getComponent(CharacterComponent.class).character.getStat(Stat.HUNGER);
 			}
 		};
 		engine.addEntity(foodBar);
 		foodBar.setCharacter(character);
 		foodBar.getComponent(BarComponent.class).colour = Color.GREEN;
 		
-		CharacterStatBarEntity happyBar = new CharacterStatBarEntity(x + 10, y - 60, 100, 10, 0, character.getMaxHappiness()) {
+		CharacterStatBarEntity happyBar = new CharacterStatBarEntity(x + 10, y - 60, 100, 10, 0, character.getStat(Stat.MAXHAPPINESS)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxHappiness();
-				return this.getComponent(CharacterComponent.class).character.getHappiness();
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXHAPPINESS);
+				return this.getComponent(CharacterComponent.class).character.getStat(Stat.HAPPINESS);
 			}
 		};
 		engine.addEntity(happyBar);
 		happyBar.setCharacter(character);
 		happyBar.getComponent(BarComponent.class).colour = Color.YELLOW;
 		
-		CharacterStatBarEntity goldBar = new CharacterStatBarEntity(x + 10, y - 75, 100, 10, 0, character.getMaxGold()) {
+		CharacterStatBarEntity goldBar = new CharacterStatBarEntity(x + 10, y - 75, 100, 10, 0, character.getStat(Stat.MAXGOLD)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getMaxGold();
-				return this.getComponent(CharacterComponent.class).character.getGold();
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXGOLD);
+				return this.getComponent(CharacterComponent.class).character.getStat(Stat.GOLD);
 			}
 		};
 		engine.addEntity(goldBar);
