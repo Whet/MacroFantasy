@@ -3,7 +3,7 @@ package com.mygdx.game.cards;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AdventureCard {
+public class AdventureCard {
 
 	protected String title, description;
 	protected List<Choice> choices;

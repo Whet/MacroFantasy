@@ -12,9 +12,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.CharacterBank;
-import com.mygdx.game.actor.enums.CharacterValues.*;
+import com.mygdx.game.actor.PartyCharacter;
+import com.mygdx.game.actor.enums.CharacterValues.Stat;
+import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
@@ -27,6 +28,7 @@ import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.CharacterStatBarEntity;
+import com.mygdx.game.entities.ui.TextEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
 
@@ -37,6 +39,10 @@ public class GameMenu extends Screen {
 	private UiImageEntity cardFrontEntity;
 	private CharacterBank characterBank;
 	private CardMechanics cardMechanics;
+
+	private TextEntity cardName;
+
+	private TextEntity cardDescription;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -89,6 +95,23 @@ public class GameMenu extends Screen {
 		cardFrontEntity = new UiImageEntity(cardX + cardFrontTexture.getRegionWidth()/2, cardY - cardFrontTexture.getRegionHeight()/4, cardFrontTexture);
 		cardFrontEntity.getComponent(TextureComponent.class).visible = false;
 		engine.addEntity(cardFrontEntity);
+		
+		cardName = new TextEntity();
+		cardName.getComponent(TextComponent.class).text = "Title Here";
+		cardName.getComponent(UiPositionComponent.class).x = cardFrontEntity.getComponent(UiPositionComponent.class).x + 20;
+		cardName.getComponent(UiPositionComponent.class).y = cardFrontEntity.getComponent(UiPositionComponent.class).y + cardFrontTexture.getRegionHeight() - 20;
+		cardName.getComponent(TextComponent.class).visible = false;
+		engine.addEntity(cardName);
+		
+		cardDescription = new TextEntity();
+		cardDescription.getComponent(TextComponent.class).text = "Description Here jdashjdgsagadsggh hg ahghsgh ghg ghs hagdhghsa gg ghhsg hdgy at y ty ty ty ty sghdb b n ghg gh sghghdghdsahg hg g g hg hg hg h  yy tsdtysdtytydsty  hgghghhgjghjgjh  hgg hgh g";
+		cardDescription.getComponent(TextComponent.class).maxCharsPerLine = 30;
+		cardDescription.getComponent(UiPositionComponent.class).x = cardFrontEntity.getComponent(UiPositionComponent.class).x + 20;
+		cardDescription.getComponent(UiPositionComponent.class).y = cardFrontEntity.getComponent(UiPositionComponent.class).y + cardFrontTexture.getRegionHeight() - 50;
+		cardDescription.getComponent(TextComponent.class).visible = false;
+		engine.addEntity(cardDescription);
+		
+		generateNewCards();
 	}
 
 	private void createCharacterInfo() {
@@ -246,6 +269,7 @@ public class GameMenu extends Screen {
 		
 		for(int i = 0; i < buttons.size(); i++) {
 			buttons.get(i).getComponent(MultiTextureComponent.class).visible = false;
+			buttons.get(i).getComponent(TextComponent.class).visible = false;
 		}
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = true;
@@ -259,6 +283,9 @@ public class GameMenu extends Screen {
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
 		}
+		
+		cardName.getComponent(TextComponent.class).visible = true;
+		cardDescription.getComponent(TextComponent.class).visible = true;
 	}
 	
 	public void hideCards() {
@@ -267,10 +294,21 @@ public class GameMenu extends Screen {
 		ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
 		for(int i = 0; i < buttons.size(); i++) {
 			buttons.get(i).getComponent(MultiTextureComponent.class).visible = true;
+			buttons.get(i).getComponent(TextComponent.class).visible = true;
 		}
 		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
+		}
+		
+		cardName.getComponent(TextComponent.class).visible = false;
+		cardDescription.getComponent(TextComponent.class).visible = false;
+	}
+	
+	private void generateNewCards() {
+		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
+		for(int i = 0; i < cards.size(); i++) {
+			cards.get(i).getComponent(CardDisplayComponent.class).card = AdventureBuilder.getNewAdventure(cardMechanics, characterBank);
 		}
 	}
 

@@ -9,6 +9,7 @@ public class CardMechanics {
 	private AdventureCard chosenCard;
 	private GameMenu gameMenu;
 	private CharacterBank characterBank;
+	private PartyCharacter chosenCharacter;
 	
 	public CardMechanics(GameMenu gameMenu, CharacterBank characterBank) {
 		this.gameMenu = gameMenu;
@@ -16,11 +17,20 @@ public class CardMechanics {
 	}
 	
 	public void chooseCharacter(PartyCharacter chosenCharacter) {
+		this.chosenCharacter = chosenCharacter;
 		gameMenu.hideCards();
 	}
 	
 	public void chooseCard(AdventureCard chosenCard) {
 		this.chosenCard = chosenCard;
+	}
+
+	public AdventureCard getChosenCard() {
+		return chosenCard;
+	}
+
+	public PartyCharacter getChosenCharacter() {
+		return chosenCharacter;
 	}
 	
 }

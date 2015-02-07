@@ -17,6 +17,7 @@
 package com.mygdx.game.systems.ui;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.ComponentType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -52,6 +53,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ImmutableArray<Entity> uiMultiButtons;
 	private ImmutableArray<Entity> multiImages;
 	private ImmutableArray<Entity> bars;
+	private ImmutableArray<Entity> text;
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
@@ -86,10 +88,11 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	@Override
 	public void addedToEngine (Engine engine) {
 		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
-		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class));
+		uiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
 		uiMultiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class, UiMouseActivityComponent.class));
 		multiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class));
 		bars = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, BarComponent.class));
+		text = engine.getEntitiesFor(Family.getFor(ComponentType.getBitsFor(TextComponent.class), ComponentType.getBitsFor(), ComponentType.getBitsFor(TextureComponent.class, MultiTextureComponent.class, MultiRegionComponent.class)));
 	}
 
 	@Override
@@ -151,7 +154,36 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			if(multiVisual.visible) {
 				TextureRegion region = multiVisual.regions.get(multiVisual.frame);
 				batch.draw(region, position.x, position.y);
-				font.draw(batch, text.text, position.x + region.getRegionWidth() / 6, (int)(position.y + region.getRegionHeight() * 0.65));
+				
+				if(text.visible) {
+					font.draw(batch, text.text, position.x + 15, position.y + 30);
+				}
+			}
+		}
+		for (int i = 0; i < this.text.size(); ++i) {
+			Entity e = this.text.get(i);
+
+			position = pm.get(e);
+			text = txtm.get(e);
+			
+			if(text.visible) {
+				
+				// Split text into lines
+				StringBuffer sb = new StringBuffer();
+				int index = 0;
+				int line = 0;
+				while(index < text.text.length()) {
+					if(sb.length() < text.maxCharsPerLine || text.text.charAt(index) != ' ') {
+						sb.append(text.text.charAt(index));
+					}
+					else {
+						font.draw(batch, sb.toString(), position.x, position.y - 20 * line);
+						sb = new StringBuffer();
+						line++;
+					}
+					index++;
+				}
+				font.draw(batch, sb.toString(), position.x, position.y - 20 * line);
 			}
 		}
 		for (int i = 0; i < bars.size(); ++i) {
