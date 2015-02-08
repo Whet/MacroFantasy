@@ -2,7 +2,7 @@ package com.mygdx.game.cards;
 
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
-import com.mygdx.game.actor.enums.CharacterValues.Job;
+import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.screens.GameMenu;
 

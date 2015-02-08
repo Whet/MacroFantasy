@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.mygdx.game.actor.enums.CauseOfDeath;
+import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Race;
-import com.mygdx.game.actor.enums.RandomEnum;
-import com.mygdx.game.actor.enums.CharacterTraits.*;
-import com.mygdx.game.actor.enums.CharacterValues.*;
+import com.mygdx.game.actor.traits.AbstractTrait;
+import com.mygdx.game.actor.traits.TraitBigAppetite;
+import com.mygdx.game.actor.traits.TraitFeeble;
+import com.mygdx.game.actor.traits.TraitFlag;
 
 public class PartyCharacter {
 
@@ -17,9 +20,6 @@ public class PartyCharacter {
 
 	//Random Generators
 	Random rn = new Random();
-	private static RandomEnum<CareerTrait> rCareerTrait;
-	private static RandomEnum<CharacterTrait> rCharacterTrait;
-	private static RandomEnum<GeneralTrait> rGeneralTrait;
 	
 	//Name
 	private String name;
@@ -33,15 +33,12 @@ public class PartyCharacter {
 	private int happiness, maxHappiness;
 
 	//Traits
-	private ArrayList<CharacterTrait> characterTraits;
-	private ArrayList<CareerTrait> careerTraits;
-	private ArrayList<GeneralTrait> generalTraits;
+	private ArrayList<AbstractTrait> traits;
 
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
 
-	//Needus
 	private boolean alive;
 	private CauseOfDeath causeOfDeath;
 
@@ -50,19 +47,16 @@ public class PartyCharacter {
 		//Initialise variables
 		setAlive(true);
 		jobSkills = new HashMap<Job, Integer>();
-		characterTraits = new ArrayList<CharacterTrait>() ;
-		careerTraits = new ArrayList<CareerTrait>();
-		generalTraits = new ArrayList<GeneralTrait>();
 		
-		rCareerTrait = new RandomEnum<CareerTrait>(CareerTrait.class);
-		rCharacterTrait = new RandomEnum<CharacterTrait>(CharacterTrait.class);
-		rGeneralTrait = new RandomEnum<GeneralTrait>(GeneralTrait.class);
+		traits = new ArrayList<AbstractTrait>();
+		traits.add(new TraitBigAppetite());
+		traits.add(new TraitFeeble());
 
 		generateRace();
 		generateName();
-		setNeed(Need.GOLD, 5);
-		setNeed(Need.HAPPINESS, 100);
-		setNeed(Need.HUNGER, 100);
+		setBaseNeed(Need.GOLD, 5);
+		setBaseNeed(Need.HAPPINESS, 100);
+		setBaseNeed(Need.HUNGER, 100);
 
 //		assignJob();
 		jobSkills.put(Job.Alchemist, rn.nextInt(5));
@@ -70,10 +64,7 @@ public class PartyCharacter {
 		jobSkills.put(Job.Cook, rn.nextInt(5));
 		jobSkills.put(Job.Healer, rn.nextInt(5));
 		jobSkills.put(Job.Merchant, rn.nextInt(5));
-		addCharacterTrait();
-		addCareerTrait();
-		addGeneralTrait();
-
+		
 	}
 
 	private void generateName() {
@@ -92,52 +83,47 @@ public class PartyCharacter {
 		switch(rn.nextInt(5))
 		{
 		case 0: setRace(Race.HUMAN);
-		setNeeds(100, 100, 100, 100, 0);
+		setBaseNeeds(100, 100, 100, 100, 0);
 		break;
 
 		case 1: setRace(Race.GNOME);
-		setNeeds(75, 125, 100, 100, 0);
+		setBaseNeeds(75, 125, 100, 100, 0);
 		break;
 
 		case 2: setRace(Race.ELF);
-		setNeeds(90, 110, 100, 100, 0);
+		setBaseNeeds(90, 110, 100, 100, 0);
 		break;
 
 		case 3: setRace(Race.DWARF);
-		setNeeds(140, 60, 100, 100, 0);
+		setBaseNeeds(140, 60, 100, 100, 0);
 		break;
 
 		case 4: setRace(Race.HALFLING);
-		setNeeds(80, 120, 100, 100, 0);
+		setBaseNeeds(80, 120, 100, 100, 0);
 		break;
 
 		case 5: setRace(Race.ORC);
-		setNeeds(175, 25, 100, 100, 0);
+		setBaseNeeds(175, 25, 100, 100, 0);
 		break;
 		}
 	}
 
-
-
-	public void setNeeds(int health, int mana, int hunger, int happiness, int gold)
+	private void setBaseNeeds(int health, int mana, int hunger, int happiness, int gold)
 	{
+		this.setBaseNeed(Need.HEALTH, health);
+		this.setBaseNeed(Need.MANA, mana);
+		this.setBaseNeed(Need.HUNGER, hunger);
+		this.setBaseNeed(Need.HAPPINESS, happiness);
+		this.setBaseNeed(Need.GOLD, gold);
 
-		this.setNeed(Need.HEALTH, health);
-		this.setNeed(Need.MANA, mana);
-		this.setNeed(Need.HUNGER, hunger);
-		this.setNeed(Need.HAPPINESS, happiness);
-		this.setNeed(Need.GOLD, gold);
-
-		this.setNeed(Need.MAXHEALTH, health);
-		this.setNeed(Need.MAXMANA, mana);
-		this.setNeed(Need.MAXHUNGER, hunger);
-		this.setNeed(Need.MAXHAPPINESS, happiness);
-		this.setNeed(Need.MAXGOLD, DEFAULT_MAX);
+		this.setBaseNeed(Need.MAXHEALTH, health);
+		this.setBaseNeed(Need.MAXMANA, mana);
+		this.setBaseNeed(Need.MAXHUNGER, hunger);
+		this.setBaseNeed(Need.MAXHAPPINESS, happiness);
+		this.setBaseNeed(Need.MAXGOLD, DEFAULT_MAX);
 	}
 
-
 	public boolean isAlive() {
-		checkAlive();
 		return alive;
 	}
 
@@ -150,17 +136,8 @@ public class PartyCharacter {
 		this.causeOfDeath = causeOfDeath;
 	}
 
-	public void checkAlive()
-	{
-		if (getNeed(Need.HEALTH) < 0)
-			setAlive(false, CauseOfDeath.HEALTH);
-		else if (getNeed(Need.HUNGER) < 0)
-			setAlive(false, CauseOfDeath.HUNGER);
-	}
-
 	public CauseOfDeath getCauseOfDeath() {
 		return causeOfDeath;
-
 	}
 
 	public void assignJob() {
@@ -187,8 +164,8 @@ public class PartyCharacter {
 		jobSkills.put(job, jobSkills.get(job) + increment);
 	}
 
-	public void setNeed(Need stat, int value) {
-		switch (stat) {
+	public void setBaseNeed(Need need, int value) {
+		switch (need) {
 		case HEALTH :
 			this.health = value;
 			break;
@@ -222,8 +199,8 @@ public class PartyCharacter {
 		}
 	}
 
-	public int getNeed(Need stat) {
-		switch (stat) {
+	public int getBaseNeed(Need need) {
+		switch (need) {
 		case HEALTH :
 			return health;
 		case MAXHEALTH :
@@ -247,11 +224,76 @@ public class PartyCharacter {
 		}
 		return 0;
 	}
-
-	public void incrementNeed(Need need, int increment) {
-		setNeed(need, getNeed(need) + increment);
+	
+	public int getTrueNeed(Need need) {
+		switch (need) {
+		case HEALTH :
+			int trueHealth = health;
+			for(AbstractTrait t : traits) {
+				t.getTrueHealth(trueHealth);
+			}
+			return trueHealth;
+		case MAXHEALTH :
+			int trueMaxHealth = maxHealth;
+			for(AbstractTrait t : traits) {
+				t.getTrueMaxHealth(trueMaxHealth);
+			}
+			return trueMaxHealth;
+		case MANA :
+			int trueMana = mana;
+			for(AbstractTrait t : traits) {
+				t.getTrueMana(trueMana);
+			}
+			return trueMana;
+		case MAXMANA :
+			int trueMaxMana = maxMana;
+			for(AbstractTrait t : traits) {
+				t.getTrueMaxMana(trueMaxMana);
+			}
+			return trueMaxMana;
+		case HUNGER :
+			int trueHunger = hunger;
+			for(AbstractTrait t : traits) {
+				t.getTrueHunger(trueHunger);
+			}
+			return trueHunger;
+		case MAXHUNGER :
+			int trueMaxHunger = maxHunger;
+			for(AbstractTrait t : traits) {
+				t.getTrueMaxHunger(trueMaxHunger);
+			}
+			return trueMaxHunger;
+		case HAPPINESS :
+			int trueHappiness = happiness;
+			for(AbstractTrait t : traits) {
+				t.getTrueHappiness(trueHappiness);
+			}
+			return trueHappiness;
+		case MAXHAPPINESS :
+			int trueMaxHappiness = maxHappiness;
+			for(AbstractTrait t : traits) {
+				t.getTrueMaxHappiness(trueMaxHappiness);
+			}
+			return trueMaxHappiness;
+		case GOLD :
+			int trueGold = gold;
+			for(AbstractTrait t : traits) {
+				t.getTrueGold(trueGold);
+			}
+			return trueGold;
+		case MAXGOLD :
+			int trueMaxGold = maxGold;
+			for(AbstractTrait t : traits) {
+				t.getTrueMaxGold(trueMaxGold);
+			}
+			return trueMaxGold;
+		}
+		return 0;
 	}
 
+	public void incrementNeed(Need need, int increment) {
+		setBaseNeed(need, getBaseNeed(need) + increment);
+	}
 
 	public Race getRace() {
 		return race;
@@ -269,45 +311,52 @@ public class PartyCharacter {
 		this.name = name;
 	}
 
-	public ArrayList<CareerTrait> getCareerTrait() {
-		return careerTraits;
+	public boolean hasFlag(TraitFlag flag) {
+		for(AbstractTrait t : traits) {
+			if(t.hasFlag(flag)) {
+				return true;
+			}
+		}
+		return false;
 	}
-
-	public void addCareerTrait() {
-		careerTraits.add(rCareerTrait.random());
-	}
-
-	public void addCareerTrait(CareerTrait classTrait) {
-		careerTraits.add(classTrait);
-	}
-
-	public ArrayList<CharacterTrait> getCharacterTraits() {
-		return characterTraits;
-	}
-
-	public void addCharacterTrait() {
-		characterTraits.add(rCharacterTrait.random());
-	}
-
-	public void addCharacterTrait(CharacterTrait characterTrait) {
-		characterTraits.add(characterTrait);
-	}
-
-	public ArrayList<GeneralTrait> getGeneralTraits() {
-		return generalTraits;
-	}
-
-	public void addGeneralTrait() {
-		generalTraits.add(rGeneralTrait.random());
-	}
-
-	public void addGeneralTrait(GeneralTrait generalTrait) {
-		generalTraits.add(generalTrait);
-	}
-
+	
 	public void endTurn() {
-		// Decrease stats based on what the character consumes per turn
+		// Decrease needs based on what the character consumes per turn	
+		hunger -= 1;
+		happiness -= 1;
+		
+		int trueHealth = health, trueMaxHealth = maxHealth;
+		int trueMana = mana, trueMaxMana = maxMana;
+		int trueHunger = maxHunger, trueMaxHunger = maxHunger;
+		int trueGold = gold, trueMaxGold = maxGold;
+		int trueHappiness = happiness, trueMaxHappiness = maxHappiness;
+		
+		for(AbstractTrait t : traits) {
+			trueHealth = t.getTrueHealth(health);
+			trueMaxHealth = t.getTrueMaxHealth(maxHealth);
+			trueMana = t.getTrueMana(mana);
+			trueMaxMana = t.getTrueMaxMana(maxMana);
+			trueHunger = t.getTrueHunger(hunger);
+			trueMaxHunger = t.getTrueMaxHunger(maxHunger);
+			trueGold = t.getTrueGold(gold);
+			trueMaxGold = t.getTrueMaxGold(maxGold);
+			trueHappiness = t.getTrueHappiness(happiness);
+			trueMaxHappiness = t.getTrueMaxHappiness(maxHappiness);
+			
+			t.act(this);	//Any other crazy changes to needs are done here.
+		}
+		
+		System.out.println(maxHealth + " " + trueMaxHealth);
+		System.out.println(maxHunger + " " + trueMaxHunger);
+		
+		if(trueHealth < 0) {
+			setAlive(false, CauseOfDeath.HEALTH);
+		}
+		if(trueHunger < 0) {
+			setAlive(false, CauseOfDeath.HUNGER);
+		}
+		if(trueGold < 0) {
+			setAlive(false, CauseOfDeath.GOLD);
+		}
 	}
-
-
 }
