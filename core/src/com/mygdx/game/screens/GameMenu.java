@@ -101,15 +101,13 @@ public class GameMenu extends Screen {
 		engine.addEntity(cardFrontEntity);
 		
 		cardName = new TextEntity();
-		cardName.getComponent(TextComponent.class).text = "Title Here";
 		cardName.getComponent(UiPositionComponent.class).x = cardFrontEntity.getComponent(UiPositionComponent.class).x + 20;
 		cardName.getComponent(UiPositionComponent.class).y = cardFrontEntity.getComponent(UiPositionComponent.class).y + cardFrontTexture.getRegionHeight() - 20;
 		cardName.getComponent(TextComponent.class).visible = false;
 		engine.addEntity(cardName);
 		
 		cardDescription = new TextEntity();
-		cardDescription.getComponent(TextComponent.class).text = "Description Here jdashjdgsagadsggh hg ahghsgh ghg ghs hagdhghsa gg ghhsg hdgy at y ty ty ty ty sghdb b n ghg gh sghghdghdsahg hg g g hg hg hg h  yy tsdtysdtytydsty  hgghghhgjghjgjh  hgg hgh g";
-		cardDescription.getComponent(TextComponent.class).maxCharsPerLine = 30;
+		cardDescription.getComponent(TextComponent.class).maxCharsPerLine = 34;
 		cardDescription.getComponent(UiPositionComponent.class).x = cardFrontEntity.getComponent(UiPositionComponent.class).x + 20;
 		cardDescription.getComponent(UiPositionComponent.class).y = cardFrontEntity.getComponent(UiPositionComponent.class).y + cardFrontTexture.getRegionHeight() - 50;
 		cardDescription.getComponent(TextComponent.class).visible = false;

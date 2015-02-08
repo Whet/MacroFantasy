@@ -6,8 +6,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.components.primitive.RemoveComponent;
-import com.mygdx.game.components.primitive.TextureComponent;
-import com.mygdx.game.components.ui.UiPositionComponent;
 
 public abstract class Screen {
 

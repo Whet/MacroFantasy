@@ -3,7 +3,6 @@ package com.mygdx.game.entities.ui;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.primitive.RemoveComponent;
-import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 
