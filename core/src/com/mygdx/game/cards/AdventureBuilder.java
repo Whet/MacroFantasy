@@ -24,7 +24,14 @@ public class AdventureBuilder {
 			}
 		};
 		
-		card = new AdventureCard("Test 1", "Test 2", new Choice("Next Card", new AdventureCard("Test 3", "Test 4", new Choice("Finish", reward, penalty))));
+		card = new AdventureCard("Test 1", "Test 2", new Choice("", new AdventureCard("Test 3", "Test 4", new Choice("Finish", reward, penalty) {
+			
+			@Override
+			public void choose() {
+				this.getReward().act();
+			}
+			
+		})));
 		
 		return card;
 	}

@@ -16,7 +16,9 @@ import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.CharacterValues.Stat;
 import com.mygdx.game.cards.AdventureBuilder;
+import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
+import com.mygdx.game.cards.Choice;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
@@ -28,6 +30,7 @@ import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.CharacterStatBarEntity;
+import com.mygdx.game.entities.ui.TextButtonEntity;
 import com.mygdx.game.entities.ui.TextEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
@@ -40,14 +43,15 @@ public class GameMenu extends Screen {
 	private CharacterBank characterBank;
 	private CardMechanics cardMechanics;
 
+	private List<TextButtonEntity> cardButtons;
 	private TextEntity cardName;
-
 	private TextEntity cardDescription;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
 		this.characterBank = new CharacterBank();
 		this.cardMechanics = new CardMechanics(this, characterBank);
+		cardButtons = new ArrayList<TextButtonEntity>();
 	}
 
 	@Override
@@ -284,8 +288,44 @@ public class GameMenu extends Screen {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
 		}
 		
+		AdventureCard chosenCard = cardMechanics.getChosenCard();
+		
+		cardName.getComponent(TextComponent.class).text = chosenCard.getTitle();
+		cardDescription.getComponent(TextComponent.class).text = chosenCard.getDescription();
+		
 		cardName.getComponent(TextComponent.class).visible = true;
 		cardDescription.getComponent(TextComponent.class).visible = true;
+		
+		// Remove old buttons
+		for(TextButtonEntity textBtn:cardButtons) {
+			engine.removeEntity(textBtn);
+		}
+		
+		cardButtons = new ArrayList<TextButtonEntity>();
+		
+		for(Choice choice:chosenCard.getChoices()) {
+			
+			final Choice choiceFinal = choice;
+			
+			cardButtons.add(new TextButtonEntity() {
+				
+				{
+					this.getComponent(TextComponent.class).text = choiceFinal.getText();
+				}
+				
+				@Override
+				public boolean mD(int x, int y) {
+					cardMechanics.makeChoice(choiceFinal);
+					return true;
+				}
+			});
+		}
+		
+		for(int i = 0; i < cardButtons.size(); i++) {
+			engine.addEntity(cardButtons.get(i));
+			cardButtons.get(i).getComponent(UiPositionComponent.class).x = cardName.getComponent(UiPositionComponent.class).x;
+			cardButtons.get(i).getComponent(UiPositionComponent.class).y = cardFrontEntity.getComponent(UiPositionComponent.class).y + 40 + 20 * (i + 1);
+		}
 	}
 	
 	public void hideCards() {
@@ -303,6 +343,13 @@ public class GameMenu extends Screen {
 		
 		cardName.getComponent(TextComponent.class).visible = false;
 		cardDescription.getComponent(TextComponent.class).visible = false;
+		
+		// Remove old buttons
+		for(TextButtonEntity textBtn:cardButtons) {
+			engine.removeEntity(textBtn);
+		}
+		
+		cardButtons = new ArrayList<TextButtonEntity>();
 	}
 	
 	private void generateNewCards() {

@@ -33,5 +33,9 @@ public class Choice {
 	public String getText() {
 		return text;
 	}
+
+	public void choose() {
+		// Use to apply dice rolls etc.
+	}
 	
 }

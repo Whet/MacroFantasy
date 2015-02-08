@@ -28,4 +28,8 @@ public class AdventureCard {
 		return choices;
 	}
 
+	public AdventureCard next() {
+		return this.choices.get(0).getNextCard();
+	}
+
 }

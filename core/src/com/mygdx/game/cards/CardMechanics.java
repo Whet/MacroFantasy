@@ -1,7 +1,7 @@
 package com.mygdx.game.cards;
 
-import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.CharacterBank;
+import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.screens.GameMenu;
 
 public class CardMechanics {
@@ -17,8 +17,11 @@ public class CardMechanics {
 	}
 	
 	public void chooseCharacter(PartyCharacter chosenCharacter) {
-		this.chosenCharacter = chosenCharacter;
-		gameMenu.hideCards();
+		if(this.chosenCharacter == null) {
+			this.chosenCharacter = chosenCharacter;
+			this.chosenCard = chosenCard.next();
+			gameMenu.showChosenCard();
+		}
 	}
 	
 	public void chooseCard(AdventureCard chosenCard) {
@@ -31,6 +34,21 @@ public class CardMechanics {
 
 	public PartyCharacter getChosenCharacter() {
 		return chosenCharacter;
+	}
+
+	public void makeChoice(Choice choice) {
+		if(choice.getNextCard() != null) {
+			this.chosenCard = chosenCard.next();
+			gameMenu.showChosenCard();
+		}
+		else {
+			// End quest line
+			choice.choose();
+
+			this.chosenCard = null;
+			this.chosenCharacter = null;
+			gameMenu.hideCards();
+		}
 	}
 	
 }

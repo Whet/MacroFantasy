@@ -41,6 +41,7 @@ import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
+import com.mygdx.game.entities.ui.TextButtonEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
@@ -54,6 +55,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ImmutableArray<Entity> multiImages;
 	private ImmutableArray<Entity> bars;
 	private ImmutableArray<Entity> text;
+	private ImmutableArray<Entity> textButtons;
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
@@ -92,7 +94,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		uiMultiButtons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class, UiMouseActivityComponent.class));
 		multiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiRegionComponent.class));
 		bars = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, BarComponent.class));
-		text = engine.getEntitiesFor(Family.getFor(ComponentType.getBitsFor(TextComponent.class), ComponentType.getBitsFor(), ComponentType.getBitsFor(TextureComponent.class, MultiTextureComponent.class, MultiRegionComponent.class)));
+		text = engine.getEntitiesFor(Family.getFor(ComponentType.getBitsFor(TextComponent.class, UiPositionComponent.class), ComponentType.getBitsFor(), ComponentType.getBitsFor(TextureComponent.class, MultiTextureComponent.class, MultiRegionComponent.class)));
+		textButtons = engine.getEntitiesFor(Family.getFor(ComponentType.getBitsFor(TextComponent.class, UiPositionComponent.class, UiMouseActivityComponent.class), ComponentType.getBitsFor(), ComponentType.getBitsFor(TextureComponent.class, MultiTextureComponent.class, MultiRegionComponent.class)));
 	}
 
 	@Override
@@ -261,6 +264,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		MultiTextureComponent multiVisual;
 		MultiRegionComponent multiRegion;
 		UiMouseActivityComponent mouse;
+		TextComponent text;
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
@@ -314,6 +318,30 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			}
 			
 		}
+		for (int i = 0; i < textButtons.size(); ++i) {
+			Entity e = textButtons.get(i);
+
+			position = pm.get(e);
+			mouse = mm.get(e);
+			text = txtm.get(e);
+			
+			if(text.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + 50 >= mousePos.x  &&
+									 position.y + 50 >= mousePos.y;
+									 
+				TextButtonEntity btn = (TextButtonEntity) e;
+				
+				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					if(btn.mD(mousePos.x, mousePos.y))
+						break;
+				}
+			}
+			
+		}
 		return true;
 	}
 
@@ -324,6 +352,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		MultiTextureComponent multiVisual;
 		MultiRegionComponent multiRegion;
 		UiMouseActivityComponent mouse;
+		TextComponent text;
 		
 		for (int i = 0; i < uiButtons.size(); ++i) {
 			Entity e = uiButtons.get(i);
@@ -369,6 +398,30 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 position.y + region.getRegionHeight() >= mousePos.y;
 									 
 				CharacterImageEntity btn = (CharacterImageEntity) e;
+				
+				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					if(btn.mU(mousePos.x, mousePos.y))
+						break;
+				}
+			}
+			
+		}
+		for (int i = 0; i < textButtons.size(); ++i) {
+			Entity e = textButtons.get(i);
+
+			position = pm.get(e);
+			mouse = mm.get(e);
+			text = txtm.get(e);
+			
+			if(text.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + 50 >= mousePos.x  &&
+									 position.y + 50 >= mousePos.y;
+									 
+				TextButtonEntity btn = (TextButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mU(mousePos.x, mousePos.y))
