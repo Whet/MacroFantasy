@@ -43,15 +43,18 @@ public class GameMenu extends Screen {
 	
 	public static final int CARD_CHOICES = 3;
 	
-	private UiImageEntity cardFrontEntity;
 	private CharacterBank characterBank;
 	private CardMechanics cardMechanics;
+	
+	private UiImageEntity cardFrontEntity;
 
 	private List<TextButtonEntity> cardButtons;
 	private TextEntity cardName;
 	private TextEntity cardDescription;
 	
 	private List<CharacterUi> characterUis;
+	
+	private CharacterStatMenu characterStatMenu;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -138,6 +141,62 @@ public class GameMenu extends Screen {
 		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.characters.get(3));
 		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.characters.get(4));
 		
+		characterStatMenu = new CharacterStatMenu();
+		Texture skillBackground = new Texture("statMenuBack.png");
+		TextureRegion skillBackgroundTexture = new TextureRegion(skillBackground);
+		
+		int cardX = Gdx.graphics.getWidth()/2;
+		int cardY = Gdx.graphics.getHeight()/2;
+		
+		int x = cardX - skillBackgroundTexture.getRegionWidth()/2;
+		int y = cardY - skillBackgroundTexture.getRegionHeight()/4;
+		
+		characterStatMenu.background = new UiImageEntity(x, y, skillBackgroundTexture);
+		characterStatMenu.background.getComponent(TextureComponent.class).visible = false;
+		
+		characterStatMenu.name = new TextEntity();
+		
+		characterStatMenu.name.getComponent(TextComponent.class).text = "NAME";
+		characterStatMenu.name.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.name.getComponent(UiPositionComponent.class).x = x;
+		characterStatMenu.name.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 20;
+		
+		characterStatMenu.needText = new TextEntity();
+		characterStatMenu.needText.getComponent(TextComponent.class).text = "NEED";
+		characterStatMenu.needText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.needText.getComponent(UiPositionComponent.class).x = x;
+		characterStatMenu.needText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 40;
+		
+		characterStatMenu.skillText = new TextEntity();
+		characterStatMenu.skillText.getComponent(TextComponent.class).text = "SKILL";
+		characterStatMenu.skillText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.skillText.getComponent(UiPositionComponent.class).x = x;
+		characterStatMenu.skillText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 60;
+		
+		characterStatMenu.closeText = new TextButtonEntity() {
+			@Override
+			public boolean mD(int x, int y) {
+				hideStatMenu();
+				return true;
+			}
+		};
+		characterStatMenu.closeText.getComponent(TextComponent.class).text = "Close";
+		characterStatMenu.closeText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.closeText.getComponent(UiPositionComponent.class).x = x + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionWidth() - 60;
+		characterStatMenu.closeText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 20;
+		
+		characterStatMenu.traitText = new TextEntity();
+		characterStatMenu.traitText.getComponent(TextComponent.class).text = "T@RA@IT";
+		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.traitText.getComponent(UiPositionComponent.class).x = x;
+		characterStatMenu.traitText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 85;
+		
+		engine.addEntity(characterStatMenu.background);
+		engine.addEntity(characterStatMenu.closeText);
+		engine.addEntity(characterStatMenu.name);
+		engine.addEntity(characterStatMenu.needText);
+		engine.addEntity(characterStatMenu.skillText);
+		engine.addEntity(characterStatMenu.traitText);
 	}
 
 	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, PartyCharacter character) {
@@ -412,6 +471,42 @@ public class GameMenu extends Screen {
 		cardButtons = new ArrayList<TextButtonEntity>();
 	}
 	
+	public void showStatMenu(PartyCharacter chosenCharacter) {
+		
+		ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
+		for(int i = 0; i < buttons.size(); i++) {
+			buttons.get(i).getComponent(MultiTextureComponent.class).visible = false;
+			buttons.get(i).getComponent(TextComponent.class).visible = false;
+		}
+		
+		characterStatMenu.background.getComponent(TextureComponent.class).visible = true;
+		characterStatMenu.name.getComponent(TextComponent.class).visible = true;
+		characterStatMenu.needText.getComponent(TextComponent.class).visible = true;
+		characterStatMenu.skillText.getComponent(TextComponent.class).visible = true;
+		characterStatMenu.traitText.getComponent(TextComponent.class).visible = true;
+		characterStatMenu.closeText.getComponent(TextComponent.class).visible = true;
+	}
+	
+	public void hideStatMenu() {
+		
+		ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
+		for(int i = 0; i < buttons.size(); i++) {
+			buttons.get(i).getComponent(MultiTextureComponent.class).visible = true;
+			buttons.get(i).getComponent(TextComponent.class).visible = true;
+		}
+		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
+		for(int i = 0; i < cards.size(); i++) {
+			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
+		}
+		
+		characterStatMenu.background.getComponent(TextureComponent.class).visible = false;
+		characterStatMenu.name.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.needText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.skillText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.closeText.getComponent(TextComponent.class).visible = false;
+	}
+	
 	private void generateNewCards() {
 		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
 		for(int i = 0; i < cards.size(); i++) {
@@ -432,6 +527,12 @@ public class GameMenu extends Screen {
 		public TextEntity name, healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
 		public CharacterImageEntity image;
 		public BarEntity healthBar, manaBar, foodBar, happyBar, goldBar;
+	}
+	
+	private static class CharacterStatMenu {
+		public TextButtonEntity closeText;
+		public TextEntity name, skillText, needText, traitText;
+		public UiImageEntity background;
 	}
 
 }

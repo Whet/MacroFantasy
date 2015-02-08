@@ -24,6 +24,9 @@ public class CardMechanics {
 			this.chosenCard = chosenCard.next();
 			gameMenu.showChosenCard();
 		}
+		else if(this.chosenCard == null && chosenCharacter.isAlive()) {
+			gameMenu.showStatMenu(chosenCharacter);
+		}
 	}
 	
 	public void chooseCard(AdventureCard chosenCard) {
