@@ -68,38 +68,42 @@ public class CardMechanics {
 		int moneyBoost = 0;
 		
 		for (PartyCharacter character:characterBank.characters) {
-			// Drain stats based on consumption rates
-			character.endTurn();
-			
-			if(character.getJob() != null)
-			switch(character.getJob()) {
-				case Alchemist:
-					manaBoost = character.getSkill(Job.Alchemist);
-				break;
-				case Bard:
-					happyBoost = character.getSkill(Job.Bard);
-				break;
-				case Cook:
-					foodBoost = character.getSkill(Job.Cook);
-				break;
-				case Healer:
-					healthBoost = character.getSkill(Job.Healer);
-				break;
-				case Merchant:
-					moneyBoost = character.getSkill(Job.Merchant);
-				break;
-				default:
-				break;
+			if(character.isAlive()) {
+				// Drain stats based on consumption rates
+				character.endTurn();
+				
+				if(character.getJob() != null)
+				switch(character.getJob()) {
+					case Alchemist:
+						manaBoost = character.getSkill(Job.Alchemist);
+					break;
+					case Bard:
+						happyBoost = character.getSkill(Job.Bard);
+					break;
+					case Cook:
+						foodBoost = character.getSkill(Job.Cook);
+					break;
+					case Healer:
+						healthBoost = character.getSkill(Job.Healer);
+					break;
+					case Merchant:
+						moneyBoost = character.getSkill(Job.Merchant);
+					break;
+					default:
+					break;
+				}
 			}
 		}
 		
 		// Go through all characters and give the bonuses
 		for (PartyCharacter character:characterBank.characters) {
-			character.incrementNeed(Need.HEALTH, healthBoost);
-			character.incrementNeed(Need.MANA, manaBoost);
-			character.incrementNeed(Need.HUNGER, foodBoost);
-			character.incrementNeed(Need.HAPPINESS, happyBoost);
-			character.incrementNeed(Need.GOLD, moneyBoost);
+			if(character.isAlive()) {
+				character.incrementNeed(Need.HEALTH, healthBoost);
+				character.incrementNeed(Need.MANA, manaBoost);
+				character.incrementNeed(Need.HUNGER, foodBoost);
+				character.incrementNeed(Need.HAPPINESS, happyBoost);
+				character.incrementNeed(Need.GOLD, moneyBoost);
+			}
 		}
 	}
 	

@@ -321,6 +321,11 @@ public class PartyCharacter {
 	}
 	
 	public void endTurn() {
+		
+		// Stops stats becoming super negative
+		if(!this.isAlive())
+			return;
+		
 		// Decrease needs based on what the character consumes per turn	
 		hunger -= 1;
 		happiness -= 1;
