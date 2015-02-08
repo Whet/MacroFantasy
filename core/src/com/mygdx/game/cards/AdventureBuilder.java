@@ -24,7 +24,9 @@ public class AdventureBuilder {
 			}
 		};
 		
-		card = new AdventureCard("Test 1", "Test 2", new Choice("", new AdventureCard("Test 3", "Test 4", new Choice("Finish", reward, penalty) {
+		card = new AdventureCard("The Adventure Begins", "A new day dawns in the lands of Test-topia! The sun is shining, birds are chirping and orcs are marching to destroy the party! Choose someone to go forth and battle by clicking their portrait!",
+								 new Choice("",
+								 new AdventureCard("The Adventure Ends!", "The party member says the orcs with ease and are given some money as a reward. Great job!", new Choice("Claim Reward", reward, penalty) {
 			
 			@Override
 			public void choose() {
