@@ -54,11 +54,8 @@ public class GameMenu extends Screen {
 	private TextEntity cardDescription;
 	
 	private List<CharacterUi> characterUis;
-	private List<CharacterTextEntity> names;
 	
 	private CharacterStatMenu characterStatMenu;
-
-
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -66,7 +63,6 @@ public class GameMenu extends Screen {
 		this.cardMechanics = new CardMechanics(this, characterBank);
 		cardButtons = new ArrayList<TextButtonEntity>();
 		characterUis = new ArrayList<CharacterUi>();
-		names = new ArrayList<CharacterTextEntity>();
 	}
 
 	@Override
@@ -441,7 +437,8 @@ public class GameMenu extends Screen {
 		characterUI.name = name;
 		name.setCharacter(character);
 		engine.addEntity(name);
-		names.add(name);
+		
+		this.characterUis.add(characterUI);
 	}
 
 	private void createButtons() {
@@ -665,14 +662,13 @@ public class GameMenu extends Screen {
 			if(!character.isAlive()) {
 				// Show dead icon
 			}
-		}
-		for(CharacterTextEntity characterTextEntity:this.names) {
-			characterTextEntity.setCharacter(characterTextEntity.getComponent(CharacterComponent.class).character);
+			characterUi.name.setCharacter(characterUi.name.getComponent(CharacterComponent.class).character);
 		}
 	}
 	
 	private static class CharacterUi {
-		public TextEntity name, healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
+		public TextEntity healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
+		public CharacterTextEntity name;
 		public CharacterImageEntity image;
 		public BarEntity healthBar, manaBar, foodBar, happyBar, goldBar;
 	}
