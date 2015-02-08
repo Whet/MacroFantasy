@@ -303,5 +303,9 @@ public class PartyCharacter {
 		generalTraits.add(generalTrait);
 	}
 
+	public void endTurn() {
+		// Decrease stats based on what the character consumes per turn
+	}
+
 
 }

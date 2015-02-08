@@ -27,6 +27,7 @@ import com.mygdx.game.components.ui.CardDisplayComponent;
 import com.mygdx.game.components.ui.CharacterComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
+import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.CharacterStatBarEntity;
@@ -46,12 +47,15 @@ public class GameMenu extends Screen {
 	private List<TextButtonEntity> cardButtons;
 	private TextEntity cardName;
 	private TextEntity cardDescription;
+	
+	private List<CharacterUi> characterUis;
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
 		this.characterBank = new CharacterBank();
 		this.cardMechanics = new CardMechanics(this, characterBank);
 		cardButtons = new ArrayList<TextButtonEntity>();
+		characterUis = new ArrayList<CharacterUi>();
 	}
 
 	@Override
@@ -134,9 +138,13 @@ public class GameMenu extends Screen {
 	}
 
 	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, PartyCharacter character) {
+		
+		CharacterUi characterUI = new CharacterUi();
+		
 		CharacterImageEntity characterImg = new CharacterImageEntity(x, y, bodyRegions, cardMechanics);
 		characterImg.setCharacter(character);
 		engine.addEntity(characterImg);
+		characterUI.image = characterImg;
 		
 		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 10, y - 15, 100, 10, 0, character.getStat(Stat.HEALTH)) {
 			
@@ -151,6 +159,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(healthBar);
 		healthBar.setCharacter(character);
 		healthBar.getComponent(BarComponent.class).colour = Color.RED;
+		characterUI.healthBar = healthBar;
 		
 		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 10, y - 30, 100, 10, 0, character.getStat(Stat.MAXMANA)) {
 			
@@ -165,6 +174,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(manaBar);
 		manaBar.setCharacter(character);
 		manaBar.getComponent(BarComponent.class).colour = Color.CYAN;
+		characterUI.healthBar = manaBar;
 		
 		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 10, y - 45, 100, 10, 0, character.getStat(Stat.MAXHUNGER)) {
 			
@@ -179,6 +189,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(foodBar);
 		foodBar.setCharacter(character);
 		foodBar.getComponent(BarComponent.class).colour = Color.GREEN;
+		characterUI.healthBar = foodBar;
 		
 		CharacterStatBarEntity happyBar = new CharacterStatBarEntity(x + 10, y - 60, 100, 10, 0, character.getStat(Stat.MAXHAPPINESS)) {
 			
@@ -193,6 +204,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(happyBar);
 		happyBar.setCharacter(character);
 		happyBar.getComponent(BarComponent.class).colour = Color.YELLOW;
+		characterUI.healthBar = happyBar;
 		
 		CharacterStatBarEntity goldBar = new CharacterStatBarEntity(x + 10, y - 75, 100, 10, 0, character.getStat(Stat.MAXGOLD)) {
 			
@@ -207,6 +219,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(goldBar);
 		goldBar.setCharacter(character);
 		goldBar.getComponent(BarComponent.class).colour = Color.DARK_GRAY;
+		characterUI.healthBar = goldBar;
 	}
 
 	private void createButtons() {
@@ -355,6 +368,20 @@ public class GameMenu extends Screen {
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(CardDisplayComponent.class).card = AdventureBuilder.getNewAdventure(cardMechanics, characterBank);
 		}
+	}
+	
+	public void updateCharacters() {
+		for(CharacterUi characterUi:this.characterUis) {
+			PartyCharacter character = characterUi.image.getComponent(CharacterComponent.class).character;
+			if(!character.isAlive()) {
+				// Show dead icon
+			}
+		}
+	}
+	
+	private static class CharacterUi {
+		public CharacterImageEntity image;
+		public BarEntity healthBar, manaBar, foodBar, happyBar, moneyBar;
 	}
 
 }
