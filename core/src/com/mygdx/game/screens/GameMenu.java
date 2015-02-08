@@ -54,8 +54,11 @@ public class GameMenu extends Screen {
 	private TextEntity cardDescription;
 	
 	private List<CharacterUi> characterUis;
+	private List<CharacterTextEntity> names;
 	
 	private CharacterStatMenu characterStatMenu;
+
+
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -63,6 +66,7 @@ public class GameMenu extends Screen {
 		this.cardMechanics = new CardMechanics(this, characterBank);
 		cardButtons = new ArrayList<TextButtonEntity>();
 		characterUis = new ArrayList<CharacterUi>();
+		names = new ArrayList<CharacterTextEntity>();
 	}
 
 	@Override
@@ -207,6 +211,7 @@ public class GameMenu extends Screen {
 				if(!characterBank.isAssignedJob(Job.Healer)) {
 					characterStatMenu.getCharacter().assignJob(Job.Healer);
 					characterStatMenu.updateIcons(characterBank);
+					updateCharacters();
 				}
 				return true;
 			}
@@ -225,6 +230,7 @@ public class GameMenu extends Screen {
 				if(!characterBank.isAssignedJob(Job.Alchemist)) {
 					characterStatMenu.getCharacter().assignJob(Job.Alchemist);
 					characterStatMenu.updateIcons(characterBank);
+					updateCharacters();
 				}
 				return true;
 			}
@@ -243,6 +249,7 @@ public class GameMenu extends Screen {
 				if(!characterBank.isAssignedJob(Job.Cook)) {
 					characterStatMenu.getCharacter().assignJob(Job.Cook);
 					characterStatMenu.updateIcons(characterBank);
+					updateCharacters();
 				}
 				return true;
 			}
@@ -261,6 +268,7 @@ public class GameMenu extends Screen {
 				if(!characterBank.isAssignedJob(Job.Bard)) {
 					characterStatMenu.getCharacter().assignJob(Job.Bard);
 					characterStatMenu.updateIcons(characterBank);
+					updateCharacters();
 				}
 				return true;
 			}
@@ -279,6 +287,7 @@ public class GameMenu extends Screen {
 				if(!characterBank.isAssignedJob(Job.Merchant)) {
 					characterStatMenu.getCharacter().assignJob(Job.Merchant);
 					characterStatMenu.updateIcons(characterBank);
+					updateCharacters();
 				}
 				return true;
 			}
@@ -336,7 +345,6 @@ public class GameMenu extends Screen {
 		characterUI.healthLabel = healthLabel;
 		healthLabel.setLabel(Need.HEALTH);
 		engine.addEntity(healthLabel);
-
 		
 		CharacterNeedBarEntity manaBar = new CharacterNeedBarEntity(x + 10, y - 30, 100, 10, 0, character.getTrueNeed(Need.MAXMANA)) {
 			
@@ -433,7 +441,7 @@ public class GameMenu extends Screen {
 		characterUI.name = name;
 		name.setCharacter(character);
 		engine.addEntity(name);
-		
+		names.add(name);
 	}
 
 	private void createButtons() {
@@ -657,6 +665,9 @@ public class GameMenu extends Screen {
 			if(!character.isAlive()) {
 				// Show dead icon
 			}
+		}
+		for(CharacterTextEntity characterTextEntity:this.names) {
+			characterTextEntity.setCharacter(characterTextEntity.getComponent(CharacterComponent.class).character);
 		}
 	}
 	
