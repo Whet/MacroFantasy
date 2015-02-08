@@ -1,6 +1,6 @@
 package com.mygdx.game.entities.ui;
 
-import com.mygdx.game.actor.enums.CharacterValues.Stat;
+import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.components.primitive.TextComponent;
 
 public class CharacterLabelEntity extends TextEntity {
@@ -9,8 +9,8 @@ public class CharacterLabelEntity extends TextEntity {
 
 	}
 
-	public void setLabel(Stat stat) {
-		switch(stat) {
+	public void setLabel(Need need) {
+		switch(need) {
 		case HEALTH : 
 			this.getComponent(TextComponent.class).text = "HP";
 			break;

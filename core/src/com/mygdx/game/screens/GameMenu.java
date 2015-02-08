@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
-import com.mygdx.game.actor.enums.CharacterValues.Stat;
+import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
@@ -32,7 +32,7 @@ import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.CharacterLabelEntity;
-import com.mygdx.game.entities.ui.CharacterStatBarEntity;
+import com.mygdx.game.entities.ui.CharacterNeedBarEntity;
 import com.mygdx.game.entities.ui.CharacterTextEntity;
 import com.mygdx.game.entities.ui.TextButtonEntity;
 import com.mygdx.game.entities.ui.TextEntity;
@@ -149,14 +149,14 @@ public class GameMenu extends Screen {
 		engine.addEntity(characterImg);
 		characterUI.image = characterImg;
 		
-		CharacterStatBarEntity healthBar = new CharacterStatBarEntity(x + 10, y - 15, 100, 10, 0, character.getStat(Stat.HEALTH)) {
+		CharacterNeedBarEntity healthBar = new CharacterNeedBarEntity(x + 10, y - 15, 100, 10, 0, character.getNeed(Need.HEALTH)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXHEALTH);
-				return this.getComponent(CharacterComponent.class).character.getStat(Stat.HEALTH);
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getNeed(Need.MAXHEALTH);
+				return this.getComponent(CharacterComponent.class).character.getNeed(Need.HEALTH);
 			}
 		};
 		engine.addEntity(healthBar);
@@ -168,18 +168,18 @@ public class GameMenu extends Screen {
 		healthLabel.getComponent(UiPositionComponent.class).x = healthBar.getComponent(UiPositionComponent.class).x - 30;
 		healthLabel.getComponent(UiPositionComponent.class).y = healthBar.getComponent(UiPositionComponent.class).y + 12;
 		characterUI.healthLabel = healthLabel;
-		healthLabel.setLabel(Stat.HEALTH);
+		healthLabel.setLabel(Need.HEALTH);
 		engine.addEntity(healthLabel);
 
 		
-		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 10, y - 30, 100, 10, 0, character.getStat(Stat.MAXMANA)) {
+		CharacterNeedBarEntity manaBar = new CharacterNeedBarEntity(x + 10, y - 30, 100, 10, 0, character.getNeed(Need.MAXMANA)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXMANA);
-				return this.getComponent(CharacterComponent.class).character.getStat(Stat.MANA);
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getNeed(Need.MAXMANA);
+				return this.getComponent(CharacterComponent.class).character.getNeed(Need.MANA);
 			}
 		};
 		engine.addEntity(manaBar);
@@ -191,18 +191,18 @@ public class GameMenu extends Screen {
 		manaLabel.getComponent(UiPositionComponent.class).x = manaBar.getComponent(UiPositionComponent.class).x - 30;
 		manaLabel.getComponent(UiPositionComponent.class).y = manaBar.getComponent(UiPositionComponent.class).y + 12;
 		characterUI.manaLabel = manaLabel;
-		manaLabel.setLabel(Stat.MANA);
+		manaLabel.setLabel(Need.MANA);
 		engine.addEntity(manaLabel);
 
 		
-		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 10, y - 45, 100, 10, 0, character.getStat(Stat.MAXHUNGER)) {
+		CharacterNeedBarEntity foodBar = new CharacterNeedBarEntity(x + 10, y - 45, 100, 10, 0, character.getNeed(Need.MAXHUNGER)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXHUNGER);
-				return this.getComponent(CharacterComponent.class).character.getStat(Stat.HUNGER);
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getNeed(Need.MAXHUNGER);
+				return this.getComponent(CharacterComponent.class).character.getNeed(Need.HUNGER);
 			}
 		};
 		engine.addEntity(foodBar);
@@ -214,17 +214,17 @@ public class GameMenu extends Screen {
 		foodLabel.getComponent(UiPositionComponent.class).x = foodBar.getComponent(UiPositionComponent.class).x - 30;
 		foodLabel.getComponent(UiPositionComponent.class).y = foodBar.getComponent(UiPositionComponent.class).y + 12;
 		characterUI.foodLabel = foodLabel;
-		foodLabel.setLabel(Stat.HUNGER);
+		foodLabel.setLabel(Need.HUNGER);
 		engine.addEntity(foodLabel);
 		
-		CharacterStatBarEntity happyBar = new CharacterStatBarEntity(x + 10, y - 60, 100, 10, 0, character.getStat(Stat.MAXHAPPINESS)) {
+		CharacterNeedBarEntity happyBar = new CharacterNeedBarEntity(x + 10, y - 60, 100, 10, 0, character.getNeed(Need.MAXHAPPINESS)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXHAPPINESS);
-				return this.getComponent(CharacterComponent.class).character.getStat(Stat.HAPPINESS);
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getNeed(Need.MAXHAPPINESS);
+				return this.getComponent(CharacterComponent.class).character.getNeed(Need.HAPPINESS);
 			}
 		};
 		engine.addEntity(happyBar);
@@ -236,17 +236,17 @@ public class GameMenu extends Screen {
 		happyLabel.getComponent(UiPositionComponent.class).x = happyBar.getComponent(UiPositionComponent.class).x - 30;
 		happyLabel.getComponent(UiPositionComponent.class).y = happyBar.getComponent(UiPositionComponent.class).y + 12;
 		characterUI.happyLabel = happyLabel;
-		happyLabel.setLabel(Stat.HAPPINESS);
+		happyLabel.setLabel(Need.HAPPINESS);
 		engine.addEntity(happyLabel);
 		
-		CharacterStatBarEntity goldBar = new CharacterStatBarEntity(x + 10, y - 75, 100, 10, 0, character.getStat(Stat.MAXGOLD)) {
+		CharacterNeedBarEntity goldBar = new CharacterNeedBarEntity(x + 10, y - 75, 100, 10, 0, character.getNeed(Need.MAXGOLD)) {
 			
 			@Override
 			public int getValue() {
 				
 				// Update min and max
-				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getStat(Stat.MAXGOLD);
-				return this.getComponent(CharacterComponent.class).character.getStat(Stat.GOLD);
+				this.getComponent(BarComponent.class).max = this.getComponent(CharacterComponent.class).character.getNeed(Need.MAXGOLD);
+				return this.getComponent(CharacterComponent.class).character.getNeed(Need.GOLD);
 			}
 		};
 		engine.addEntity(goldBar);
@@ -258,7 +258,7 @@ public class GameMenu extends Screen {
 		goldLabel.getComponent(UiPositionComponent.class).x = goldBar.getComponent(UiPositionComponent.class).x - 30;
 		goldLabel.getComponent(UiPositionComponent.class).y = goldBar.getComponent(UiPositionComponent.class).y + 12;
 		characterUI.goldLabel = goldLabel;
-		goldLabel.setLabel(Stat.GOLD);
+		goldLabel.setLabel(Need.GOLD);
 		engine.addEntity(goldLabel);
 		
 		CharacterTextEntity name = new CharacterTextEntity();

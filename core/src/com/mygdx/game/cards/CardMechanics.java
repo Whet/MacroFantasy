@@ -3,7 +3,7 @@ package com.mygdx.game.cards;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.CharacterValues.Job;
-import com.mygdx.game.actor.enums.CharacterValues.Stat;
+import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.screens.GameMenu;
 
 public class CardMechanics {
@@ -92,11 +92,11 @@ public class CardMechanics {
 		
 		// Go through all characters and give the bonuses
 		for (PartyCharacter character:characterBank.characters) {
-			character.incrementStat(Stat.HEALTH, healthBoost);
-			character.incrementStat(Stat.MANA, manaBoost);
-			character.incrementStat(Stat.HUNGER, foodBoost);
-			character.incrementStat(Stat.HAPPINESS, happyBoost);
-			character.incrementStat(Stat.GOLD, moneyBoost);
+			character.incrementNeed(Need.HEALTH, healthBoost);
+			character.incrementNeed(Need.MANA, manaBoost);
+			character.incrementNeed(Need.HUNGER, foodBoost);
+			character.incrementNeed(Need.HAPPINESS, happyBoost);
+			character.incrementNeed(Need.GOLD, moneyBoost);
 		}
 	}
 	

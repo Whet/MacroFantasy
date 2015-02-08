@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.mygdx.game.actor.enums.Need;
+import com.mygdx.game.actor.enums.Race;
 import com.mygdx.game.actor.enums.RandomEnum;
 import com.mygdx.game.actor.enums.CharacterTraits.*;
 import com.mygdx.game.actor.enums.CharacterValues.*;
@@ -23,7 +25,7 @@ public class PartyCharacter {
 	private String name;
 	private Race race;
 
-	//Stats
+	//Needs
 	private int health, maxHealth;
 	private int mana, maxMana;
 	private int hunger, maxHunger;
@@ -39,7 +41,7 @@ public class PartyCharacter {
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
 
-	//Status
+	//Needus
 	private boolean alive;
 	private CauseOfDeath causeOfDeath;
 
@@ -58,9 +60,9 @@ public class PartyCharacter {
 
 		generateRace();
 		generateName();
-		setStat(Stat.GOLD, 5);
-		setStat(Stat.HAPPINESS, 100);
-		setStat(Stat.HUNGER, 100);
+		setNeed(Need.GOLD, 5);
+		setNeed(Need.HAPPINESS, 100);
+		setNeed(Need.HUNGER, 100);
 
 //		assignJob();
 		jobSkills.put(Job.Alchemist, rn.nextInt(5));
@@ -90,47 +92,47 @@ public class PartyCharacter {
 		switch(rn.nextInt(5))
 		{
 		case 0: setRace(Race.HUMAN);
-		setStats(100, 100, 100, 100, 0);
+		setNeeds(100, 100, 100, 100, 0);
 		break;
 
 		case 1: setRace(Race.GNOME);
-		setStats(75, 125, 100, 100, 0);
+		setNeeds(75, 125, 100, 100, 0);
 		break;
 
 		case 2: setRace(Race.ELF);
-		setStats(90, 110, 100, 100, 0);
+		setNeeds(90, 110, 100, 100, 0);
 		break;
 
 		case 3: setRace(Race.DWARF);
-		setStats(140, 60, 100, 100, 0);
+		setNeeds(140, 60, 100, 100, 0);
 		break;
 
 		case 4: setRace(Race.HALFLING);
-		setStats(80, 120, 100, 100, 0);
+		setNeeds(80, 120, 100, 100, 0);
 		break;
 
 		case 5: setRace(Race.ORC);
-		setStats(175, 25, 100, 100, 0);
+		setNeeds(175, 25, 100, 100, 0);
 		break;
 		}
 	}
 
 
 
-	public void setStats(int health, int mana, int hunger, int happiness, int gold)
+	public void setNeeds(int health, int mana, int hunger, int happiness, int gold)
 	{
 
-		this.setStat(Stat.HEALTH, health);
-		this.setStat(Stat.MANA, mana);
-		this.setStat(Stat.HUNGER, hunger);
-		this.setStat(Stat.HAPPINESS, happiness);
-		this.setStat(Stat.GOLD, gold);
+		this.setNeed(Need.HEALTH, health);
+		this.setNeed(Need.MANA, mana);
+		this.setNeed(Need.HUNGER, hunger);
+		this.setNeed(Need.HAPPINESS, happiness);
+		this.setNeed(Need.GOLD, gold);
 
-		this.setStat(Stat.MAXHEALTH, health);
-		this.setStat(Stat.MAXMANA, mana);
-		this.setStat(Stat.MAXHUNGER, hunger);
-		this.setStat(Stat.MAXHAPPINESS, happiness);
-		this.setStat(Stat.MAXGOLD, DEFAULT_MAX);
+		this.setNeed(Need.MAXHEALTH, health);
+		this.setNeed(Need.MAXMANA, mana);
+		this.setNeed(Need.MAXHUNGER, hunger);
+		this.setNeed(Need.MAXHAPPINESS, happiness);
+		this.setNeed(Need.MAXGOLD, DEFAULT_MAX);
 	}
 
 
@@ -150,9 +152,9 @@ public class PartyCharacter {
 
 	public void checkAlive()
 	{
-		if (getStat(Stat.HEALTH) < 0)
+		if (getNeed(Need.HEALTH) < 0)
 			setAlive(false, CauseOfDeath.HEALTH);
-		else if (getStat(Stat.HUNGER) < 0)
+		else if (getNeed(Need.HUNGER) < 0)
 			setAlive(false, CauseOfDeath.HUNGER);
 	}
 
@@ -185,7 +187,7 @@ public class PartyCharacter {
 		jobSkills.put(job, jobSkills.get(job) + increment);
 	}
 
-	public void setStat(Stat stat, int value) {
+	public void setNeed(Need stat, int value) {
 		switch (stat) {
 		case HEALTH :
 			this.health = value;
@@ -220,7 +222,7 @@ public class PartyCharacter {
 		}
 	}
 
-	public int getStat(Stat stat) {
+	public int getNeed(Need stat) {
 		switch (stat) {
 		case HEALTH :
 			return health;
@@ -246,8 +248,8 @@ public class PartyCharacter {
 		return 0;
 	}
 
-	public void incrementStat(Stat stat, int increment) {
-		setStat(stat, getStat(stat) + increment);
+	public void incrementNeed(Need need, int increment) {
+		setNeed(need, getNeed(need) + increment);
 	}
 
 

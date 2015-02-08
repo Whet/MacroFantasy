@@ -1,7 +1,7 @@
 package com.mygdx.game.cards;
 
 import com.mygdx.game.actor.CharacterBank;
-import com.mygdx.game.actor.enums.CharacterValues.Stat;
+import com.mygdx.game.actor.enums.Need;
 
 public class AdventureBuilder {
 
@@ -13,7 +13,7 @@ public class AdventureBuilder {
 			
 			@Override
 			public void act() {
-				cardMechanics.getChosenCharacter().incrementStat(Stat.GOLD, 10);
+				cardMechanics.getChosenCharacter().incrementNeed(Need.GOLD, 10);
 			}
 		};
 		

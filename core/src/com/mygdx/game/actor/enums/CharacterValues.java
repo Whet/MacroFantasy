@@ -5,15 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class CharacterValues {
-	public enum Stat {
-		HEALTH, MAXHEALTH, HUNGER, MAXHUNGER, GOLD, MAXGOLD, MANA, MAXMANA, HAPPINESS, MAXHAPPINESS;
-	}
-
-	public enum Race {
-		ORC, HUMAN, ELF, HALFLING, DWARF, GNOME;
-	}
-	
+public class CharacterValues {	
 	public enum Job {
 		Healer("The healer heals the party every turn."),
 		Alchemist("The alchemist regenerates the party's mana."),
