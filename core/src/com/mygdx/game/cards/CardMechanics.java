@@ -53,7 +53,7 @@ public class CardMechanics {
 		}
 	}
 
-	private void endTurn() {
+	public void endTurn() {
 		gameMenu.hideCards();
 		gameMenu.updateCharacters();
 		
@@ -68,6 +68,7 @@ public class CardMechanics {
 			// Drain stats based on consumption rates
 			character.endTurn();
 			
+			if(character.getJob() != null)
 			switch(character.getJob()) {
 				case Alchemist:
 					manaBoost = character.getSkill(Job.Alchemist);

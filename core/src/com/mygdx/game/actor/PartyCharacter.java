@@ -57,12 +57,12 @@ public class PartyCharacter {
 		rGeneralTrait = new RandomEnum<GeneralTrait>(GeneralTrait.class);
 
 		generateRace();
-		//generateName();
+		generateName();
 		setStat(Stat.GOLD, 5);
 		setStat(Stat.HAPPINESS, 100);
 		setStat(Stat.HUNGER, 100);
 
-		assignJob();
+//		assignJob();
 		jobSkills.put(Job.Alchemist, rn.nextInt(5));
 		jobSkills.put(Job.Bard, rn.nextInt(5));
 		jobSkills.put(Job.Cook, rn.nextInt(5));

@@ -19,6 +19,7 @@ import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.cards.Choice;
+import com.mygdx.game.components.primitive.MultiRegionComponent;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.components.primitive.TextureComponent;
@@ -31,6 +32,7 @@ import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.CharacterStatBarEntity;
+import com.mygdx.game.entities.ui.CharacterTextEntity;
 import com.mygdx.game.entities.ui.TextButtonEntity;
 import com.mygdx.game.entities.ui.TextEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
@@ -220,6 +222,14 @@ public class GameMenu extends Screen {
 		goldBar.setCharacter(character);
 		goldBar.getComponent(BarComponent.class).colour = Color.DARK_GRAY;
 		characterUI.healthBar = goldBar;
+		
+		CharacterTextEntity name = new CharacterTextEntity();
+		name.getComponent(UiPositionComponent.class).x = x;
+		name.getComponent(UiPositionComponent.class).y = y + characterImg.getComponent(MultiRegionComponent.class).regions.get(0).getRegionHeight() + 20;
+		characterUI.name = name;
+		name.setCharacter(character);
+		engine.addEntity(name);
+		
 	}
 
 	private void createButtons() {
@@ -271,6 +281,7 @@ public class GameMenu extends Screen {
 			
 			@Override
 			public boolean mD(int x, int y) {
+				cardMechanics.endTurn();
 				return true;
 			}
 			
@@ -380,6 +391,7 @@ public class GameMenu extends Screen {
 	}
 	
 	private static class CharacterUi {
+		public TextEntity name;
 		public CharacterImageEntity image;
 		public BarEntity healthBar, manaBar, foodBar, happyBar, moneyBar;
 	}
