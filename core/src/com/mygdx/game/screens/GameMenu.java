@@ -31,6 +31,7 @@ import com.mygdx.game.components.ui.UiPositionComponent;
 import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.CardEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
+import com.mygdx.game.entities.ui.CharacterLabelEntity;
 import com.mygdx.game.entities.ui.CharacterStatBarEntity;
 import com.mygdx.game.entities.ui.CharacterTextEntity;
 import com.mygdx.game.entities.ui.TextButtonEntity;
@@ -163,6 +164,14 @@ public class GameMenu extends Screen {
 		healthBar.getComponent(BarComponent.class).colour = Color.RED;
 		characterUI.healthBar = healthBar;
 		
+		CharacterLabelEntity healthLabel = new CharacterLabelEntity();
+		healthLabel.getComponent(UiPositionComponent.class).x = healthBar.getComponent(UiPositionComponent.class).x - 30;
+		healthLabel.getComponent(UiPositionComponent.class).y = healthBar.getComponent(UiPositionComponent.class).y + 12;
+		characterUI.healthLabel = healthLabel;
+		healthLabel.setLabel(Stat.HEALTH);
+		engine.addEntity(healthLabel);
+
+		
 		CharacterStatBarEntity manaBar = new CharacterStatBarEntity(x + 10, y - 30, 100, 10, 0, character.getStat(Stat.MAXMANA)) {
 			
 			@Override
@@ -176,7 +185,15 @@ public class GameMenu extends Screen {
 		engine.addEntity(manaBar);
 		manaBar.setCharacter(character);
 		manaBar.getComponent(BarComponent.class).colour = Color.CYAN;
-		characterUI.healthBar = manaBar;
+		characterUI.manaBar = manaBar;
+
+		CharacterLabelEntity manaLabel = new CharacterLabelEntity();
+		manaLabel.getComponent(UiPositionComponent.class).x = manaBar.getComponent(UiPositionComponent.class).x - 30;
+		manaLabel.getComponent(UiPositionComponent.class).y = manaBar.getComponent(UiPositionComponent.class).y + 12;
+		characterUI.manaLabel = manaLabel;
+		manaLabel.setLabel(Stat.MANA);
+		engine.addEntity(manaLabel);
+
 		
 		CharacterStatBarEntity foodBar = new CharacterStatBarEntity(x + 10, y - 45, 100, 10, 0, character.getStat(Stat.MAXHUNGER)) {
 			
@@ -191,7 +208,14 @@ public class GameMenu extends Screen {
 		engine.addEntity(foodBar);
 		foodBar.setCharacter(character);
 		foodBar.getComponent(BarComponent.class).colour = Color.GREEN;
-		characterUI.healthBar = foodBar;
+		characterUI.foodBar = foodBar;
+		
+		CharacterLabelEntity foodLabel = new CharacterLabelEntity();
+		foodLabel.getComponent(UiPositionComponent.class).x = foodBar.getComponent(UiPositionComponent.class).x - 30;
+		foodLabel.getComponent(UiPositionComponent.class).y = foodBar.getComponent(UiPositionComponent.class).y + 12;
+		characterUI.foodLabel = foodLabel;
+		foodLabel.setLabel(Stat.HUNGER);
+		engine.addEntity(foodLabel);
 		
 		CharacterStatBarEntity happyBar = new CharacterStatBarEntity(x + 10, y - 60, 100, 10, 0, character.getStat(Stat.MAXHAPPINESS)) {
 			
@@ -206,7 +230,14 @@ public class GameMenu extends Screen {
 		engine.addEntity(happyBar);
 		happyBar.setCharacter(character);
 		happyBar.getComponent(BarComponent.class).colour = Color.YELLOW;
-		characterUI.healthBar = happyBar;
+		characterUI.happyBar = happyBar;
+
+		CharacterLabelEntity happyLabel = new CharacterLabelEntity();
+		happyLabel.getComponent(UiPositionComponent.class).x = happyBar.getComponent(UiPositionComponent.class).x - 30;
+		happyLabel.getComponent(UiPositionComponent.class).y = happyBar.getComponent(UiPositionComponent.class).y + 12;
+		characterUI.happyLabel = happyLabel;
+		happyLabel.setLabel(Stat.HAPPINESS);
+		engine.addEntity(happyLabel);
 		
 		CharacterStatBarEntity goldBar = new CharacterStatBarEntity(x + 10, y - 75, 100, 10, 0, character.getStat(Stat.MAXGOLD)) {
 			
@@ -221,7 +252,14 @@ public class GameMenu extends Screen {
 		engine.addEntity(goldBar);
 		goldBar.setCharacter(character);
 		goldBar.getComponent(BarComponent.class).colour = Color.DARK_GRAY;
-		characterUI.healthBar = goldBar;
+		characterUI.goldBar = goldBar;
+
+		CharacterLabelEntity goldLabel = new CharacterLabelEntity();
+		goldLabel.getComponent(UiPositionComponent.class).x = goldBar.getComponent(UiPositionComponent.class).x - 30;
+		goldLabel.getComponent(UiPositionComponent.class).y = goldBar.getComponent(UiPositionComponent.class).y + 12;
+		characterUI.goldLabel = goldLabel;
+		goldLabel.setLabel(Stat.GOLD);
+		engine.addEntity(goldLabel);
 		
 		CharacterTextEntity name = new CharacterTextEntity();
 		name.getComponent(UiPositionComponent.class).x = x;
@@ -391,9 +429,9 @@ public class GameMenu extends Screen {
 	}
 	
 	private static class CharacterUi {
-		public TextEntity name;
+		public TextEntity name, healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
 		public CharacterImageEntity image;
-		public BarEntity healthBar, manaBar, foodBar, happyBar, moneyBar;
+		public BarEntity healthBar, manaBar, foodBar, happyBar, goldBar;
 	}
 
 }
