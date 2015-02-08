@@ -176,7 +176,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				int index = 0;
 				int line = 0;
 				while(index < text.text.length()) {
-					if(sb.length() < text.maxCharsPerLine || text.text.charAt(index) != ' ') {
+					if((sb.length() < text.maxCharsPerLine || text.text.charAt(index) != ' ') && text.text.charAt(index) != '@') {
 						sb.append(text.text.charAt(index));
 					}
 					else {
