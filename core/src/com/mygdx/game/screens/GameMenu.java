@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
+import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
@@ -192,12 +193,117 @@ public class GameMenu extends Screen {
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).x = x;
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 85;
 		
+		int iconX = x + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionWidth() - 90;
+		int iconY = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 90;
+		
+		List<TextureRegion> region = new ArrayList<TextureRegion>();
+		Texture icon1 = new Texture("healerIcon.png");
+		TextureRegion icon1Texture = new TextureRegion(icon1);
+		region.add(icon1Texture);
+		region.add(icon1Texture);
+		characterStatMenu.healerIcon = new UiButtonEntity(x, y, region) {
+			@Override
+			public boolean mD(int x, int y) {
+				if(!characterBank.isAssignedJob(Job.Healer)) {
+					characterStatMenu.getCharacter().assignJob(Job.Healer);
+					characterStatMenu.updateIcons(characterBank);
+				}
+				return true;
+			}
+		};
+		characterStatMenu.healerIcon.getComponent(UiPositionComponent.class).x = iconX;
+		characterStatMenu.healerIcon.getComponent(UiPositionComponent.class).y = iconY;
+		
+		region = new ArrayList<TextureRegion>();
+		icon1 = new Texture("alchemistIcon.png");
+		icon1Texture = new TextureRegion(icon1);
+		region.add(icon1Texture);
+		region.add(icon1Texture);
+		characterStatMenu.alchIcon = new UiButtonEntity(x, y, region) {
+			@Override
+			public boolean mD(int x, int y) {
+				if(!characterBank.isAssignedJob(Job.Alchemist)) {
+					characterStatMenu.getCharacter().assignJob(Job.Alchemist);
+					characterStatMenu.updateIcons(characterBank);
+				}
+				return true;
+			}
+		};
+		characterStatMenu.alchIcon.getComponent(UiPositionComponent.class).x = iconX;
+		characterStatMenu.alchIcon.getComponent(UiPositionComponent.class).y = iconY - 40;
+		
+		region = new ArrayList<TextureRegion>();
+		icon1 = new Texture("chefIcon.png");
+		icon1Texture = new TextureRegion(icon1);
+		region.add(icon1Texture);
+		region.add(icon1Texture);
+		characterStatMenu.cookIcon = new UiButtonEntity(x, y, region) {
+			@Override
+			public boolean mD(int x, int y) {
+				if(!characterBank.isAssignedJob(Job.Cook)) {
+					characterStatMenu.getCharacter().assignJob(Job.Cook);
+					characterStatMenu.updateIcons(characterBank);
+				}
+				return true;
+			}
+		};
+		characterStatMenu.cookIcon.getComponent(UiPositionComponent.class).x = iconX;
+		characterStatMenu.cookIcon.getComponent(UiPositionComponent.class).y = iconY - 80;
+		
+		region = new ArrayList<TextureRegion>();
+		icon1 = new Texture("bardIcon.png");
+		icon1Texture = new TextureRegion(icon1);
+		region.add(icon1Texture);
+		region.add(icon1Texture);
+		characterStatMenu.bardIcon = new UiButtonEntity(x, y, region) {
+			@Override
+			public boolean mD(int x, int y) {
+				if(!characterBank.isAssignedJob(Job.Bard)) {
+					characterStatMenu.getCharacter().assignJob(Job.Bard);
+					characterStatMenu.updateIcons(characterBank);
+				}
+				return true;
+			}
+		};
+		characterStatMenu.bardIcon.getComponent(UiPositionComponent.class).x = iconX;
+		characterStatMenu.bardIcon.getComponent(UiPositionComponent.class).y = iconY - 120;
+		
+		region = new ArrayList<TextureRegion>();
+		icon1 = new Texture("merchantIcon.png");
+		icon1Texture = new TextureRegion(icon1);
+		region.add(icon1Texture);
+		region.add(icon1Texture);
+		characterStatMenu.merchIcon = new UiButtonEntity(x, y, region) {
+			@Override
+			public boolean mD(int x, int y) {
+				if(!characterBank.isAssignedJob(Job.Merchant)) {
+					characterStatMenu.getCharacter().assignJob(Job.Merchant);
+					characterStatMenu.updateIcons(characterBank);
+				}
+				return true;
+			}
+		};
+		characterStatMenu.merchIcon.getComponent(UiPositionComponent.class).x = iconX;
+		characterStatMenu.merchIcon.getComponent(UiPositionComponent.class).y = iconY - 160;
+		
+		characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.cookIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.merchIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.bardIcon.getComponent(MultiTextureComponent.class).visible = false;
+		
 		engine.addEntity(characterStatMenu.background);
 		engine.addEntity(characterStatMenu.closeText);
 		engine.addEntity(characterStatMenu.name);
 		engine.addEntity(characterStatMenu.needText);
 		engine.addEntity(characterStatMenu.skillText);
 		engine.addEntity(characterStatMenu.traitText);
+		
+		engine.addEntity(characterStatMenu.healerIcon);
+		engine.addEntity(characterStatMenu.alchIcon);
+		engine.addEntity(characterStatMenu.cookIcon);
+		engine.addEntity(characterStatMenu.bardIcon);
+		engine.addEntity(characterStatMenu.merchIcon);
 	}
 
 	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, PartyCharacter character) {
@@ -460,6 +566,11 @@ public class GameMenu extends Screen {
 		for(int i = 0; i < cards.size(); i++) {
 			cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
 		}
+		characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.cookIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.merchIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.bardIcon.getComponent(MultiTextureComponent.class).visible = false;
 		
 		cardName.getComponent(TextComponent.class).visible = false;
 		cardDescription.getComponent(TextComponent.class).visible = false;
@@ -473,6 +584,8 @@ public class GameMenu extends Screen {
 	}
 	
 	public void showStatMenu(PartyCharacter chosenCharacter) {
+		
+		characterStatMenu.character = chosenCharacter;
 		
 		ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
 		for(int i = 0; i < buttons.size(); i++) {
@@ -495,6 +608,14 @@ public class GameMenu extends Screen {
 																			  Need.HAPPINESS + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
 																			  Need.GOLD + " " + chosenCharacter.getTrueNeed(Need.GOLD);
 		
+		characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = true;
+		characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = true;
+		characterStatMenu.cookIcon.getComponent(MultiTextureComponent.class).visible = true;
+		characterStatMenu.merchIcon.getComponent(MultiTextureComponent.class).visible = true;
+		characterStatMenu.bardIcon.getComponent(MultiTextureComponent.class).visible = true;
+		
+		characterStatMenu.updateIcons(characterBank);
+		
 	}
 	
 	public void hideStatMenu() {
@@ -515,6 +636,12 @@ public class GameMenu extends Screen {
 		characterStatMenu.skillText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.closeText.getComponent(TextComponent.class).visible = false;
+		
+		characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.cookIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.merchIcon.getComponent(MultiTextureComponent.class).visible = false;
+		characterStatMenu.bardIcon.getComponent(MultiTextureComponent.class).visible = false;
 	}
 	
 	private void generateNewCards() {
@@ -540,9 +667,76 @@ public class GameMenu extends Screen {
 	}
 	
 	private static class CharacterStatMenu {
+		
+		public PartyCharacter character;
+		
 		public TextButtonEntity closeText;
 		public TextEntity name, skillText, needText, traitText;
 		public UiImageEntity background;
+		public UiButtonEntity healerIcon, alchIcon, cookIcon, bardIcon, merchIcon;
+		
+		public PartyCharacter getCharacter() {
+			return this.character;
+		}
+
+		public void updateIcons(CharacterBank characterBank) {
+			
+			if(characterBank.isAssignedJob(Job.Alchemist)) {
+				alchIcon.getComponent(MultiTextureComponent.class).visible = false;
+			}
+			else {
+				alchIcon.getComponent(MultiTextureComponent.class).visible = true;
+			}
+			
+			if(characterBank.isAssignedJob(Job.Bard)) {
+				bardIcon.getComponent(MultiTextureComponent.class).visible = false;
+			}
+			else {
+				bardIcon.getComponent(MultiTextureComponent.class).visible = true;
+			}
+			
+			if(characterBank.isAssignedJob(Job.Cook)) {
+				cookIcon.getComponent(MultiTextureComponent.class).visible = false;
+			}
+			else {
+				cookIcon.getComponent(MultiTextureComponent.class).visible = true;
+			}
+			
+			if(characterBank.isAssignedJob(Job.Healer)) {
+				healerIcon.getComponent(MultiTextureComponent.class).visible = false;
+			}
+			else {
+				healerIcon.getComponent(MultiTextureComponent.class).visible = true;
+			}
+			
+			if(characterBank.isAssignedJob(Job.Merchant)) {
+				merchIcon.getComponent(MultiTextureComponent.class).visible = false;
+			}
+			else {
+				merchIcon.getComponent(MultiTextureComponent.class).visible = true;
+			}
+			
+			if(character.getJob() != null)
+			switch(character.getJob()) {
+				case Alchemist:
+					alchIcon.getComponent(MultiTextureComponent.class).visible = true;
+				break;
+				case Bard:
+					bardIcon.getComponent(MultiTextureComponent.class).visible = true;
+				break;
+				case Cook:
+					cookIcon.getComponent(MultiTextureComponent.class).visible = true;
+				break;
+				case Healer:
+					healerIcon.getComponent(MultiTextureComponent.class).visible = true;
+				break;
+				case Merchant:
+					merchIcon.getComponent(MultiTextureComponent.class).visible = true;
+				break;
+				default:
+				break;
+			}
+		}
 	}
 
 }
