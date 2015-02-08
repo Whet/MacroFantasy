@@ -19,7 +19,7 @@ public class CardMechanics {
 	}
 	
 	public void chooseCharacter(PartyCharacter chosenCharacter) {
-		if(this.chosenCharacter == null && chosenCharacter.isAlive()) {
+		if(this.chosenCard != null && this.chosenCharacter == null && chosenCharacter.isAlive()) {
 			this.chosenCharacter = chosenCharacter;
 			this.chosenCard = chosenCard.next();
 			gameMenu.showChosenCard();
