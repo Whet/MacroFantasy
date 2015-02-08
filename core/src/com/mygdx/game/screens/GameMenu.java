@@ -164,6 +164,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.needText = new TextEntity();
 		characterStatMenu.needText.getComponent(TextComponent.class).text = "NEED";
 		characterStatMenu.needText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.needText.getComponent(TextComponent.class).maxCharsPerLine = 999;
 		characterStatMenu.needText.getComponent(UiPositionComponent.class).x = x;
 		characterStatMenu.needText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 40;
 		
@@ -485,6 +486,15 @@ public class GameMenu extends Screen {
 		characterStatMenu.skillText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.closeText.getComponent(TextComponent.class).visible = true;
+		
+		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName();
+		
+		characterStatMenu.needText.getComponent(TextComponent.class).text =""+Need.HEALTH + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + " " +
+																			  Need.MANA + " " + chosenCharacter.getTrueNeed(Need.MANA) + " " +
+																			  Need.HUNGER + " " + chosenCharacter.getTrueNeed(Need.HUNGER) + " " +
+																			  Need.HAPPINESS + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
+																			  Need.GOLD + " " + chosenCharacter.getTrueNeed(Need.GOLD);
+		
 	}
 	
 	public void hideStatMenu() {
