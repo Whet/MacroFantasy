@@ -299,7 +299,36 @@ public class PartyCharacter {
 	}
 
 	public void incrementNeed(Need need, int increment) {
-		setBaseNeed(need, getBaseNeed(need) + increment);
+		switch (need) {
+		case HEALTH :
+			if (maxHealth < getBaseNeed(need) + increment)
+				setBaseNeed(need, maxHealth);
+			else
+				setBaseNeed(need, getBaseNeed(need) + increment);
+			break;
+		case MANA :
+			if (maxMana < getBaseNeed(need) + increment)
+				setBaseNeed(need, maxMana);
+			else
+				setBaseNeed(need, getBaseNeed(need) + increment);
+			break;
+		case HAPPINESS :
+			if (maxHappiness < getBaseNeed(need) + increment)
+				setBaseNeed(need, maxHappiness);
+			else
+				setBaseNeed(need, getBaseNeed(need) + increment);
+			break;
+		case GOLD :
+			if (maxGold < getBaseNeed(need) + increment)
+				setBaseNeed(need, maxGold);
+			else
+				setBaseNeed(need, getBaseNeed(need) + increment);
+			break;
+		default :
+			setBaseNeed(need, getBaseNeed(need) + increment);
+			break;
+		}
+		
 	}
 
 	public Race getRace() {
