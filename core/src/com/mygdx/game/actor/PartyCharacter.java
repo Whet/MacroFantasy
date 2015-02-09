@@ -79,7 +79,6 @@ public class PartyCharacter {
 		try {
 			NameGenerator nameGen = new NameGenerator("humanNames.txt");
 			setName(nameGen.compose(rn.nextInt(3)+1));
-			System.out.println(name);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

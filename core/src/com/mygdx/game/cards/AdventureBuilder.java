@@ -14,6 +14,7 @@ public class AdventureBuilder {
 			@Override
 			public void act() {
 				cardMechanics.getChosenCharacter().incrementNeed(Need.GOLD, 10);
+				cardMechanics.getChosenCharacter().incrementNeed(Need.HEALTH, -10);
 			}
 		};
 		
@@ -26,7 +27,7 @@ public class AdventureBuilder {
 		
 		card = new AdventureCard("The Adventure Begins", "A new day dawns in the lands of Test-topia! The sun is shining, birds are chirping and orcs are marching to destroy the party! Choose someone to go forth and battle by clicking their portrait!",
 								 new Choice("",
-								 new AdventureCard("The Adventure Ends!", "The party member says the orcs with ease and are given some money as a reward. Great job!", new Choice("Claim Reward", reward, penalty) {
+								 new AdventureCard("The Adventure Ends!", "The party member slays the orcs with relative ease and are given some money as a reward. They suffered some wounds however. Great job!", new Choice("Claim Reward", reward, penalty) {
 			
 			@Override
 			public void choose() {

@@ -613,9 +613,12 @@ public class GameMenu extends Screen {
 																			  Need.HUNGER + " " + chosenCharacter.getTrueNeed(Need.HUNGER) + " " +
 																			  Need.HAPPINESS + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
 																			  Need.GOLD + " " + chosenCharacter.getTrueNeed(Need.GOLD);
-		for (AbstractTrait trait : chosenCharacter.getTraits())
+		for (int i = 0; i < chosenCharacter.getTraits().size(); i++)
 		{
-		characterStatMenu.traitText.getComponent(TextComponent.class).text += trait.getName() + ": " + trait.getDescription() + "@";
+			if (i == 0)
+				characterStatMenu.traitText.getComponent(TextComponent.class).text = chosenCharacter.getTraits().get(i).getName() + ": " + chosenCharacter.getTraits().get(i).getDescription() + "@";
+			else
+				characterStatMenu.traitText.getComponent(TextComponent.class).text += chosenCharacter.getTraits().get(i).getName() + ": " + chosenCharacter.getTraits().get(i).getDescription() + "@";			
 		}
 		characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = true;
 		characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = true;
