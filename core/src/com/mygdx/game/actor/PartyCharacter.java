@@ -10,8 +10,6 @@ import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Race;
 import com.mygdx.game.actor.traits.AbstractTrait;
-import com.mygdx.game.actor.traits.TraitBigAppetite;
-import com.mygdx.game.actor.traits.TraitFeeble;
 import com.mygdx.game.actor.traits.TraitFlag;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
 import com.mygdx.game.actor.traits.pools.TraitPool;
@@ -62,16 +60,16 @@ public class PartyCharacter {
 
 		generateRace();
 		generateName();
-		setBaseNeed(Need.GOLD, 5);
-		setBaseNeed(Need.HAPPINESS, 100);
+		setBaseNeed(Need.GOLD, rn.nextInt(20));
+		setBaseNeed(Need.HAPPINESS, rn.nextInt(60) + 40);
 		setBaseNeed(Need.HUNGER, 100);
 
 //		assignJob();
-		jobSkills.put(Job.Alchemist, rn.nextInt(5));
-		jobSkills.put(Job.Bard, rn.nextInt(5));
-		jobSkills.put(Job.Cook, rn.nextInt(5));
-		jobSkills.put(Job.Healer, rn.nextInt(5));
-		jobSkills.put(Job.Merchant, rn.nextInt(5));
+		jobSkills.put(Job.ALCHEMIST, rn.nextInt(10));
+		jobSkills.put(Job.BARD, rn.nextInt(10));
+		jobSkills.put(Job.COOK, rn.nextInt(10));
+		jobSkills.put(Job.HEALER, rn.nextInt(10));
+		jobSkills.put(Job.MERCHANT, rn.nextInt(10));
 		
 	}
 
@@ -315,6 +313,12 @@ public class PartyCharacter {
 		case HAPPINESS :
 			if (maxHappiness < getBaseNeed(need) + increment)
 				setBaseNeed(need, maxHappiness);
+			else
+				setBaseNeed(need, getBaseNeed(need) + increment);
+			break;
+		case HUNGER :
+			if (maxHunger < getBaseNeed(need) + increment)
+				setBaseNeed(need, maxHunger);
 			else
 				setBaseNeed(need, getBaseNeed(need) + increment);
 			break;

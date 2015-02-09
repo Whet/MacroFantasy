@@ -74,20 +74,25 @@ public class CardMechanics {
 				
 				if(character.getJob() != null)
 				switch(character.getJob()) {
-					case Alchemist:
-						manaBoost = character.getSkill(Job.Alchemist);
+					case ALCHEMIST:
+						manaBoost = Math.round(character.getSkill(Job.ALCHEMIST)/10);
+						character.incrementSkill(Job.ALCHEMIST, 1);
 					break;
-					case Bard:
-						happyBoost = character.getSkill(Job.Bard);
+					case BARD:
+						happyBoost = Math.round(character.getSkill(Job.BARD)/10);
+						character.incrementSkill(Job.BARD, 1);
 					break;
-					case Cook:
-						foodBoost = character.getSkill(Job.Cook);
+					case COOK:
+						foodBoost = Math.round(character.getSkill(Job.COOK)/10);
+						character.incrementSkill(Job.COOK, 1);
 					break;
-					case Healer:
-						healthBoost = character.getSkill(Job.Healer);
+					case HEALER:
+						healthBoost = Math.round(character.getSkill(Job.HEALER)/10);
+						character.incrementSkill(Job.HEALER, 1);
 					break;
-					case Merchant:
-						moneyBoost = character.getSkill(Job.Merchant);
+					case MERCHANT:
+						moneyBoost = Math.round(character.getSkill(Job.MERCHANT)/10);
+						character.incrementSkill(Job.MERCHANT, 1);
 					break;
 					default:
 					break;

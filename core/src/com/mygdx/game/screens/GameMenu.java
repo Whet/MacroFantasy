@@ -40,6 +40,7 @@ import com.mygdx.game.entities.ui.TextButtonEntity;
 import com.mygdx.game.entities.ui.TextEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
+import com.mygdx.game.utils.WordUtils;
 
 public class GameMenu extends Screen {
 	
@@ -173,6 +174,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.skillText = new TextEntity();
 		characterStatMenu.skillText.getComponent(TextComponent.class).text = "SKILL";
 		characterStatMenu.skillText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.skillText.getComponent(TextComponent.class).maxCharsPerLine = 70;
 		characterStatMenu.skillText.getComponent(UiPositionComponent.class).x = x;
 		characterStatMenu.skillText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 60;
 		
@@ -205,8 +207,8 @@ public class GameMenu extends Screen {
 		characterStatMenu.healerIcon = new UiButtonEntity(x, y, region) {
 			@Override
 			public boolean mD(int x, int y) {
-				if(!characterBank.isAssignedJob(Job.Healer)) {
-					characterStatMenu.getCharacter().assignJob(Job.Healer);
+				if(!characterBank.isAssignedJob(Job.HEALER)) {
+					characterStatMenu.getCharacter().assignJob(Job.HEALER);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
@@ -224,8 +226,8 @@ public class GameMenu extends Screen {
 		characterStatMenu.alchIcon = new UiButtonEntity(x, y, region) {
 			@Override
 			public boolean mD(int x, int y) {
-				if(!characterBank.isAssignedJob(Job.Alchemist)) {
-					characterStatMenu.getCharacter().assignJob(Job.Alchemist);
+				if(!characterBank.isAssignedJob(Job.ALCHEMIST)) {
+					characterStatMenu.getCharacter().assignJob(Job.ALCHEMIST);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
@@ -243,8 +245,8 @@ public class GameMenu extends Screen {
 		characterStatMenu.cookIcon = new UiButtonEntity(x, y, region) {
 			@Override
 			public boolean mD(int x, int y) {
-				if(!characterBank.isAssignedJob(Job.Cook)) {
-					characterStatMenu.getCharacter().assignJob(Job.Cook);
+				if(!characterBank.isAssignedJob(Job.COOK)) {
+					characterStatMenu.getCharacter().assignJob(Job.COOK);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
@@ -262,8 +264,8 @@ public class GameMenu extends Screen {
 		characterStatMenu.bardIcon = new UiButtonEntity(x, y, region) {
 			@Override
 			public boolean mD(int x, int y) {
-				if(!characterBank.isAssignedJob(Job.Bard)) {
-					characterStatMenu.getCharacter().assignJob(Job.Bard);
+				if(!characterBank.isAssignedJob(Job.BARD)) {
+					characterStatMenu.getCharacter().assignJob(Job.BARD);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
@@ -281,8 +283,8 @@ public class GameMenu extends Screen {
 		characterStatMenu.merchIcon = new UiButtonEntity(x, y, region) {
 			@Override
 			public boolean mD(int x, int y) {
-				if(!characterBank.isAssignedJob(Job.Merchant)) {
-					characterStatMenu.getCharacter().assignJob(Job.Merchant);
+				if(!characterBank.isAssignedJob(Job.MERCHANT)) {
+					characterStatMenu.getCharacter().assignJob(Job.MERCHANT);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
@@ -608,12 +610,18 @@ public class GameMenu extends Screen {
 		
 		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName();
 		
-		characterStatMenu.needText.getComponent(TextComponent.class).text =""+Need.HEALTH + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + " " +
-																			  Need.MANA + " " + chosenCharacter.getTrueNeed(Need.MANA) + " " +
-																			  Need.HUNGER + " " + chosenCharacter.getTrueNeed(Need.HUNGER) + " " +
-																			  Need.HAPPINESS + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
-																			  Need.GOLD + " " + chosenCharacter.getTrueNeed(Need.GOLD);
-		for (int i = 0; i < chosenCharacter.getTraits().size(); i++)
+		characterStatMenu.needText.getComponent(TextComponent.class).text = "Needs: "+ WordUtils.capitalise(Need.HEALTH.toString()) + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + " " +
+																			   WordUtils.capitalise(Need.MANA.toString()) + " " + chosenCharacter.getTrueNeed(Need.MANA) + " " +
+																			   WordUtils.capitalise(Need.HUNGER.toString()) + " " + chosenCharacter.getTrueNeed(Need.HUNGER) + " " +
+																			   WordUtils.capitalise(Need.HAPPINESS.toString()) + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
+																			   WordUtils.capitalise(Need.GOLD.toString()) + " " + chosenCharacter.getTrueNeed(Need.GOLD);
+		
+		characterStatMenu.skillText.getComponent(TextComponent.class).text = "Skills: "+ WordUtils.capitalise(Job.ALCHEMIST.toString()) + " " + chosenCharacter.getSkill(Job.ALCHEMIST) + " " +
+				 WordUtils.capitalise(Job.BARD.toString()) + " " + chosenCharacter.getSkill(Job.BARD) + " " +
+				 WordUtils.capitalise(Job.COOK.toString()) + " " + chosenCharacter.getSkill(Job.COOK) + " " +
+				 WordUtils.capitalise(Job.HEALER.toString()) + " " + chosenCharacter.getSkill(Job.HEALER) + " " +
+				 WordUtils.capitalise(Job.MERCHANT.toString()) + " " + chosenCharacter.getSkill(Job.MERCHANT);
+for (int i = 0; i < chosenCharacter.getTraits().size(); i++)
 		{
 			if (i == 0)
 				characterStatMenu.traitText.getComponent(TextComponent.class).text = chosenCharacter.getTraits().get(i).getName() + ": " + chosenCharacter.getTraits().get(i).getDescription() + "@";
@@ -695,35 +703,35 @@ public class GameMenu extends Screen {
 
 		public void updateIcons(CharacterBank characterBank) {
 			
-			if(characterBank.isAssignedJob(Job.Alchemist)) {
+			if(characterBank.isAssignedJob(Job.ALCHEMIST)) {
 				alchIcon.getComponent(MultiTextureComponent.class).visible = false;
 			}
 			else {
 				alchIcon.getComponent(MultiTextureComponent.class).visible = true;
 			}
 			
-			if(characterBank.isAssignedJob(Job.Bard)) {
+			if(characterBank.isAssignedJob(Job.BARD)) {
 				bardIcon.getComponent(MultiTextureComponent.class).visible = false;
 			}
 			else {
 				bardIcon.getComponent(MultiTextureComponent.class).visible = true;
 			}
 			
-			if(characterBank.isAssignedJob(Job.Cook)) {
+			if(characterBank.isAssignedJob(Job.COOK)) {
 				cookIcon.getComponent(MultiTextureComponent.class).visible = false;
 			}
 			else {
 				cookIcon.getComponent(MultiTextureComponent.class).visible = true;
 			}
 			
-			if(characterBank.isAssignedJob(Job.Healer)) {
+			if(characterBank.isAssignedJob(Job.HEALER)) {
 				healerIcon.getComponent(MultiTextureComponent.class).visible = false;
 			}
 			else {
 				healerIcon.getComponent(MultiTextureComponent.class).visible = true;
 			}
 			
-			if(characterBank.isAssignedJob(Job.Merchant)) {
+			if(characterBank.isAssignedJob(Job.MERCHANT)) {
 				merchIcon.getComponent(MultiTextureComponent.class).visible = false;
 			}
 			else {
@@ -732,19 +740,19 @@ public class GameMenu extends Screen {
 			
 			if(character.getJob() != null)
 			switch(character.getJob()) {
-				case Alchemist:
+				case ALCHEMIST:
 					alchIcon.getComponent(MultiTextureComponent.class).visible = true;
 				break;
-				case Bard:
+				case BARD:
 					bardIcon.getComponent(MultiTextureComponent.class).visible = true;
 				break;
-				case Cook:
+				case COOK:
 					cookIcon.getComponent(MultiTextureComponent.class).visible = true;
 				break;
-				case Healer:
+				case HEALER:
 					healerIcon.getComponent(MultiTextureComponent.class).visible = true;
 				break;
-				case Merchant:
+				case MERCHANT:
 					merchIcon.getComponent(MultiTextureComponent.class).visible = true;
 				break;
 				default:

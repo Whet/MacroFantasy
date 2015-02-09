@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Random;
 
 public enum Job {
-	Healer("The healer heals the party every turn."),
-	Alchemist("The alchemist regenerates the party's mana."),
-	Cook("The cook feeds the party every turn."),
-	Bard("The bard raises the party's happiness every turn."),
-	Merchant("The merchant makes the party money every turn.");
+	HEALER("The healer heals the party every turn."),
+	ALCHEMIST("The alchemist regenerates the party's mana."),
+	COOK("The cook feeds the party every turn."),
+	BARD("The bard raises the party's happiness every turn."),
+	MERCHANT("The merchant makes the party money every turn.");
 	
 
 	private final String description;
