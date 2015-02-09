@@ -13,6 +13,8 @@ import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitBigAppetite;
 import com.mygdx.game.actor.traits.TraitFeeble;
 import com.mygdx.game.actor.traits.TraitFlag;
+import com.mygdx.game.actor.traits.pools.PoolGeneric;
+import com.mygdx.game.actor.traits.pools.TraitPool;
 
 public class PartyCharacter {
 
@@ -34,7 +36,8 @@ public class PartyCharacter {
 
 	//Traits
 	private ArrayList<AbstractTrait> traits;
-
+	private TraitPool genericTraitPool;
+	
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -49,8 +52,13 @@ public class PartyCharacter {
 		jobSkills = new HashMap<Job, Integer>();
 		
 		traits = new ArrayList<AbstractTrait>();
-		traits.add(new TraitBigAppetite());
-		traits.add(new TraitFeeble());
+		genericTraitPool = new PoolGeneric();
+		if (!genericTraitPool.isEmpty())
+			traits.add(genericTraitPool.getRandomTrait());
+		if (!genericTraitPool.isEmpty())
+			traits.add(genericTraitPool.getRandomTrait());
+		if (!genericTraitPool.isEmpty())
+			traits.add(genericTraitPool.getRandomTrait());
 
 		generateRace();
 		generateName();
@@ -363,5 +371,10 @@ public class PartyCharacter {
 		if(trueGold < 0) {
 			setAlive(false, CauseOfDeath.GOLD);
 		}
+	}
+
+	public ArrayList<AbstractTrait> getTraits() {
+		// TODO Auto-generated method stub
+		return traits;
 	}
 }

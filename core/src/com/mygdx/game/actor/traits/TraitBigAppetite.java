@@ -4,6 +4,7 @@ public class TraitBigAppetite extends AbstractTrait {
 
 	public TraitBigAppetite() {
 		super();
+		name = "Big Appetite";
 		description = "A big belly means it takes more to fill you up.";
 		flags.add(TraitFlag.HUNGER);
 	}

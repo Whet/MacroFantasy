@@ -16,6 +16,7 @@ import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
+import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
@@ -188,7 +189,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.closeText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 20;
 		
 		characterStatMenu.traitText = new TextEntity();
-		characterStatMenu.traitText.getComponent(TextComponent.class).text = "T@RA@IT";
+		characterStatMenu.traitText.getComponent(TextComponent.class).text = "Traits: @";
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).x = x;
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 85;
@@ -612,7 +613,10 @@ public class GameMenu extends Screen {
 																			  Need.HUNGER + " " + chosenCharacter.getTrueNeed(Need.HUNGER) + " " +
 																			  Need.HAPPINESS + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
 																			  Need.GOLD + " " + chosenCharacter.getTrueNeed(Need.GOLD);
-		
+		for (AbstractTrait trait : chosenCharacter.getTraits())
+		{
+		characterStatMenu.traitText.getComponent(TextComponent.class).text += trait.getName() + ": " + trait.getDescription() + "@";
+		}
 		characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = true;
 		characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = true;
 		characterStatMenu.cookIcon.getComponent(MultiTextureComponent.class).visible = true;

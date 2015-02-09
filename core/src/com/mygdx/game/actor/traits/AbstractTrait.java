@@ -9,9 +9,11 @@ public abstract class AbstractTrait {
 
 	protected List<TraitFlag> flags;	//Categories which describe the trait and can be used to enable extra event choices.
 	protected String description;
+	protected String name;
 	
 	public AbstractTrait() {
 		flags = new ArrayList<TraitFlag>();
+		name = "";
 		description = "";
 	}
 	
@@ -24,6 +26,14 @@ public abstract class AbstractTrait {
 		return false;
 	}
 
+	public String getName(){
+		return name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
 	//Fancy actions are performed in overriding methods of this.
 	public void act(PartyCharacter pc) {}
 	
