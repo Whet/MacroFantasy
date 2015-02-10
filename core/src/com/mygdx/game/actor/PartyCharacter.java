@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.mygdx.game.actor.enums.CauseOfDeath;
+import com.mygdx.game.actor.enums.Gender;
 import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Race;
@@ -24,6 +25,7 @@ public class PartyCharacter {
 	//Name
 	private String name;
 	private Race race;
+	private Gender gender;
 
 	//Needs
 	private int health, maxHealth;
@@ -53,11 +55,13 @@ public class PartyCharacter {
 		genericTraitPool = new PoolGeneric();
 		if (!genericTraitPool.isEmpty())
 			traits.add(genericTraitPool.getRandomTrait());
-		if (!genericTraitPool.isEmpty())
-			traits.add(genericTraitPool.getRandomTrait());
-		if (!genericTraitPool.isEmpty())
-			traits.add(genericTraitPool.getRandomTrait());
 
+		//Assign gender
+		if (rn.nextInt(2) == 0)
+			gender = Gender.MALE;
+		else
+			gender = Gender.FEMALE;
+		
 		generateRace();
 		generateName();
 		setBaseNeed(Need.GOLD, rn.nextInt(20));
@@ -345,6 +349,10 @@ public class PartyCharacter {
 
 	public String getName() {
 		return name;
+	}
+	
+	public Gender getGender() {
+		return gender;
 	}
 	
 	public void setName(String name) {

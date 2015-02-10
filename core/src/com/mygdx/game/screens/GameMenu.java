@@ -193,11 +193,12 @@ public class GameMenu extends Screen {
 		characterStatMenu.traitText = new TextEntity();
 		characterStatMenu.traitText.getComponent(TextComponent.class).text = "Traits: @";
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.traitText.getComponent(TextComponent.class).maxCharsPerLine = 70;
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).x = x;
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 85;
 		
 		int iconX = x + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionWidth() - 90;
-		int iconY = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 90;
+		int iconY = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 98;
 		
 		List<TextureRegion> region = new ArrayList<TextureRegion>();
 		Texture icon1 = new Texture("healerIcon.png");
@@ -608,13 +609,13 @@ public class GameMenu extends Screen {
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.closeText.getComponent(TextComponent.class).visible = true;
 		
-		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName() + ", " + WordUtils.capitalise(chosenCharacter.getRace().toString());
+		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName() + ", " + WordUtils.capitalise(chosenCharacter.getGender().toString()) + " " + WordUtils.capitalise(chosenCharacter.getRace().toString());
 		
-		characterStatMenu.needText.getComponent(TextComponent.class).text = "Needs: "+ WordUtils.capitalise(Need.HEALTH.toString()) + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + " " +
-																			   WordUtils.capitalise(Need.MANA.toString()) + " " + chosenCharacter.getTrueNeed(Need.MANA) + " " +
-																			   WordUtils.capitalise(Need.HUNGER.toString()) + " " + chosenCharacter.getTrueNeed(Need.HUNGER) + " " +
-																			   WordUtils.capitalise(Need.HAPPINESS.toString()) + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + " " +
-																			   WordUtils.capitalise(Need.GOLD.toString()) + " " + chosenCharacter.getTrueNeed(Need.GOLD);
+		characterStatMenu.needText.getComponent(TextComponent.class).text = "Needs: "+ WordUtils.capitalise(Need.HEALTH.toString()) + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + "/" + chosenCharacter.getTrueNeed(Need.MAXHEALTH) + " " +
+																			   WordUtils.capitalise(Need.MANA.toString()) + " " + chosenCharacter.getTrueNeed(Need.MANA)  + "/" + chosenCharacter.getTrueNeed(Need.MAXMANA) + " " +
+																			   WordUtils.capitalise(Need.HUNGER.toString()) + " " + chosenCharacter.getTrueNeed(Need.HUNGER)  + "/" + chosenCharacter.getTrueNeed(Need.MAXHUNGER) + " " +
+																			   WordUtils.capitalise(Need.HAPPINESS.toString()) + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + "/" + chosenCharacter.getTrueNeed(Need.MAXHAPPINESS) + " " +
+																			   WordUtils.capitalise(Need.GOLD.toString()) + " " + chosenCharacter.getTrueNeed(Need.GOLD) + "/" + chosenCharacter.getTrueNeed(Need.MAXGOLD) ;
 		
 		characterStatMenu.skillText.getComponent(TextComponent.class).text = "Skills: "+ WordUtils.capitalise(Job.ALCHEMIST.toString()) + " " + chosenCharacter.getSkill(Job.ALCHEMIST) + " " +
 				 WordUtils.capitalise(Job.BARD.toString()) + " " + chosenCharacter.getSkill(Job.BARD) + " " +
