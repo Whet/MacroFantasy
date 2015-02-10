@@ -608,7 +608,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.closeText.getComponent(TextComponent.class).visible = true;
 		
-		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName();
+		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName() + ", " + WordUtils.capitalise(chosenCharacter.getRace().toString());
 		
 		characterStatMenu.needText.getComponent(TextComponent.class).text = "Needs: "+ WordUtils.capitalise(Need.HEALTH.toString()) + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + " " +
 																			   WordUtils.capitalise(Need.MANA.toString()) + " " + chosenCharacter.getTrueNeed(Need.MANA) + " " +
