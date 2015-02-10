@@ -12,6 +12,7 @@ import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Race;
 import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitFlag;
+import com.mygdx.game.actor.traits.pools.PoolFemale;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
 import com.mygdx.game.actor.traits.pools.TraitPool;
 
@@ -37,7 +38,7 @@ public class PartyCharacter {
 	//Traits
 	private ArrayList<AbstractTrait> traits;
 	private TraitPool genericTraitPool;
-	
+	private TraitPool femaleTraitPool;
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -53,28 +54,34 @@ public class PartyCharacter {
 		
 		traits = new ArrayList<AbstractTrait>();
 		genericTraitPool = new PoolGeneric();
-		if (!genericTraitPool.isEmpty())
-			traits.add(genericTraitPool.getRandomTrait());
-
+		femaleTraitPool = new PoolFemale();
+		
 		//Assign gender
 		if (rn.nextInt(2) == 0)
 			gender = Gender.MALE;
 		else
 			gender = Gender.FEMALE;
-		
+				
 		generateRace();
 		generateName();
 		setBaseNeed(Need.GOLD, rn.nextInt(20));
 		setBaseNeed(Need.HAPPINESS, rn.nextInt(60) + 40);
 		setBaseNeed(Need.HUNGER, 100);
 
-//		assignJob();
+//		Assign starting job values
 		jobSkills.put(Job.ALCHEMIST, rn.nextInt(10));
 		jobSkills.put(Job.BARD, rn.nextInt(10));
 		jobSkills.put(Job.COOK, rn.nextInt(10));
 		jobSkills.put(Job.HEALER, rn.nextInt(10));
 		jobSkills.put(Job.MERCHANT, rn.nextInt(10));
 		
+		//Assign traits
+		if (!genericTraitPool.isEmpty())
+			traits.add(genericTraitPool.getRandomTrait());
+		//20% chance of getting female trait
+		if (rn.nextInt(5) == 0 && !femaleTraitPool.isEmpty() && getGender() == Gender.FEMALE)
+			traits.add(femaleTraitPool.getRandomTrait());
+
 	}
 
 	private void generateName() {
@@ -305,34 +312,46 @@ public class PartyCharacter {
 		case HEALTH :
 			if (maxHealth < getBaseNeed(need) + increment)
 				setBaseNeed(need, maxHealth);
+			else if (getBaseNeed(need) + increment < 0)
+				setBaseNeed(need, 0);
 			else
 				setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		case MANA :
 			if (maxMana < getBaseNeed(need) + increment)
 				setBaseNeed(need, maxMana);
+			else if (getBaseNeed(need) + increment < 0)
+				setBaseNeed(need, 0);
 			else
 				setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		case HAPPINESS :
 			if (maxHappiness < getBaseNeed(need) + increment)
 				setBaseNeed(need, maxHappiness);
+			else if (getBaseNeed(need) + increment < 0)
+				setBaseNeed(need, 0);
 			else
 				setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		case HUNGER :
 			if (maxHunger < getBaseNeed(need) + increment)
 				setBaseNeed(need, maxHunger);
+			else if (getBaseNeed(need) + increment < 0)
+				setBaseNeed(need, 0);
 			else
 				setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		case GOLD :
 			if (maxGold < getBaseNeed(need) + increment)
 				setBaseNeed(need, maxGold);
+			else if (getBaseNeed(need) + increment < 0)
+				setBaseNeed(need, 0);
 			else
 				setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		default :
+			if (getBaseNeed(need) + increment < 0)
+				setBaseNeed(need, 0);
 			setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		}
