@@ -10,10 +10,12 @@ import com.mygdx.game.actor.enums.Gender;
 import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Race;
+import com.mygdx.game.actor.enums.Stat;
 import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitFlag;
 import com.mygdx.game.actor.traits.pools.PoolFemale;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
+import com.mygdx.game.actor.traits.pools.PoolGenericNegative;
 import com.mygdx.game.actor.traits.pools.TraitPool;
 
 public class PartyCharacter {
@@ -22,7 +24,7 @@ public class PartyCharacter {
 
 	//Random Generators
 	Random rn = new Random();
-	
+
 	//Name
 	private String name;
 	private Race race;
@@ -35,9 +37,17 @@ public class PartyCharacter {
 	private int gold, maxGold;
 	private int happiness, maxHappiness;
 
+	//Stats
+	private int fastTalk;
+	private int pathfinder;
+	private int sneak;
+	private int combat;
+	private int luck;
+
 	//Traits
 	private ArrayList<AbstractTrait> traits;
 	private TraitPool genericTraitPool;
+	private TraitPool genericNegativeTraitPool;
 	private TraitPool femaleTraitPool;
 	//Job
 	private Job job;
@@ -51,36 +61,54 @@ public class PartyCharacter {
 		//Initialise variables
 		setAlive(true);
 		jobSkills = new HashMap<Job, Integer>();
-		
+
 		traits = new ArrayList<AbstractTrait>();
 		genericTraitPool = new PoolGeneric();
+		genericNegativeTraitPool = new PoolGenericNegative();
 		femaleTraitPool = new PoolFemale();
-		
+
 		//Assign gender
 		if (rn.nextInt(2) == 0)
 			gender = Gender.MALE;
 		else
 			gender = Gender.FEMALE;
-				
+
 		generateRace();
 		generateName();
 		setBaseNeed(Need.GOLD, rn.nextInt(20));
 		setBaseNeed(Need.HAPPINESS, rn.nextInt(60) + 40);
 		setBaseNeed(Need.HUNGER, 100);
+		
+		setBaseStat(Stat.COMBAT, rn.nextInt(20));
+		setBaseStat(Stat.LUCK, rn.nextInt(20));
+		setBaseStat(Stat.PATHFINDER, rn.nextInt(20));
+		setBaseStat(Stat.SNEAK, rn.nextInt(20));
+		setBaseStat(Stat.LUCK, rn.nextInt(20));
 
-//		Assign starting job values
+		//		Assign starting job values
 		jobSkills.put(Job.ALCHEMIST, rn.nextInt(10));
 		jobSkills.put(Job.BARD, rn.nextInt(10));
 		jobSkills.put(Job.COOK, rn.nextInt(10));
 		jobSkills.put(Job.HEALER, rn.nextInt(10));
 		jobSkills.put(Job.MERCHANT, rn.nextInt(10));
-		
-		//Assign traits
+
+		//Assign 2 positive/neutral traits
 		if (!genericTraitPool.isEmpty())
 			traits.add(genericTraitPool.getRandomTrait());
+
+		//20% chance of gender related trait otherwise normal trait
+		if (rn.nextInt(5) == 0)
+			if (!femaleTraitPool.isEmpty() && getGender() == Gender.FEMALE)
+				traits.add(femaleTraitPool.getRandomTrait());
+		//else if (!maleTraitPool.isEmpty() && getGender() == Gender.MALE)
+		//traits.add(maleTraitPool.getRandomTrait());
+			else if (!genericTraitPool.isEmpty())
+				traits.add(genericTraitPool.getRandomTrait());
+
+		//Add single negative trait
+		if (!genericNegativeTraitPool.isEmpty())
+			traits.add(genericNegativeTraitPool.getRandomTrait());
 		//20% chance of getting female trait
-		if (rn.nextInt(5) == 0 && !femaleTraitPool.isEmpty() && getGender() == Gender.FEMALE)
-			traits.add(femaleTraitPool.getRandomTrait());
 
 	}
 
@@ -240,7 +268,7 @@ public class PartyCharacter {
 		}
 		return 0;
 	}
-	
+
 	public int getTrueNeed(Need need) {
 		switch (need) {
 		case HEALTH :
@@ -355,9 +383,81 @@ public class PartyCharacter {
 			setBaseNeed(need, getBaseNeed(need) + increment);
 			break;
 		}
-		
+
 	}
 
+	public void setBaseStat(Stat stat, int value) {
+		switch (stat) {
+		case COMBAT:
+			this.combat = value;
+			break;
+		case FASTTALK:
+			this.fastTalk = value;
+			break;
+		case LUCK:
+			this.luck = value;
+			break;
+		case PATHFINDER:
+			this.pathfinder = value;
+			break;
+		case SNEAK:
+			this.sneak = value;
+			break;
+		}
+	}
+	
+	public int getBaseStat(Stat stat) {
+		switch (stat) {
+		case COMBAT:
+			return combat;
+		case FASTTALK:
+			return fastTalk;
+		case LUCK:
+			return luck;
+		case PATHFINDER:
+			return pathfinder;
+		case SNEAK:
+			return sneak;
+		}
+		return 0;
+	}
+	
+	public int getTrueStat(Stat stat) {
+		switch (stat) {
+		case COMBAT:
+			int trueCombat = combat;
+			for(AbstractTrait t : traits) {
+				t.getTrueCombat(trueCombat);
+			}
+			return trueCombat;
+		case FASTTALK:
+			int trueFastTalk = fastTalk;
+			for(AbstractTrait t : traits) {
+				t.getTrueCombat(trueFastTalk);
+			}
+			return trueFastTalk;
+		case LUCK:
+			int trueLuck = luck;
+			for(AbstractTrait t : traits) {
+				t.getTrueCombat(trueLuck);
+			}
+			return trueLuck;
+		case PATHFINDER:
+			int truePathfinder = pathfinder;
+			for(AbstractTrait t : traits) {
+				t.getTrueCombat(truePathfinder);
+			}
+			return truePathfinder;
+		case SNEAK:
+			int trueSneak = sneak;
+			for(AbstractTrait t : traits) {
+				t.getTrueCombat(trueSneak);
+			}
+			return trueSneak;
+		}
+		return 0;
+	}
+	
 	public Race getRace() {
 		return race;
 	}
@@ -369,11 +469,11 @@ public class PartyCharacter {
 	public String getName() {
 		return name;
 	}
-	
+
 	public Gender getGender() {
 		return gender;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -386,13 +486,13 @@ public class PartyCharacter {
 		}
 		return false;
 	}
-	
+
 	public void endTurn() {
-		
+
 		// Stops stats becoming super negative
 		if(!this.isAlive())
 			return;
-		
+
 		// Decrease needs based on what the character consumes per turn	
 		hunger -= 1;
 		happiness -= 1;
@@ -403,7 +503,7 @@ public class PartyCharacter {
 		int trueHunger = hunger, trueMaxHunger = maxHunger;
 		int trueGold = gold, trueMaxGold = maxGold;
 		int trueHappiness = happiness, trueMaxHappiness = maxHappiness;
-		
+
 		for(AbstractTrait t : traits) {
 			trueHealth = t.getTrueHealth(health);
 			trueMaxHealth = t.getTrueMaxHealth(maxHealth);
@@ -415,13 +515,13 @@ public class PartyCharacter {
 			trueMaxGold = t.getTrueMaxGold(maxGold);
 			trueHappiness = t.getTrueHappiness(happiness);
 			trueMaxHappiness = t.getTrueMaxHappiness(maxHappiness);
-			
+
 			t.act(this);	//Any other crazy changes to needs are done here.
 		}
-		
+
 		System.out.println(maxHealth + " " + trueMaxHealth);
 		System.out.println(maxHunger + " " + trueMaxHunger);
-		
+
 		if(trueHealth < 0) {
 			setAlive(false, CauseOfDeath.HEALTH);
 		}

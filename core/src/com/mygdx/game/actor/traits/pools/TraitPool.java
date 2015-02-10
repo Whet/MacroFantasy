@@ -21,16 +21,16 @@ public abstract class TraitPool {
 	public List<AbstractTrait> getPool(){
 		return traitPool;
 	}
-
+	
 	public AbstractTrait getRandomTrait(){
 		AbstractTrait trait = traitPool.get(random.nextInt(traitPool.size())); 
 		traitPool.remove(trait);
 		return trait;
 	}
 
-
 	public boolean isEmpty(){
 		return traitPool.isEmpty();
 	}
+
 
 }
