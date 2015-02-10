@@ -38,6 +38,13 @@ public class PartyCharacter {
 	private int hunger, maxHunger;
 	private int gold, maxGold;
 	private int happiness, maxHappiness;
+	
+	private boolean vitalHealth, vitalMaxHealth;
+	private boolean vitalMana, vitalMaxMana;
+	private boolean vitalHunger, vitalMaxHunger;
+	private boolean vitalGold, vitalMaxGold;
+	private boolean vitalHappiness, vitalMaxHappiness;
+	private HashMap<Need, Integer> vitalNeedThreshold;
 
 	//Stats
 	private int fastTalk;
@@ -64,9 +71,20 @@ public class PartyCharacter {
 		//Initialise variables
 		setAlive(true);
 		jobSkills = new HashMap<Job, Integer>();
+		vitalNeedThreshold = new HashMap<Need, Integer>();
 
 		int diceRoll;
-
+		setVitalNeed(Need.HEALTH, true, 0);
+		setVitalNeed(Need.MANA, false, 0);
+		setVitalNeed(Need.HUNGER, true, 0);
+		setVitalNeed(Need.HAPPINESS, true, 0);
+		setVitalNeed(Need.GOLD, false, 0);
+		setVitalNeed(Need.MAXHEALTH, true, 0);
+		setVitalNeed(Need.MAXMANA, false, 0);
+		setVitalNeed(Need.MAXHUNGER, true, 0);
+		setVitalNeed(Need.MAXHAPPINESS, true, 0);
+		setVitalNeed(Need.MAXGOLD, false, 0);
+		
 		traits = new ArrayList<AbstractTrait>();
 		genericTraitPool = new PoolGeneric();
 		femaleTraitPool = new PoolFemale();
@@ -83,7 +101,7 @@ public class PartyCharacter {
 
 		generateRace();
 		generateName();
-		setBaseNeed(Need.GOLD, rn.nextInt(20));
+		setBaseNeed(Need.GOLD, rn.nextInt(15)+10);
 		setBaseNeed(Need.HAPPINESS, rn.nextInt(60) + 40);
 		setBaseNeed(Need.HUNGER, 100);
 
@@ -569,14 +587,89 @@ public class PartyCharacter {
 		System.out.println(maxHealth + " " + trueMaxHealth);
 		System.out.println(maxHunger + " " + trueMaxHunger);
 
-		if(trueHealth < 0) {
-			setAlive(false, CauseOfDeath.HEALTH);
+		if(isVitalNeed(Need.HEALTH) && health < vitalNeedThreshold.get(Need.HEALTH)) {
+			setAlive(false, CauseOfDeath.DEATH);
 		}
-		if(trueHunger < 0) {
-			setAlive(false, CauseOfDeath.HUNGER);
+		if(isVitalNeed(Need.HUNGER) && trueHunger < vitalNeedThreshold.get(Need.HUNGER)) {
+			setAlive(false, CauseOfDeath.DEATH);
 		}
-		if(trueGold < 0) {
-			setAlive(false, CauseOfDeath.GOLD);
+		if(isVitalNeed(Need.HAPPINESS) && trueHappiness < vitalNeedThreshold.get(Need.HAPPINESS)) {
+			setAlive(false, CauseOfDeath.DESERTION);
+		}
+		if(isVitalNeed(Need.GOLD) && trueGold < vitalNeedThreshold.get(Need.GOLD)) {
+			setAlive(false, CauseOfDeath.DESERTION);
+		}
+	}
+
+	public boolean isVitalNeed(Need need) {
+		switch (need)
+		{
+		case GOLD:
+			return vitalGold;
+		case HAPPINESS:
+			return vitalHappiness;
+		case HEALTH:
+			return vitalHealth;
+		case HUNGER:
+			return vitalHunger;
+		case MANA:
+			return vitalMana;
+		case MAXGOLD:
+			return vitalMaxGold;
+		case MAXHAPPINESS:
+			return vitalMaxHappiness;
+		case MAXHEALTH:
+			return vitalMaxHealth;
+		case MAXHUNGER:
+			return vitalMaxHunger;
+		case MAXMANA:
+			return vitalMaxMana;
+		}
+		return false;
+	}
+	public void setVitalNeed(Need need, boolean value, Integer threshold) {
+		switch (need)
+		{
+		case GOLD:
+			this.vitalGold = value;
+			vitalNeedThreshold.put(Need.GOLD, threshold);
+			break;
+		case HAPPINESS:
+			this.vitalHappiness = value;
+			vitalNeedThreshold.put(Need.HAPPINESS, threshold);
+			break;
+		case HEALTH:
+			this.vitalHealth = value;
+			vitalNeedThreshold.put(Need.HEALTH, threshold);
+			break;
+		case HUNGER:
+			this.vitalHunger = value;
+			vitalNeedThreshold.put(Need.HUNGER, threshold);
+			break;
+		case MANA:
+			this.vitalMana = value;
+			vitalNeedThreshold.put(Need.MANA, threshold);
+			break;
+		case MAXGOLD:
+			this.vitalMaxGold = value;
+			vitalNeedThreshold.put(Need.MAXGOLD, threshold);
+			break;
+		case MAXHAPPINESS:
+			this.vitalMaxHappiness = value;
+			vitalNeedThreshold.put(Need.MAXHAPPINESS, threshold);
+			break;
+		case MAXHEALTH:
+			this.vitalMaxHealth = value;
+			vitalNeedThreshold.put(Need.MAXHEALTH, threshold);
+			break;
+		case MAXHUNGER:
+			this.vitalMaxHunger = value;
+			vitalNeedThreshold.put(Need.MAXHUNGER, threshold);
+			break;
+		case MAXMANA:
+			this.vitalMaxMana = value;
+			vitalNeedThreshold.put(Need.MAXMANA, threshold);
+			break;
 		}
 	}
 

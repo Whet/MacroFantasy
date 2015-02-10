@@ -4,6 +4,7 @@ import com.mygdx.game.actor.traits.TraitBigAppetite;
 import com.mygdx.game.actor.traits.TraitBully;
 import com.mygdx.game.actor.traits.TraitFeeble;
 import com.mygdx.game.actor.traits.TraitLoneMaiden;
+import com.mygdx.game.actor.traits.TraitMercenary;
 import com.mygdx.game.actor.traits.TraitRacist;
 import com.mygdx.game.actor.traits.TraitRavenous;
 
@@ -16,6 +17,7 @@ public class PoolGeneric extends TraitPool {
 		traitPool.add(new TraitRavenous());
 		traitPool.add(new TraitRacist());
 		traitPool.add(new TraitLoneMaiden());
+		traitPool.add(new TraitMercenary());
 	}
 
 }

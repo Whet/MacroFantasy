@@ -67,7 +67,7 @@ public class CardMechanics {
 		int happyBoost = 0;
 		int moneyBoost = 0;
 		
-		for (PartyCharacter character:characterBank.characters) {
+		for (PartyCharacter character : CharacterBank.characters) {
 			if(character.isAlive()) {
 				// Drain stats based on consumption rates
 				character.endTurn();
@@ -98,10 +98,12 @@ public class CardMechanics {
 					break;
 				}
 			}
+			else
+				System.out.println(character.getName() + " is not here anymore due to " + character.getCauseOfDeath());
 		}
 		
 		// Go through all characters and give the bonuses
-		for (PartyCharacter character:characterBank.characters) {
+		for (PartyCharacter character : CharacterBank.characters) {
 			if(character.isAlive()) {
 				character.incrementNeed(Need.HEALTH, healthBoost);
 				character.incrementNeed(Need.MANA, manaBoost);
