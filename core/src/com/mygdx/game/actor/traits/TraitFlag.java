@@ -8,5 +8,5 @@ public enum TraitFlag {
 	//Trait effect
 	POSITIVE, NEGATIVE, NEUTRAL,
 	//Gender
-	FEMALE;
+	FEMALE, MALE;
 }

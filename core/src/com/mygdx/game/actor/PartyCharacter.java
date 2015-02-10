@@ -15,6 +15,7 @@ import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitFlag;
 import com.mygdx.game.actor.traits.pools.PoolFemale;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
+import com.mygdx.game.actor.traits.pools.PoolMagic;
 import com.mygdx.game.actor.traits.pools.PoolMale;
 import com.mygdx.game.actor.traits.pools.TraitPool;
 
@@ -29,6 +30,7 @@ public class PartyCharacter {
 	private String name;
 	private Race race;
 	private Gender gender;
+	private boolean hasMagic;
 
 	//Needs
 	private int health, maxHealth;
@@ -49,6 +51,7 @@ public class PartyCharacter {
 	private TraitPool genericTraitPool;
 	private TraitPool femaleTraitPool;
 	private TraitPool maleTraitPool;
+	private TraitPool magicTraitPool;
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -62,10 +65,15 @@ public class PartyCharacter {
 		setAlive(true);
 		jobSkills = new HashMap<Job, Integer>();
 
+		int diceRoll;
+
 		traits = new ArrayList<AbstractTrait>();
 		genericTraitPool = new PoolGeneric();
 		femaleTraitPool = new PoolFemale();
 		maleTraitPool = new PoolMale();
+		magicTraitPool = new PoolMagic();
+
+		setHasMagic(false);
 
 		//Assign gender
 		if (rn.nextInt(2) == 0)
@@ -96,17 +104,41 @@ public class PartyCharacter {
 		if (!genericTraitPool.isPosNeuEmpty())
 			traits.add(genericTraitPool.getRandomTrait());
 
-		//20% chance of positive/neutral gender related trait otherwise normal trait
-		if (rn.nextInt(5) == 0)
+
+		boolean hasRareTrait = false;
+		//20% chance of positive/neutral gender related trait
+		diceRoll = rn.nextInt(100);
+		if (diceRoll < 20)
+		{
 			if (!femaleTraitPool.isPosNeuEmpty() && getGender() == Gender.FEMALE)
+			{
 				traits.add(femaleTraitPool.getRandomTrait());
-		//else if (!maleTraitPool.isEmpty() && getGender() == Gender.MALE)
-		//traits.add(maleTraitPool.getRandomTrait());
-			else if (!genericTraitPool.isPosNeuEmpty())
-				traits.add(genericTraitPool.getRandomTrait());
+				hasRareTrait = true;
+			}
+			else if (!maleTraitPool.isEmpty() && getGender() == Gender.MALE)
+			{
+				traits.add(maleTraitPool.getRandomTrait());
+				hasRareTrait = true;
+			}
+		}
+		//5% chance of positive/neutral magic related trait
+		diceRoll = rn.nextInt(100);
+		if (diceRoll < 5)
+		{
+			if(!magicTraitPool.isPosNeuEmpty())
+			{
+				traits.add(magicTraitPool.getRandomTrait());
+				setHasMagic(true);
+				hasRareTrait = true;
+			}
+		}
+		// otherwise normal trait
+		else if (!hasRareTrait && !genericTraitPool.isPosNeuEmpty())
+			traits.add(genericTraitPool.getRandomTrait());
 
 		//20% chance of gender related negative trait otherwise normal negative trait
-		if (rn.nextInt(5) == 0)
+		diceRoll = rn.nextInt(100);
+		if (diceRoll < 20)
 		{
 			if (!femaleTraitPool.isNegativeEmpty() && getGender() == Gender.FEMALE)
 				traits.add(femaleTraitPool.getNegativeTrait());
@@ -479,6 +511,14 @@ public class PartyCharacter {
 
 	public Gender getGender() {
 		return gender;
+	}
+
+	public boolean hasMagic() {
+		return hasMagic;
+	}
+
+	public void setHasMagic(boolean hasMagic) {
+		this.hasMagic = hasMagic;
 	}
 
 	public void setName(String name) {
