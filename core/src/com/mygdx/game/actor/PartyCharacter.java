@@ -496,10 +496,11 @@ public class PartyCharacter {
 		// Decrease needs based on what the character consumes per turn	
 		hunger -= 1;
 		happiness -= 1;
-
+		gold -= 1;
+		
 		int trueHealth = health, trueMaxHealth = maxHealth;
 		int trueMana = mana, trueMaxMana = maxMana;
-		int trueHunger = maxHunger, trueMaxHunger = maxHunger;
+		int trueHunger = hunger, trueMaxHunger = maxHunger;
 		int trueGold = gold, trueMaxGold = maxGold;
 		int trueHappiness = happiness, trueMaxHappiness = maxHappiness;
 
