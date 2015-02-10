@@ -4,5 +4,9 @@ public enum TraitFlag {
 	//Needs
 	HUNGER, HEALTH, MAXHEALTH, HAPPINESS,
 	//Stats
-	LUCK;
+	LUCK,
+	//Trait effect
+	POSITIVE, NEGATIVE, NEUTRAL,
+	//Gender
+	FEMALE;
 }

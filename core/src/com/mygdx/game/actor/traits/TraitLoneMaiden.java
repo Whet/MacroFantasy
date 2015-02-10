@@ -11,6 +11,7 @@ public class TraitLoneMaiden extends AbstractTrait {
 		super();
 		name = "Lone Maiden";
 		description = "You don't like other females..";
+		flags.add(TraitFlag.NEGATIVE);
 	}
 
 	public void act(PartyCharacter pc) {

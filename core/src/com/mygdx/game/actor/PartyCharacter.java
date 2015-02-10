@@ -15,7 +15,7 @@ import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitFlag;
 import com.mygdx.game.actor.traits.pools.PoolFemale;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
-import com.mygdx.game.actor.traits.pools.PoolGenericNegative;
+import com.mygdx.game.actor.traits.pools.PoolMale;
 import com.mygdx.game.actor.traits.pools.TraitPool;
 
 public class PartyCharacter {
@@ -47,8 +47,8 @@ public class PartyCharacter {
 	//Traits
 	private ArrayList<AbstractTrait> traits;
 	private TraitPool genericTraitPool;
-	private TraitPool genericNegativeTraitPool;
 	private TraitPool femaleTraitPool;
+	private TraitPool maleTraitPool;
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -64,8 +64,8 @@ public class PartyCharacter {
 
 		traits = new ArrayList<AbstractTrait>();
 		genericTraitPool = new PoolGeneric();
-		genericNegativeTraitPool = new PoolGenericNegative();
 		femaleTraitPool = new PoolFemale();
+		maleTraitPool = new PoolMale();
 
 		//Assign gender
 		if (rn.nextInt(2) == 0)
@@ -78,7 +78,7 @@ public class PartyCharacter {
 		setBaseNeed(Need.GOLD, rn.nextInt(20));
 		setBaseNeed(Need.HAPPINESS, rn.nextInt(60) + 40);
 		setBaseNeed(Need.HUNGER, 100);
-		
+
 		setBaseStat(Stat.COMBAT, rn.nextInt(20));
 		setBaseStat(Stat.LUCK, rn.nextInt(20));
 		setBaseStat(Stat.PATHFINDER, rn.nextInt(20));
@@ -93,23 +93,30 @@ public class PartyCharacter {
 		jobSkills.put(Job.MERCHANT, rn.nextInt(10));
 
 		//Assign 2 positive/neutral traits
-		if (!genericTraitPool.isEmpty())
+		if (!genericTraitPool.isPosNeuEmpty())
 			traits.add(genericTraitPool.getRandomTrait());
 
-		//20% chance of gender related trait otherwise normal trait
+		//20% chance of positive/neutral gender related trait otherwise normal trait
 		if (rn.nextInt(5) == 0)
-			if (!femaleTraitPool.isEmpty() && getGender() == Gender.FEMALE)
+			if (!femaleTraitPool.isPosNeuEmpty() && getGender() == Gender.FEMALE)
 				traits.add(femaleTraitPool.getRandomTrait());
 		//else if (!maleTraitPool.isEmpty() && getGender() == Gender.MALE)
 		//traits.add(maleTraitPool.getRandomTrait());
-			else if (!genericTraitPool.isEmpty())
+			else if (!genericTraitPool.isPosNeuEmpty())
 				traits.add(genericTraitPool.getRandomTrait());
 
-		//Add single negative trait
-		if (!genericNegativeTraitPool.isEmpty())
-			traits.add(genericNegativeTraitPool.getRandomTrait());
-		//20% chance of getting female trait
-
+		//20% chance of gender related negative trait otherwise normal negative trait
+		if (rn.nextInt(5) == 0)
+		{
+			if (!femaleTraitPool.isNegativeEmpty() && getGender() == Gender.FEMALE)
+				traits.add(femaleTraitPool.getNegativeTrait());
+			else if (!maleTraitPool.isNegativeEmpty() && getGender() == Gender.MALE)
+				traits.add(maleTraitPool.getRandomTrait());
+		}
+		else if (!genericTraitPool.isNegativeEmpty())
+		{
+			traits.add(genericTraitPool.getNegativeTrait());
+		}
 	}
 
 	private void generateName() {
@@ -405,7 +412,7 @@ public class PartyCharacter {
 			break;
 		}
 	}
-	
+
 	public int getBaseStat(Stat stat) {
 		switch (stat) {
 		case COMBAT:
@@ -421,7 +428,7 @@ public class PartyCharacter {
 		}
 		return 0;
 	}
-	
+
 	public int getTrueStat(Stat stat) {
 		switch (stat) {
 		case COMBAT:
@@ -457,7 +464,7 @@ public class PartyCharacter {
 		}
 		return 0;
 	}
-	
+
 	public Race getRace() {
 		return race;
 	}
@@ -497,7 +504,7 @@ public class PartyCharacter {
 		hunger -= 1;
 		happiness -= 1;
 		gold -= 1;
-		
+
 		int trueHealth = health, trueMaxHealth = maxHealth;
 		int trueMana = mana, trueMaxMana = maxMana;
 		int trueHunger = hunger, trueMaxHunger = maxHunger;

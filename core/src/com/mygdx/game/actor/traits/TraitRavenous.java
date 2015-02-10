@@ -10,6 +10,7 @@ public class TraitRavenous extends AbstractTrait {
 		name = "Ravenous";
 		description = "Your hunger detiorates rapidly.";
 		flags.add(TraitFlag.HUNGER);
+		flags.add(TraitFlag.NEGATIVE);
 	}
 	
 	public void act(PartyCharacter pc) {

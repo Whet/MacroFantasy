@@ -7,6 +7,7 @@ public class TraitFeeble extends AbstractTrait {
 		description = "Weaker than most, it takes fewer hits to take you down.";
 		flags.add(TraitFlag.HEALTH);
 		flags.add(TraitFlag.MAXHEALTH);
+		flags.add(TraitFlag.NEGATIVE);
 	}
 	
 	public int getTrueHealth(int baseHealth) {

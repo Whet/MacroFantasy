@@ -15,6 +15,7 @@ public class TraitBully extends AbstractTrait {
 		name = "Bully";
 		description = "This character will pick on the party member with the lowest hit-points every so often.";
 		flags.add(TraitFlag.HAPPINESS);
+		flags.add(TraitFlag.NEGATIVE);
 		rn = new Random();
 	}
 	

@@ -7,6 +7,7 @@ public class TraitLuckStruck extends AbstractTrait {
 		name = "Luck-Struck";
 		description = "You are inexplicably lucky.";
 		flags.add(TraitFlag.LUCK);
+		flags.add(TraitFlag.POSITIVE);
 	}
 
 	public int getLuck(int baseLuck) {

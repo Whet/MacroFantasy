@@ -10,6 +10,7 @@ public class TraitRacist extends AbstractTrait {
 		super();
 		name = "Racist";
 		description = "You are a racist.";
+		flags.add(TraitFlag.NEGATIVE);
 	}
 
 	public void act(PartyCharacter pc) {
