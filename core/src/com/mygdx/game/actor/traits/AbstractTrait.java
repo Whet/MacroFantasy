@@ -48,4 +48,12 @@ public abstract class AbstractTrait {
 	public int getTrueMaxGold(int baseMaxGold) { return baseMaxGold; }
 	public int getTrueHappiness(int baseHappiness) { return baseHappiness; }
 	public int getTrueMaxHappiness(int baseMaxHappiness) { return baseMaxHappiness; }
+	
+
+	//Override any of these methods when you want a trait to change it.
+	public int getTrueLuck(int baseLuck) { return baseLuck; }
+	public int getTrueCombat(int baseCombat) { return baseCombat; }
+	public int getTrueSneak(int baseSneak) { return baseSneak; }
+	public int getTrueFastTalk(int baseFastTalk) { return baseFastTalk; }
+	public int getTruePathfinder(int basePathfinder) { return basePathfinder; }
 }

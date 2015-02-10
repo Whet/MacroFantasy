@@ -16,6 +16,7 @@ import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
+import com.mygdx.game.actor.enums.Stat;
 import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
@@ -171,12 +172,19 @@ public class GameMenu extends Screen {
 		characterStatMenu.needText.getComponent(UiPositionComponent.class).x = x;
 		characterStatMenu.needText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 40;
 		
+		characterStatMenu.statText = new TextEntity();
+		characterStatMenu.statText.getComponent(TextComponent.class).text = "STAT";
+		characterStatMenu.statText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.statText.getComponent(TextComponent.class).maxCharsPerLine = 999;
+		characterStatMenu.statText.getComponent(UiPositionComponent.class).x = x;
+		characterStatMenu.statText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 60;
+		
 		characterStatMenu.skillText = new TextEntity();
 		characterStatMenu.skillText.getComponent(TextComponent.class).text = "SKILL";
 		characterStatMenu.skillText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.skillText.getComponent(TextComponent.class).maxCharsPerLine = 70;
 		characterStatMenu.skillText.getComponent(UiPositionComponent.class).x = x;
-		characterStatMenu.skillText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 60;
+		characterStatMenu.skillText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 80;
 		
 		characterStatMenu.closeText = new TextButtonEntity() {
 			@Override
@@ -195,7 +203,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.traitText.getComponent(TextComponent.class).maxCharsPerLine = 70;
 		characterStatMenu.traitText.getComponent(UiPositionComponent.class).x = x;
-		characterStatMenu.traitText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 85;
+		characterStatMenu.traitText.getComponent(UiPositionComponent.class).y = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 105;
 		
 		int iconX = x + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionWidth() - 90;
 		int iconY = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 98;
@@ -306,6 +314,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(characterStatMenu.name);
 		engine.addEntity(characterStatMenu.needText);
 		engine.addEntity(characterStatMenu.skillText);
+		engine.addEntity(characterStatMenu.statText);
 		engine.addEntity(characterStatMenu.traitText);
 		
 		engine.addEntity(characterStatMenu.healerIcon);
@@ -605,6 +614,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.background.getComponent(TextureComponent.class).visible = true;
 		characterStatMenu.name.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.needText.getComponent(TextComponent.class).visible = true;
+		characterStatMenu.statText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.skillText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = true;
 		characterStatMenu.closeText.getComponent(TextComponent.class).visible = true;
@@ -612,11 +622,17 @@ public class GameMenu extends Screen {
 		characterStatMenu.name.getComponent(TextComponent.class).text = chosenCharacter.getName() + ", " + WordUtils.capitalise(chosenCharacter.getGender().toString()) + " " + WordUtils.capitalise(chosenCharacter.getRace().toString());
 		
 		characterStatMenu.needText.getComponent(TextComponent.class).text = "Needs: "+ WordUtils.capitalise(Need.HEALTH.toString()) + " " + chosenCharacter.getTrueNeed(Need.HEALTH) + "/" + chosenCharacter.getTrueNeed(Need.MAXHEALTH) + " " +
-																			   WordUtils.capitalise(Need.MANA.toString()) + " " + chosenCharacter.getTrueNeed(Need.MANA)  + "/" + chosenCharacter.getTrueNeed(Need.MAXMANA) + " " +
-																			   WordUtils.capitalise(Need.HUNGER.toString()) + " " + chosenCharacter.getTrueNeed(Need.HUNGER)  + "/" + chosenCharacter.getTrueNeed(Need.MAXHUNGER) + " " +
-																			   WordUtils.capitalise(Need.HAPPINESS.toString()) + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + "/" + chosenCharacter.getTrueNeed(Need.MAXHAPPINESS) + " " +
-																			   WordUtils.capitalise(Need.GOLD.toString()) + " " + chosenCharacter.getTrueNeed(Need.GOLD) + "/" + chosenCharacter.getTrueNeed(Need.MAXGOLD) ;
-		
+				   WordUtils.capitalise(Need.MANA.toString()) + " " + chosenCharacter.getTrueNeed(Need.MANA)  + "/" + chosenCharacter.getTrueNeed(Need.MAXMANA) + " " +
+				   WordUtils.capitalise(Need.HUNGER.toString()) + " " + chosenCharacter.getTrueNeed(Need.HUNGER)  + "/" + chosenCharacter.getTrueNeed(Need.MAXHUNGER) + " " +
+				   WordUtils.capitalise(Need.HAPPINESS.toString()) + " " + chosenCharacter.getTrueNeed(Need.HAPPINESS) + "/" + chosenCharacter.getTrueNeed(Need.MAXHAPPINESS) + " " +
+				   WordUtils.capitalise(Need.GOLD.toString()) + " " + chosenCharacter.getTrueNeed(Need.GOLD) + "/" + chosenCharacter.getTrueNeed(Need.MAXGOLD) ;
+
+		characterStatMenu.statText.getComponent(TextComponent.class).text = "Stats: "+ WordUtils.capitalise(Stat.COMBAT.toString()) + " " + chosenCharacter.getTrueStat(Stat.COMBAT) + " " +
+				WordUtils.capitalise(Stat.FASTTALK.toString()) + " " + chosenCharacter.getTrueStat(Stat.COMBAT) + " " +
+				WordUtils.capitalise(Stat.SNEAK.toString()) + " " + chosenCharacter.getTrueStat(Stat.SNEAK) + " " +
+				WordUtils.capitalise(Stat.PATHFINDER.toString()) + " " + chosenCharacter.getTrueStat(Stat.PATHFINDER) + " " +
+				WordUtils.capitalise(Stat.LUCK.toString()) + " " + chosenCharacter.getTrueStat(Stat.LUCK);
+				
 		characterStatMenu.skillText.getComponent(TextComponent.class).text = "Skills: "+ WordUtils.capitalise(Job.ALCHEMIST.toString()) + " " + chosenCharacter.getSkill(Job.ALCHEMIST) + " " +
 				 WordUtils.capitalise(Job.BARD.toString()) + " " + chosenCharacter.getSkill(Job.BARD) + " " +
 				 WordUtils.capitalise(Job.COOK.toString()) + " " + chosenCharacter.getSkill(Job.COOK) + " " +
@@ -654,6 +670,7 @@ for (int i = 0; i < chosenCharacter.getTraits().size(); i++)
 		characterStatMenu.background.getComponent(TextureComponent.class).visible = false;
 		characterStatMenu.name.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.needText.getComponent(TextComponent.class).visible = false;
+		characterStatMenu.statText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.skillText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.traitText.getComponent(TextComponent.class).visible = false;
 		characterStatMenu.closeText.getComponent(TextComponent.class).visible = false;
@@ -694,7 +711,7 @@ for (int i = 0; i < chosenCharacter.getTraits().size(); i++)
 		public PartyCharacter character;
 		
 		public TextButtonEntity closeText;
-		public TextEntity name, skillText, needText, traitText;
+		public TextEntity name, skillText, needText, statText, traitText;
 		public UiImageEntity background;
 		public UiButtonEntity healerIcon, alchIcon, cookIcon, bardIcon, merchIcon;
 		

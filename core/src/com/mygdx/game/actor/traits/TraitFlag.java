@@ -1,5 +1,8 @@
 package com.mygdx.game.actor.traits;
 
 public enum TraitFlag {
-	HUNGER, HEALTH, MAXHEALTH, HAPPINESS;
+	//Needs
+	HUNGER, HEALTH, MAXHEALTH, HAPPINESS,
+	//Stats
+	LUCK;
 }
