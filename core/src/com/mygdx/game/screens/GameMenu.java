@@ -19,6 +19,7 @@ import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Stat;
 import com.mygdx.game.actor.traits.AbstractTrait;
+import com.mygdx.game.calendar.Calendar;
 import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
@@ -57,6 +58,8 @@ public class GameMenu extends Screen {
 	private TextEntity cardName;
 	private TextEntity cardDescription;
 
+	private TextEntity date;
+	
 	private List<CharacterUi> characterUis;
 
 	private CharacterStatMenu characterStatMenu;
@@ -78,10 +81,24 @@ public class GameMenu extends Screen {
 		UiImageEntity backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
 		engine.addEntity(backgroundEntity);
 
+		createDateBar();
 		createButtons();
 		createCharacterInfo();
 		createCards();
 
+	}
+	
+	private void createDateBar() {
+		date = new TextEntity();
+		date.getComponent(TextComponent.class).visible = true;
+		date.getComponent(TextComponent.class).text = Calendar.getInstance().getFullDate();
+		date.getComponent(UiPositionComponent.class).x = 10;
+		date.getComponent(UiPositionComponent.class).y = Gdx.graphics.getHeight() - 10;
+		engine.addEntity(date);
+	}
+	
+	public void updateDate() {
+		date.getComponent(TextComponent.class).text = Calendar.getInstance().getFullDate();
 	}
 
 	private void createCards() {
@@ -517,6 +534,8 @@ public class GameMenu extends Screen {
 				cardMechanics.endTurn();
 				Sound roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
 				roosterSound.play();
+				Calendar.getInstance().incrementDay(1);
+				updateDate();
 				return true;
 			}
 
@@ -711,7 +730,7 @@ public class GameMenu extends Screen {
 			characterUi.name.setCharacter(characterUi.name.getComponent(CharacterComponent.class).character);
 		}
 	}
-
+	
 	private static class CharacterUi {
 		public TextEntity healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
 		public CharacterTextEntity name;

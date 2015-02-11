@@ -2,18 +2,26 @@ package com.mygdx.game.calendar;
 
 public class Calendar {
 
-	Day day;
-	Month month;
-	int date;
-	int year;
-	int monthsInYear;
-
-	public Calendar() {
+	private Day day;
+	private Month month;
+	private int date;
+	private int year;
+	
+	private static Calendar instance;
+	
+	static {
+		instance = new Calendar();
+	}
+	
+	public static Calendar getInstance() {
+		return instance;
+	}
+	
+	private Calendar() {
 		day = Day.MOONSDAY;
 		month = Month.FROSTPEAK;
 		date = 1;
 		year = 556;
-		monthsInYear = 8;
 	}
 
 	public int getYear() {
