@@ -16,7 +16,6 @@ public class PoolGeneric extends TraitPool {
 		traitPool.add(new TraitBully());
 		traitPool.add(new TraitRavenous());
 		traitPool.add(new TraitRacist());
-		traitPool.add(new TraitLoneMaiden());
 		traitPool.add(new TraitMercenary());
 	}
 
