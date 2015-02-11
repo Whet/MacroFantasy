@@ -23,6 +23,7 @@ import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
 import com.mygdx.game.cards.Choice;
+import com.mygdx.game.cards.Location;
 import com.mygdx.game.components.primitive.MultiRegionComponent;
 import com.mygdx.game.components.primitive.MultiTextureComponent;
 import com.mygdx.game.components.primitive.TextComponent;
@@ -65,6 +66,10 @@ public class GameMenu extends Screen {
 	private CharacterStatMenu characterStatMenu;
 
 	private Sound roosterSound;
+	
+	private Location location;
+
+	private UiImageEntity backgroundEntity;
 
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
@@ -73,7 +78,7 @@ public class GameMenu extends Screen {
 		characterBank = CharacterBank.getInstance();
 		cardButtons = new ArrayList<TextButtonEntity>();
 		characterUis = new ArrayList<CharacterUi>();
-
+		this.location = Location.TUTORIAL;
 	}
 
 	@Override
@@ -81,8 +86,10 @@ public class GameMenu extends Screen {
 
 		Texture background = new Texture("mainMenuBackground.png");
 		TextureRegion backgroundRegion = new TextureRegion(background);
-
-		UiImageEntity backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
+		backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
+		
+		setBackground();
+		
 		engine.addEntity(backgroundEntity);
 
 		roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
@@ -92,6 +99,26 @@ public class GameMenu extends Screen {
 		createCharacterInfo();
 		createCards();
 
+	}
+
+	private void setBackground() {
+		
+		Texture background = null;
+		
+		switch(this.location) {
+			case FOREST:
+				background = new Texture("forestBackground.png");
+			break;
+			case TUTORIAL:
+				background = new Texture("mainMenuBackground.png");
+			break;
+			default:
+			break;
+		
+		}
+		
+		TextureRegion backgroundRegion = new TextureRegion(background);
+		backgroundEntity.getComponent(TextureComponent.class).region = backgroundRegion;
 	}
 
 	private void createDateBar() {
@@ -540,6 +567,18 @@ public class GameMenu extends Screen {
 
 			@Override
 			public boolean mouseDown(int x, int y) {
+				
+				// TEMP
+				if(location == Location.TUTORIAL) {
+					location = Location.FOREST;
+				}
+				else if(location == Location.FOREST) {
+					location = Location.TUTORIAL;
+				}
+				
+				setBackground();
+				generateNewCards();
+				
 				return true;
 			}
 
@@ -737,10 +776,10 @@ public class GameMenu extends Screen {
 		characterStatMenu.bardIcon.getComponent(MultiTextureComponent.class).visible = false;
 	}
 
-	private void generateNewCards() {
+	public void generateNewCards() {
 		ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
 		for(int i = 0; i < cards.size(); i++) {
-			cards.get(i).getComponent(CardDisplayComponent.class).card = AdventureBuilder.getNewAdventure(cardMechanics, characterBank);
+			cards.get(i).getComponent(CardDisplayComponent.class).card = AdventureBuilder.getNewAdventure(location, cardMechanics, characterBank);
 		}
 	}
 

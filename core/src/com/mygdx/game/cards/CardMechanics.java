@@ -115,6 +115,7 @@ public class CardMechanics {
 		
 		// Update for characters dying and showing leaving message
 		gameMenu.updateCharacters();
+		gameMenu.generateNewCards();
 	}
 	
 }
