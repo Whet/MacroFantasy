@@ -509,7 +509,7 @@ public class PartyCharacter {
 		case COMBAT:
 			this.combat = value;
 			break;
-		case FASTTALK:
+		case CHARISMA:
 			this.fastTalk = value;
 			break;
 		case LUCK:
@@ -528,7 +528,7 @@ public class PartyCharacter {
 		switch (stat) {
 		case COMBAT:
 			return combat;
-		case FASTTALK:
+		case CHARISMA:
 			return fastTalk;
 		case LUCK:
 			return luck;
@@ -548,7 +548,7 @@ public class PartyCharacter {
 				t.getTrueCombat(trueCombat);
 			}
 			return trueCombat;
-		case FASTTALK:
+		case CHARISMA:
 			int trueFastTalk = fastTalk;
 			for(AbstractTrait t : traits) {
 				t.getTrueCombat(trueFastTalk);

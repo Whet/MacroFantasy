@@ -714,7 +714,7 @@ public class GameMenu extends Screen {
 				WordUtils.capitalise(Need.GOLD.toString()) + " " + chosenCharacter.getTrueNeed(Need.GOLD) + "/" + chosenCharacter.getTrueNeed(Need.MAXGOLD) ;
 
 		characterStatMenu.statText.getComponent(TextComponent.class).text = "Stats: "+ WordUtils.capitalise(Stat.COMBAT.toString()) + " " + chosenCharacter.getTrueStat(Stat.COMBAT) + " " +
-				WordUtils.capitalise(Stat.FASTTALK.toString()) + " " + chosenCharacter.getTrueStat(Stat.COMBAT) + " " +
+				WordUtils.capitalise(Stat.CHARISMA.toString()) + " " + chosenCharacter.getTrueStat(Stat.COMBAT) + " " +
 				WordUtils.capitalise(Stat.SNEAK.toString()) + " " + chosenCharacter.getTrueStat(Stat.SNEAK) + " " +
 				WordUtils.capitalise(Stat.PATHFINDER.toString()) + " " + chosenCharacter.getTrueStat(Stat.PATHFINDER) + " " +
 				WordUtils.capitalise(Stat.LUCK.toString()) + " " + chosenCharacter.getTrueStat(Stat.LUCK);
