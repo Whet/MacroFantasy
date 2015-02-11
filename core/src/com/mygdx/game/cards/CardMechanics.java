@@ -112,6 +112,9 @@ public class CardMechanics {
 				character.incrementNeed(Need.GOLD, moneyBoost);
 			}
 		}
+		
+		// Update for characters dying and showing leaving message
+		gameMenu.updateCharacters();
 	}
 	
 }
