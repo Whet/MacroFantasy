@@ -311,7 +311,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				CharacterImageEntity btn = (CharacterImageEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mD(mousePos.x, mousePos.y))
 						break;
 				}
