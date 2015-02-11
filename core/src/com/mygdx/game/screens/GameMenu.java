@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -514,6 +515,8 @@ public class GameMenu extends Screen {
 			@Override
 			public boolean mD(int x, int y) {
 				cardMechanics.endTurn();
+				Sound roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
+				roosterSound.play();
 				return true;
 			}
 
