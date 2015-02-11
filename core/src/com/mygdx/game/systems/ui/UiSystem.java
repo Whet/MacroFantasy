@@ -226,12 +226,66 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				UiButtonEntity btn = (UiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive){
-					btn.mI(mousePos.x, mousePos.y);
+					btn.mouseIn(mousePos.x, mousePos.y);
 			    }
 				else if(mouse.mouseActive) {
-					btn.mO(mousePos.x, mousePos.y);
+					btn.mouseOut(mousePos.x, mousePos.y);
 				}
 			}
+		}
+		for (int i = 0; i < uiMultiButtons.size(); ++i) {
+			Entity e = uiMultiButtons.get(i);
+
+			position = pm.get(e);
+			multiRegion = mrm.get(e);
+			mouse = mm.get(e);
+			
+			if(multiRegion.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				TextureRegion region = multiRegion.regions.get(0);
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + region.getRegionWidth() >= mousePos.x  &&
+									 position.y + region.getRegionHeight() >= mousePos.y;
+									 
+				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
+				
+				if(isInBounds && mouse.mouseActive){
+					btn.mouseIn(mousePos.x, mousePos.y);
+			    }
+				else if(mouse.mouseActive) {
+					btn.mouseOut(mousePos.x, mousePos.y);
+				}
+			}
+			
+		}
+		for (int i = 0; i < textButtons.size(); ++i) {
+			Entity e = textButtons.get(i);
+
+			position = pm.get(e);
+			mouse = mm.get(e);
+			text = txtm.get(e);
+			
+			if(text.visible) {
+				MousePos mousePos = Mouse.getMouse();
+				
+				boolean isInBounds = position.x <= mousePos.x &&
+									 position.y <= mousePos.y &&
+									 position.x + 50 >= mousePos.x  &&
+									 position.y + 50 >= mousePos.y;
+									 
+				TextButtonEntity btn = (TextButtonEntity) e;
+				
+				if(isInBounds && mouse.mouseActive){
+					btn.mouseIn(mousePos.x, mousePos.y);
+			    }
+				else if(mouse.mouseActive) {
+					btn.mouseOut(mousePos.x, mousePos.y);
+				}
+			}
+			
 		}
 		
 		exampleAnim.draw(batch, 100, 100);
@@ -287,7 +341,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				UiButtonEntity btn = (UiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mD(mousePos.x, mousePos.y))
+					if(btn.mouseDown(mousePos.x, mousePos.y))
 						break;
 				}
 			}
@@ -313,7 +367,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mD(mousePos.x, mousePos.y))
+					if(btn.mouseDown(mousePos.x, mousePos.y))
 						break;
 				}
 			}
@@ -337,7 +391,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				TextButtonEntity btn = (TextButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mD(mousePos.x, mousePos.y))
+					if(btn.mouseDown(mousePos.x, mousePos.y))
 						break;
 				}
 			}
@@ -375,7 +429,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				UiButtonEntity btn = (UiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mU(mousePos.x, mousePos.y))
+					if(btn.mouseUp(mousePos.x, mousePos.y))
 						break;
 				}
 			}
@@ -401,7 +455,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mU(mousePos.x, mousePos.y))
+					if(btn.mouseUp(mousePos.x, mousePos.y))
 						break;
 				}
 			}
@@ -425,7 +479,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				TextButtonEntity btn = (TextButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mU(mousePos.x, mousePos.y))
+					if(btn.mouseUp(mousePos.x, mousePos.y))
 						break;
 				}
 			}

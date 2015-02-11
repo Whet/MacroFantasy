@@ -15,18 +15,18 @@ public class TextButtonEntity extends Entity {
 		this.add(new RemoveComponent());
 	}
 	
-	public boolean mD(int x, int y) {
+	public boolean mouseDown(int x, int y) {
 		return false;
 	}
 	
-	public boolean mU(int x, int y) {
+	public boolean mouseUp(int x, int y) {
 		return false;
 	}
 	
-	public void mI(int x, int y) {
+	public void mouseIn(int x, int y) {
 	}
 	
-	public void mO(int x, int y) {
+	public void mouseOut(int x, int y) {
 	}
 	
 }
