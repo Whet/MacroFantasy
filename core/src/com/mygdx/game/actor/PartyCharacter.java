@@ -13,10 +13,15 @@ import com.mygdx.game.actor.enums.Race;
 import com.mygdx.game.actor.enums.Stat;
 import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitFlag;
+import com.mygdx.game.actor.traits.pools.PoolBard;
+import com.mygdx.game.actor.traits.pools.PoolCook;
 import com.mygdx.game.actor.traits.pools.PoolFemale;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
+import com.mygdx.game.actor.traits.pools.PoolAlchemist;
+import com.mygdx.game.actor.traits.pools.PoolHealer;
 import com.mygdx.game.actor.traits.pools.PoolMagic;
 import com.mygdx.game.actor.traits.pools.PoolMale;
+import com.mygdx.game.actor.traits.pools.PoolMerchant;
 import com.mygdx.game.actor.traits.pools.TraitPool;
 
 public class PartyCharacter {
@@ -38,7 +43,7 @@ public class PartyCharacter {
 	private int hunger, maxHunger;
 	private int gold, maxGold;
 	private int happiness, maxHappiness;
-	
+
 	private boolean vitalHealth, vitalMaxHealth;
 	private boolean vitalMana, vitalMaxMana;
 	private boolean vitalHunger, vitalMaxHunger;
@@ -59,6 +64,14 @@ public class PartyCharacter {
 	private TraitPool femaleTraitPool;
 	private TraitPool maleTraitPool;
 	private TraitPool magicTraitPool;
+	
+		//jobtraits
+	private TraitPool alchemistTraitPool;
+	private TraitPool bardTraitPool;
+	private TraitPool cookTraitPool;
+	private TraitPool healerTraitPool;
+	private TraitPool merchantTraitPool;
+	
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -84,12 +97,18 @@ public class PartyCharacter {
 		setVitalNeed(Need.MAXHUNGER, true, 0);
 		setVitalNeed(Need.MAXHAPPINESS, true, 0);
 		setVitalNeed(Need.MAXGOLD, false, 0);
-		
+
 		traits = new ArrayList<AbstractTrait>();
 		genericTraitPool = new PoolGeneric();
 		femaleTraitPool = new PoolFemale();
 		maleTraitPool = new PoolMale();
 		magicTraitPool = new PoolMagic();
+		
+		alchemistTraitPool = new PoolAlchemist();
+		bardTraitPool = new PoolBard();
+		cookTraitPool = new PoolCook();
+		healerTraitPool = new PoolHealer();
+		merchantTraitPool = new PoolMerchant();
 
 		setHasMagic(false);
 
@@ -240,7 +259,7 @@ public class PartyCharacter {
 	public CauseOfDeath getCauseOfDeath() {
 		return causeOfDeath;
 	}
-	
+
 	public void assignJob(Job job) {
 		this.job = job;
 	}
@@ -257,7 +276,46 @@ public class PartyCharacter {
 		jobSkills.put(job, skill);
 	}
 
+	
+	//adds positive trait every 50 skill points the first four times
 	public void incrementSkill(Job job, int increment) {
+		for (int i = 1; i < 5; i++)
+		{
+			if (jobSkills.get(job) < i * 50)
+			{
+				if (jobSkills.get(job) + increment > i * 50)
+				{
+					switch (job)
+					{
+					case ALCHEMIST:
+						if (!alchemistTraitPool.isPosNeuEmpty())
+							traits.add(alchemistTraitPool.getRandomTrait());
+						break;
+					case BARD:
+						if (!bardTraitPool.isPosNeuEmpty())
+							traits.add(bardTraitPool.getRandomTrait());
+						break;
+					case COOK:
+						if (!cookTraitPool.isPosNeuEmpty())
+							traits.add(cookTraitPool.getRandomTrait());
+						break;
+					case HEALER:
+						if (!healerTraitPool.isPosNeuEmpty())
+							traits.add(healerTraitPool.getRandomTrait());
+						break;
+					case MERCHANT:
+						if (!merchantTraitPool.isPosNeuEmpty())
+							traits.add(merchantTraitPool.getRandomTrait());
+						break;
+					}
+					break;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
 		jobSkills.put(job, jobSkills.get(job) + increment);
 	}
 
