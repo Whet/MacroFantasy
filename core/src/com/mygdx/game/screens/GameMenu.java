@@ -72,13 +72,13 @@ public class GameMenu extends Screen {
 	private UiImageEntity backgroundEntity;
 
 
-	public GameMenu(Engine engine, OrthographicCamera camera) {
+	public GameMenu(Location location, Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
 		this.cardMechanics = new CardMechanics(this);
 		characterBank = CharacterBank.getInstance();
 		cardButtons = new ArrayList<TextButtonEntity>();
 		characterUis = new ArrayList<CharacterUi>();
-		this.location = Location.TUTORIAL;
+		this.location = location;
 	}
 
 	@Override
@@ -568,16 +568,8 @@ public class GameMenu extends Screen {
 			@Override
 			public boolean mouseDown(int x, int y) {
 				
-				// TEMP
-				if(location == Location.TUTORIAL) {
-					location = Location.FOREST;
-				}
-				else if(location == Location.FOREST) {
-					location = Location.TUTORIAL;
-				}
-				
-				setBackground();
-				generateNewCards();
+				TravelScreen menu = new TravelScreen(engine, camera);
+				menu.load();
 				
 				return true;
 			}

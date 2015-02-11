@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.cards.Location;
 import com.mygdx.game.components.primitive.TextComponent;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
@@ -63,7 +64,7 @@ public class MainMenu extends Screen {
 			
 			@Override
 			public boolean mouseDown(int x, int y) {
-				GameMenu menu = new GameMenu(engine, camera);
+				GameMenu menu = new GameMenu(Location.TUTORIAL, engine, camera);
 				menu.load();
 				return true;
 			}
