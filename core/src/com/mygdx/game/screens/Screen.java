@@ -19,12 +19,15 @@ public abstract class Screen {
 	
 	public final void load() {
 		
-		// Remove all old entities before loading new ones
-		ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.getFor(RemoveComponent.class));
-		
-		for(int i = 0; i < entities.size(); i++) {
-			engine.removeEntity(entities.get(i));
+		do {
+			// Remove all old entities before loading new ones
+			ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.getFor(RemoveComponent.class));
+			
+			for(int i = 0; i < entities.size(); i++) {
+				engine.removeEntity(entities.get(i));
+			}
 		}
+		while(engine.getEntitiesFor(Family.getFor(RemoveComponent.class)).size() > 0);
 		
 		loadSystem();
 	}
