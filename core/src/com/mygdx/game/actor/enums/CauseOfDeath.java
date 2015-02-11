@@ -1,5 +1,5 @@
 package com.mygdx.game.actor.enums;
 
 public enum CauseOfDeath {
-	DEATH, DESERTION
+	GOLD, HAPPINESS, FOOD, HEALTH;
 }

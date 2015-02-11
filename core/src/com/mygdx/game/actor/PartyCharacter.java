@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.mygdx.game.actor.enums.CauseOfDeath;
+import com.mygdx.game.actor.enums.DeathType;
 import com.mygdx.game.actor.enums.Gender;
 import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
@@ -78,6 +79,7 @@ public class PartyCharacter {
 
 	private boolean alive;
 	private CauseOfDeath causeOfDeath;
+	private DeathType deathType;
 
 	public PartyCharacter()
 	{
@@ -246,18 +248,23 @@ public class PartyCharacter {
 	public boolean isAlive() {
 		return alive;
 	}
-
+	
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
 
-	public void setAlive(boolean alive, CauseOfDeath causeOfDeath) {
+	public void setAlive(boolean alive, DeathType deathType, CauseOfDeath causeOfDeath) {
 		this.alive = alive;
+		this.deathType = deathType;
 		this.causeOfDeath = causeOfDeath;
 	}
 
 	public CauseOfDeath getCauseOfDeath() {
 		return causeOfDeath;
+	}
+
+	public DeathType getDeathType() {
+		return deathType;
 	}
 
 	public void assignJob(Job job) {
@@ -642,16 +649,16 @@ public class PartyCharacter {
 		System.out.println(maxHunger + " " + trueMaxHunger);
 
 		if(isVitalNeed(Need.HEALTH) && health < vitalNeedThreshold.get(Need.HEALTH)) {
-			setAlive(false, CauseOfDeath.DEATH);
+			setAlive(false, DeathType.DEATH, CauseOfDeath.HEALTH);
 		}
 		if(isVitalNeed(Need.HUNGER) && trueHunger < vitalNeedThreshold.get(Need.HUNGER)) {
-			setAlive(false, CauseOfDeath.DEATH);
+			setAlive(false, DeathType.DEATH, CauseOfDeath.FOOD);
 		}
 		if(isVitalNeed(Need.HAPPINESS) && trueHappiness < vitalNeedThreshold.get(Need.HAPPINESS)) {
-			setAlive(false, CauseOfDeath.DESERTION);
+			setAlive(false, DeathType.DESERTION, CauseOfDeath.HAPPINESS);
 		}
 		if(isVitalNeed(Need.GOLD) && trueGold < vitalNeedThreshold.get(Need.GOLD)) {
-			setAlive(false, CauseOfDeath.DESERTION);
+			setAlive(false, DeathType.DESERTION, CauseOfDeath.GOLD);
 		}
 	}
 
@@ -730,5 +737,12 @@ public class PartyCharacter {
 	public ArrayList<AbstractTrait> getTraits() {
 		// TODO Auto-generated method stub
 		return traits;
+	}
+
+	public String getPronoun() {
+		if (getGender() == Gender.MALE)
+			return "he";
+		else
+			return "she";
 	}
 }

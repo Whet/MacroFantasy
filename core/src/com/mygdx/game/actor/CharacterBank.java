@@ -8,12 +8,12 @@ import com.mygdx.game.actor.enums.Job;
 public class CharacterBank {
 
 	private static final int PARTY_MEMBERS = 5;
-	
+
 	public static List<PartyCharacter> characters;
-	
+
 	public CharacterBank() {
 		CharacterBank.characters = new ArrayList<PartyCharacter>();
-		
+
 		for(int i = 0; i < PARTY_MEMBERS; i++) {
 			CharacterBank.characters.add(new PartyCharacter());
 		}
@@ -26,5 +26,13 @@ public class CharacterBank {
 		}
 		return false;
 	}
-	
+
+	public void addCharacter(PartyCharacter character) {
+		characters.add(character);
+	}
+
+	public void removeCharacter(PartyCharacter character) {
+		characters.remove(character);
+	}
+
 }

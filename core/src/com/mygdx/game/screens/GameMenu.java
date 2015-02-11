@@ -63,9 +63,9 @@ public class GameMenu extends Screen {
 	private List<CharacterUi> characterUis;
 
 	private CharacterStatMenu characterStatMenu;
-	
+
 	private Sound roosterSound;
-	
+
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -86,7 +86,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(backgroundEntity);
 
 		roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
-		
+
 		createDateBar();
 		createButtons();
 		createCharacterInfo();
@@ -163,11 +163,11 @@ public class GameMenu extends Screen {
 		bodyRegions.add(bodyTexture);
 		bodyRegions.add(headTexture);
 
-		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.characters.get(0));
-		addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.characters.get(1));
-		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.characters.get(2));
-		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.characters.get(3));
-		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.characters.get(4));
+		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, CharacterBank.characters.get(0));
+		addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, CharacterBank.characters.get(1));
+		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, CharacterBank.characters.get(2));
+		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, CharacterBank.characters.get(3));
+		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, CharacterBank.characters.get(4));
 
 		characterStatMenu = new CharacterStatMenu();
 		Texture skillBackground = new Texture("statMenuBack.png");
@@ -488,6 +488,23 @@ public class GameMenu extends Screen {
 		this.characterUis.add(characterUI);
 	}
 
+	private void removeCharacter(CharacterUi characterUi, PartyCharacter character) {
+		engine.removeEntity(characterUi.healthBar);
+		engine.removeEntity(characterUi.healthLabel);
+		if (character.hasMagic()) {
+			engine.removeEntity(characterUi.manaBar);
+			engine.removeEntity(characterUi.manaLabel);
+		}
+		engine.removeEntity(characterUi.happyBar);
+		engine.removeEntity(characterUi.happyLabel);
+		engine.removeEntity(characterUi.foodBar);
+		engine.removeEntity(characterUi.foodLabel);
+		engine.removeEntity(characterUi.goldBar);
+		engine.removeEntity(characterUi.goldLabel);
+		engine.removeEntity(characterUi.image);
+		engine.removeEntity(characterUi.name);
+	}
+
 	private void createButtons() {
 		Texture btnUp = new Texture("btnUp.png");
 		Texture btnDown = new Texture("btnDown.png");
@@ -728,23 +745,76 @@ public class GameMenu extends Screen {
 	}
 
 	public void updateCharacters() {
+		boolean characterGone = false;
+		ArrayList<CharacterUi> deadCharacterUis = new ArrayList<CharacterUi>();
 		for(CharacterUi characterUi:this.characterUis) {
 			PartyCharacter character = characterUi.image.getComponent(CharacterComponent.class).character;	
 			characterUi.name.setCharacter(characterUi.name.getComponent(CharacterComponent.class).character);
 			if(!character.isAlive()) {
 				// Show dead icon
-				switch(character.getCauseOfDeath())
+				characterGone = true;
+				deadCharacterUis.add(characterUi);
+				removeCharacter(characterUi, character);
+			}
+		}
+
+		if (characterGone) {
+			String message = "";
+			for (CharacterUi characterUi : deadCharacterUis)
+			{
+				PartyCharacter character = characterUi.image.getComponent(CharacterComponent.class).character;	
+				switch(character.getDeathType())
 				{
 				case DEATH:
+					message += "@" + character.getName() + " died";
+					switch (character.getCauseOfDeath())
+					{
+					case FOOD:
+						message += " because of hunger. You monster!";
+						break;
+					case GOLD:
+						message += " because " + character.getPronoun() + " ran out of gold.";
+						break;
+					case HAPPINESS:
+						message += " because " + character.getPronoun() + " was unhappy.";
+						break;
+					case HEALTH:
+						message += " due to their wounds.";
+						break;
+					default:
+						message += " because... erm.. I don't know. How'd did you get here?";
+						break;
+					}
 					characterUi.name.getComponent(TextComponent.class).text = character.getName() + " is dead D:";	
 					break;
 				case DESERTION:
+					message += "@" + character.getName() + " ran away";
+					switch (character.getCauseOfDeath())
+					{
+					case FOOD:
+						message += " because of hunger. You monster!";
+						break;
+					case GOLD:
+						message += " because " + character.getPronoun() + " ran out of gold.";
+						break;
+					case HAPPINESS:
+						message += " because " + character.getPronoun() + " was unhappy.";
+						break;
+					case HEALTH:
+						message += " due to their wounds.";
+						break;
+					default:
+						message += " because... erm.. I don't know. How'd did you get here?";
+						break;
+					}
 					characterUi.name.getComponent(TextComponent.class).text = character.getName() + " left the party :(";
 					break;
-				default:
-					break;
 				}
+				characterBank.removeCharacter(character);
+				characterBank.addCharacter(new PartyCharacter());
+				this.characterUis.remove(characterUi);
 			}
+			new PopUpMessage(message);
 		}
 	}
 
@@ -827,5 +897,79 @@ public class GameMenu extends Screen {
 				}
 		}
 	}
+
+	private class PopUpMessage  {
+
+		private TextButtonEntity closeText;
+		private TextEntity message;
+		private UiImageEntity background;
+
+		public PopUpMessage(String text) {
+
+			ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
+			for(int i = 0; i < buttons.size(); i++) {
+				buttons.get(i).getComponent(MultiTextureComponent.class).visible = false;
+				buttons.get(i).getComponent(TextComponent.class).visible = false;
+			}
+
+			Texture skillBackground = new Texture("popUpBack.png");
+			TextureRegion skillBackgroundTexture = new TextureRegion(skillBackground);
+
+			int x = Gdx.graphics.getWidth()/2 - skillBackgroundTexture.getRegionWidth()/2;
+			int y = Gdx.graphics.getHeight()/2 - skillBackgroundTexture.getRegionHeight()/4;
+
+
+			background = new UiImageEntity(x, y, skillBackgroundTexture);
+			background.getComponent(TextureComponent.class).visible = true;
+
+			message = new TextEntity();
+			message.getComponent(TextComponent.class).text = text;
+			message.getComponent(TextComponent.class).visible = true;
+			message.getComponent(UiPositionComponent.class).x = x;
+			message.getComponent(UiPositionComponent.class).y = y + background.getComponent(TextureComponent.class).region.getRegionHeight() - 20;
+
+
+			closeText = new TextButtonEntity() {
+				@Override
+				public boolean mD(int x, int y) {
+					hidePopUp();
+					return true;
+				}
+			};
+			closeText.getComponent(TextComponent.class).text = "Close";
+			closeText.getComponent(TextComponent.class).visible = true;
+			closeText.getComponent(UiPositionComponent.class).x = x + background.getComponent(TextureComponent.class).region.getRegionWidth() - 60;
+			closeText.getComponent(UiPositionComponent.class).y = y + background.getComponent(TextureComponent.class).region.getRegionHeight() - 20;
+
+			engine.addEntity(background);
+			engine.addEntity(closeText);
+			engine.addEntity(message);
+		}
+
+		private void hidePopUp() {
+
+			ImmutableArray<Entity> buttons = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, MultiTextureComponent.class, UiMouseActivityComponent.class, TextComponent.class));
+			for(int i = 0; i < buttons.size(); i++) {
+				buttons.get(i).getComponent(MultiTextureComponent.class).visible = true;
+				buttons.get(i).getComponent(TextComponent.class).visible = true;
+			}
+			ImmutableArray<Entity> cards = engine.getEntitiesFor(Family.getFor(CardDisplayComponent.class));
+			for(int i = 0; i < cards.size(); i++) {
+				cards.get(i).getComponent(MultiTextureComponent.class).visible = false;
+			}
+
+			characterStatMenu.alchIcon.getComponent(MultiTextureComponent.class).visible = false;
+			characterStatMenu.healerIcon.getComponent(MultiTextureComponent.class).visible = false;
+			characterStatMenu.cookIcon.getComponent(MultiTextureComponent.class).visible = false;
+			characterStatMenu.merchIcon.getComponent(MultiTextureComponent.class).visible = false;
+			characterStatMenu.bardIcon.getComponent(MultiTextureComponent.class).visible = false;
+
+			engine.removeEntity(background);
+			engine.removeEntity(closeText);
+			engine.removeEntity(message);
+
+		}
+	}
+
 
 }
