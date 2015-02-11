@@ -5,6 +5,7 @@ import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.Need;
 
 public class TraitConjureFeast extends AbstractTrait {
+	
 	public TraitConjureFeast() {
 		super();
 		name = "Conjure Feast";
@@ -14,13 +15,13 @@ public class TraitConjureFeast extends AbstractTrait {
 	
 	public void act(PartyCharacter pc) {
 		boolean isSomeoneStarving = false;
-		for (PartyCharacter character : CharacterBank.characters) {
+		for (PartyCharacter character : CharacterBank.getInstance().getCharacters()) {
 			if (character.getTrueNeed(Need.HUNGER) < 10)
 				isSomeoneStarving = true;
 		}
 		if (isSomeoneStarving && pc.getBaseNeed(Need.MANA) > 20) {
 			pc.incrementNeed(Need.MANA, -20);
-			for (PartyCharacter character : CharacterBank.characters) {
+			for (PartyCharacter character : CharacterBank.getInstance().getCharacters()) {
 				if (character.getTrueNeed(Need.HUNGER) < 10)
 					character.incrementNeed(Need.HUNGER, 10);;
 			}
