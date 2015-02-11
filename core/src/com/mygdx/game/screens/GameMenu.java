@@ -59,10 +59,13 @@ public class GameMenu extends Screen {
 	private TextEntity cardDescription;
 
 	private TextEntity date;
-	
+
 	private List<CharacterUi> characterUis;
 
 	private CharacterStatMenu characterStatMenu;
+	
+	private Sound roosterSound;
+	
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
@@ -70,6 +73,7 @@ public class GameMenu extends Screen {
 		this.cardMechanics = new CardMechanics(this, characterBank);
 		cardButtons = new ArrayList<TextButtonEntity>();
 		characterUis = new ArrayList<CharacterUi>();
+
 	}
 
 	@Override
@@ -81,13 +85,15 @@ public class GameMenu extends Screen {
 		UiImageEntity backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
 		engine.addEntity(backgroundEntity);
 
+		roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
+		
 		createDateBar();
 		createButtons();
 		createCharacterInfo();
 		createCards();
 
 	}
-	
+
 	private void createDateBar() {
 		date = new TextEntity();
 		date.getComponent(TextComponent.class).visible = true;
@@ -96,7 +102,7 @@ public class GameMenu extends Screen {
 		date.getComponent(UiPositionComponent.class).y = Gdx.graphics.getHeight() - 10;
 		engine.addEntity(date);
 	}
-	
+
 	public void updateDate() {
 		date.getComponent(TextComponent.class).text = Calendar.getInstance().getFullDate();
 	}
@@ -345,7 +351,7 @@ public class GameMenu extends Screen {
 	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, PartyCharacter character) {
 
 		CharacterUi characterUI = new CharacterUi();
-		
+
 		//Shove bars up if character doesn't use magic
 		int manaBarDisplacement = 15;
 		if (character.hasMagic())
@@ -404,10 +410,10 @@ public class GameMenu extends Screen {
 			manaLabel.setLabel(Need.MANA);
 			engine.addEntity(manaLabel);
 		}
-			
-			CharacterNeedBarEntity foodBar = new CharacterNeedBarEntity(x + 10, y - 45 + manaBarDisplacement, 100, 10, 0, character.getTrueNeed(Need.MAXHUNGER)) {
 
-			
+		CharacterNeedBarEntity foodBar = new CharacterNeedBarEntity(x + 10, y - 45 + manaBarDisplacement, 100, 10, 0, character.getTrueNeed(Need.MAXHUNGER)) {
+
+
 			@Override
 			public int getValue() {
 
@@ -532,7 +538,7 @@ public class GameMenu extends Screen {
 			@Override
 			public boolean mD(int x, int y) {
 				cardMechanics.endTurn();
-				Sound roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
+				roosterSound.stop();
 				roosterSound.play();
 				Calendar.getInstance().incrementDay(1);
 				updateDate();
@@ -723,14 +729,25 @@ public class GameMenu extends Screen {
 
 	public void updateCharacters() {
 		for(CharacterUi characterUi:this.characterUis) {
-			PartyCharacter character = characterUi.image.getComponent(CharacterComponent.class).character;
+			PartyCharacter character = characterUi.image.getComponent(CharacterComponent.class).character;	
+			characterUi.name.setCharacter(characterUi.name.getComponent(CharacterComponent.class).character);
 			if(!character.isAlive()) {
 				// Show dead icon
+				switch(character.getCauseOfDeath())
+				{
+				case DEATH:
+					characterUi.name.getComponent(TextComponent.class).text = character.getName() + " is dead D:";	
+					break;
+				case DESERTION:
+					characterUi.name.getComponent(TextComponent.class).text = character.getName() + " left the party :(";
+					break;
+				default:
+					break;
+				}
 			}
-			characterUi.name.setCharacter(characterUi.name.getComponent(CharacterComponent.class).character);
 		}
 	}
-	
+
 	private static class CharacterUi {
 		public TextEntity healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
 		public CharacterTextEntity name;
