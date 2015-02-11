@@ -21,7 +21,7 @@ public class CharacterImageEntity extends UiMultiButtonEntity {
 	}
 	
 	@Override
-	public boolean mU(int x, int y) {
+	public boolean mD(int x, int y) {
 		cardMechanics.chooseCharacter(this.getComponent(CharacterComponent.class).character);
 		return false;
 	}

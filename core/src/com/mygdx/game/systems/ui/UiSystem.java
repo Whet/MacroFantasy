@@ -43,6 +43,7 @@ import com.mygdx.game.entities.ui.BarEntity;
 import com.mygdx.game.entities.ui.CharacterImageEntity;
 import com.mygdx.game.entities.ui.TextButtonEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
+import com.mygdx.game.entities.ui.UiMultiButtonEntity;
 import com.mygdx.game.mouse.Mouse;
 import com.mygdx.game.mouse.Mouse.MousePos;
 import com.mygdx.game.sprites.SpriteAnimation;
@@ -309,7 +310,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 position.x + region.getRegionWidth() >= mousePos.x  &&
 									 position.y + region.getRegionHeight() >= mousePos.y;
 									 
-				CharacterImageEntity btn = (CharacterImageEntity) e;
+				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mD(mousePos.x, mousePos.y))
@@ -397,7 +398,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 position.x + region.getRegionWidth() >= mousePos.x  &&
 									 position.y + region.getRegionHeight() >= mousePos.y;
 									 
-				CharacterImageEntity btn = (CharacterImageEntity) e;
+				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					if(btn.mU(mousePos.x, mousePos.y))
