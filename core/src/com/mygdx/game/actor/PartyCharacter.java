@@ -648,16 +648,16 @@ public class PartyCharacter {
 		System.out.println(maxHealth + " " + trueMaxHealth);
 		System.out.println(maxHunger + " " + trueMaxHunger);
 
-		if(isVitalNeed(Need.HEALTH) && health < vitalNeedThreshold.get(Need.HEALTH)) {
+		if(isVitalNeed(Need.HEALTH) && health <= vitalNeedThreshold.get(Need.HEALTH)) {
 			setAlive(false, DeathType.DEATH, CauseOfDeath.HEALTH);
 		}
-		if(isVitalNeed(Need.HUNGER) && trueHunger < vitalNeedThreshold.get(Need.HUNGER)) {
+		if(isVitalNeed(Need.HUNGER) && trueHunger <= vitalNeedThreshold.get(Need.HUNGER)) {
 			setAlive(false, DeathType.DEATH, CauseOfDeath.FOOD);
 		}
-		if(isVitalNeed(Need.HAPPINESS) && trueHappiness < vitalNeedThreshold.get(Need.HAPPINESS)) {
+		if(isVitalNeed(Need.HAPPINESS) && trueHappiness <= vitalNeedThreshold.get(Need.HAPPINESS)) {
 			setAlive(false, DeathType.DESERTION, CauseOfDeath.HAPPINESS);
 		}
-		if(isVitalNeed(Need.GOLD) && trueGold < vitalNeedThreshold.get(Need.GOLD)) {
+		if(isVitalNeed(Need.GOLD) && trueGold <= vitalNeedThreshold.get(Need.GOLD)) {
 			setAlive(false, DeathType.DESERTION, CauseOfDeath.GOLD);
 		}
 	}

@@ -13,9 +13,9 @@ public class CardMechanics {
 	private CharacterBank characterBank;
 	private PartyCharacter chosenCharacter;
 	
-	public CardMechanics(GameMenu gameMenu, CharacterBank characterBank) {
+	public CardMechanics(GameMenu gameMenu) {
 		this.gameMenu = gameMenu;
-		this.characterBank = characterBank;
+		this.characterBank = CharacterBank.getInstance();
 	}
 	
 	public void chooseCharacter(PartyCharacter chosenCharacter) {
@@ -67,7 +67,7 @@ public class CardMechanics {
 		int happyBoost = 0;
 		int moneyBoost = 0;
 		
-		for (PartyCharacter character : CharacterBank.characters) {
+		for (PartyCharacter character : characterBank.getCharacters()) {
 			if(character.isAlive()) {
 				// Drain stats based on consumption rates
 				character.endTurn();
@@ -103,7 +103,7 @@ public class CardMechanics {
 		}
 		
 		// Go through all characters and give the bonuses
-		for (PartyCharacter character : CharacterBank.characters) {
+		for (PartyCharacter character : characterBank.getCharacters()) {
 			if(character.isAlive()) {
 				character.incrementNeed(Need.HEALTH, healthBoost);
 				character.incrementNeed(Need.MANA, manaBoost);

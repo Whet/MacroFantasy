@@ -69,8 +69,8 @@ public class GameMenu extends Screen {
 
 	public GameMenu(Engine engine, OrthographicCamera camera) {
 		super(engine, camera);
-		this.characterBank = new CharacterBank();
-		this.cardMechanics = new CardMechanics(this, characterBank);
+		this.cardMechanics = new CardMechanics(this);
+		characterBank = CharacterBank.getInstance();
 		cardButtons = new ArrayList<TextButtonEntity>();
 		characterUis = new ArrayList<CharacterUi>();
 
@@ -163,11 +163,11 @@ public class GameMenu extends Screen {
 		bodyRegions.add(bodyTexture);
 		bodyRegions.add(headTexture);
 
-		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, CharacterBank.characters.get(0));
-		addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, CharacterBank.characters.get(1));
-		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, CharacterBank.characters.get(2));
-		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, CharacterBank.characters.get(3));
-		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, CharacterBank.characters.get(4));
+		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(0));
+		addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(1));
+		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(2));
+		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(3));
+		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.getCharacters().get(4));
 
 		characterStatMenu = new CharacterStatMenu();
 		Texture skillBackground = new Texture("statMenuBack.png");
