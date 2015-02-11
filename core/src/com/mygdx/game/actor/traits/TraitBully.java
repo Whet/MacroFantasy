@@ -9,7 +9,6 @@ import com.mygdx.game.actor.enums.Need;
 public class TraitBully extends AbstractTrait {
 
 	Random rn;
-	CharacterBank characterBank;
 	
 	public TraitBully() {
 		super();
@@ -18,12 +17,12 @@ public class TraitBully extends AbstractTrait {
 		flags.add(TraitFlag.HAPPINESS);
 		flags.add(TraitFlag.NEGATIVE);
 		rn = new Random();
-		characterBank = CharacterBank.getInstance();
 	}
 	
 	public void act(PartyCharacter pc) {
-		PartyCharacter weakest = characterBank.getCharacters().get(0);
-		for (PartyCharacter character : characterBank.getCharacters()) {
+		CharacterBank instance = CharacterBank.getInstance();
+		PartyCharacter weakest = instance.getCharacters().get(0);
+		for (PartyCharacter character : instance.getCharacters()) {
 			if (character != weakest && character.getTrueNeed(Need.HEALTH) < weakest.getTrueNeed(Need.HEALTH))
 			{
 				weakest = character;
