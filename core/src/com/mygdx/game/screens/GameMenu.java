@@ -19,7 +19,6 @@ import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Stat;
 import com.mygdx.game.actor.traits.AbstractTrait;
-import com.mygdx.game.calendar.Calendar;
 import com.mygdx.game.cards.AdventureBuilder;
 import com.mygdx.game.cards.AdventureCard;
 import com.mygdx.game.cards.CardMechanics;
@@ -44,6 +43,7 @@ import com.mygdx.game.entities.ui.TextEntity;
 import com.mygdx.game.entities.ui.UiButtonEntity;
 import com.mygdx.game.entities.ui.UiImageEntity;
 import com.mygdx.game.utils.WordUtils;
+import com.mygdx.game.utils.calendar.Calendar;
 
 public class GameMenu extends Screen {
 
