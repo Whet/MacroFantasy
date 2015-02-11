@@ -22,6 +22,7 @@ public class MainMenu extends Screen {
 	@Override
 	public void loadSystem() {
 		
+		// Ui system handles drawing the ui objects and mouse events
 		engine.addSystem(new UiSystem(camera));
 
 		Texture btnUp = new Texture("btnUp.png");

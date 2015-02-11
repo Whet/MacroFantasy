@@ -50,6 +50,7 @@ import com.mygdx.game.sprites.SpriteAnimation;
 
 public class UiSystem extends EntitySystem implements InputProcessor {
 	
+	// Stores particular entities (Collections of components with added methods)
 	private ImmutableArray<Entity> uiImages;
 	private ImmutableArray<Entity> uiButtons;
 	private ImmutableArray<Entity> uiMultiButtons;
@@ -58,10 +59,12 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	private ImmutableArray<Entity> text;
 	private ImmutableArray<Entity> textButtons;
 	
+	// Rendering variables
 	private SpriteBatch batch;
 	private ShapeRenderer shape;
 	private OrthographicCamera camera;
 
+	// Lists containing all entities with given individual components
 	private ComponentMapper<UiPositionComponent> pm = ComponentMapper.getFor(UiPositionComponent.class);
 	private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
 	private ComponentMapper<MultiTextureComponent> tmm = ComponentMapper.getFor(MultiTextureComponent.class);
@@ -88,6 +91,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		exampleAnim = new SpriteAnimation("butts.txt", frameNames);
 	}
 
+	// Update lists of entities when something is added
 	@Override
 	public void addedToEngine (Engine engine) {
 		uiImages = engine.getEntitiesFor(Family.getFor(UiPositionComponent.class, TextureComponent.class));
@@ -312,6 +316,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		return false;
 	}
 
+	// Mouse down events
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		
@@ -400,6 +405,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		return true;
 	}
 
+	// Mouse up events
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		
