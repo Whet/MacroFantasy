@@ -240,11 +240,7 @@ public class PartyCharacter {
 	public CauseOfDeath getCauseOfDeath() {
 		return causeOfDeath;
 	}
-
-	public void assignJob() {
-		this.job = Job.randomJob();
-	}
-
+	
 	public void assignJob(Job job) {
 		this.job = job;
 	}
