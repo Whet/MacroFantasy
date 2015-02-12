@@ -12,11 +12,13 @@ import com.mygdx.game.actor.enums.Job;
 import com.mygdx.game.actor.enums.Need;
 import com.mygdx.game.actor.enums.Race;
 import com.mygdx.game.actor.enums.Stat;
+import com.mygdx.game.actor.enums.TraitPoolType;
 import com.mygdx.game.actor.traits.AbstractTrait;
 import com.mygdx.game.actor.traits.TraitFlag;
 import com.mygdx.game.actor.traits.pools.PoolBard;
 import com.mygdx.game.actor.traits.pools.PoolCook;
 import com.mygdx.game.actor.traits.pools.PoolFemale;
+import com.mygdx.game.actor.traits.pools.PoolForest;
 import com.mygdx.game.actor.traits.pools.PoolGeneric;
 import com.mygdx.game.actor.traits.pools.PoolAlchemist;
 import com.mygdx.game.actor.traits.pools.PoolHealer;
@@ -65,14 +67,15 @@ public class PartyCharacter {
 	private TraitPool femaleTraitPool;
 	private TraitPool maleTraitPool;
 	private TraitPool magicTraitPool;
-	
-		//jobtraits
+	private TraitPool forestTraitPool;
+
+	//jobtraits
 	private TraitPool alchemistTraitPool;
 	private TraitPool bardTraitPool;
 	private TraitPool cookTraitPool;
 	private TraitPool healerTraitPool;
 	private TraitPool merchantTraitPool;
-	
+
 	//Job
 	private Job job;
 	private HashMap<Job, Integer> jobSkills;
@@ -81,14 +84,15 @@ public class PartyCharacter {
 	private CauseOfDeath causeOfDeath;
 	private DeathType deathType;
 
+	private int diceRoll;
+
 	public PartyCharacter()
-	{
+	{	
 		//Initialise variables
 		setAlive(true);
 		jobSkills = new HashMap<Job, Integer>();
 		vitalNeedThreshold = new HashMap<Need, Integer>();
 
-		int diceRoll;
 		setVitalNeed(Need.HEALTH, true, 0);
 		setVitalNeed(Need.MANA, false, 0);
 		setVitalNeed(Need.HUNGER, true, 0);
@@ -105,12 +109,13 @@ public class PartyCharacter {
 		femaleTraitPool = new PoolFemale();
 		maleTraitPool = new PoolMale();
 		magicTraitPool = new PoolMagic();
-		
+
 		alchemistTraitPool = new PoolAlchemist();
 		bardTraitPool = new PoolBard();
 		cookTraitPool = new PoolCook();
 		healerTraitPool = new PoolHealer();
 		merchantTraitPool = new PoolMerchant();
+		forestTraitPool = new PoolForest();
 
 		setHasMagic(false);
 
@@ -140,53 +145,32 @@ public class PartyCharacter {
 		jobSkills.put(Job.MERCHANT, rn.nextInt(10));
 
 		//Assign 2 positive/neutral traits
-		if (!genericTraitPool.isPosNeuEmpty())
-			traits.add(genericTraitPool.getRandomTrait());
+		giveTrait(TraitPoolType.GENERIC);
+		giveTrait(TraitPoolType.GENERIC);
 
-
-		boolean hasRareTrait = false;
 		//20% chance of positive/neutral gender related trait
-		diceRoll = rn.nextInt(100);
-		if (diceRoll < 20)
-		{
-			if (!femaleTraitPool.isPosNeuEmpty() && getGender() == Gender.FEMALE)
-			{
-				traits.add(femaleTraitPool.getRandomTrait());
-				hasRareTrait = true;
-			}
-			else if (!maleTraitPool.isEmpty() && getGender() == Gender.MALE)
-			{
-				traits.add(maleTraitPool.getRandomTrait());
-				hasRareTrait = true;
-			}
-		}
+		if (getGender() == Gender.FEMALE)
+			giveTrait(TraitPoolType.FEMALE, 20);
+		else
+			giveTrait(TraitPoolType.MALE, 20);
 		//5% chance of positive/neutral magic related trait
-		diceRoll = rn.nextInt(100);
-		if (diceRoll < 5)
-		{
-			if(!magicTraitPool.isPosNeuEmpty())
-			{
-				traits.add(magicTraitPool.getRandomTrait());
-				setHasMagic(true);
-				hasRareTrait = true;
-			}
-		}
+		giveTrait(TraitPoolType.MAGIC, 5);
 		// otherwise normal trait
-		else if (!hasRareTrait && !genericTraitPool.isPosNeuEmpty())
-			traits.add(genericTraitPool.getRandomTrait());
 
-		//20% chance of gender related negative trait otherwise normal negative trait
+		giveTrait(TraitPoolType.GENERIC, 50);
+
 		diceRoll = rn.nextInt(100);
 		if (diceRoll < 20)
 		{
-			if (!femaleTraitPool.isNegativeEmpty() && getGender() == Gender.FEMALE)
-				traits.add(femaleTraitPool.getNegativeTrait());
-			else if (!maleTraitPool.isNegativeEmpty() && getGender() == Gender.MALE)
-				traits.add(maleTraitPool.getRandomTrait());
+			//20% chance of gender related negative trait otherwise normal negative trait
+			if (getGender() == Gender.FEMALE)
+				giveNegativeTrait(TraitPoolType.FEMALE);
+			else
+				giveNegativeTrait(TraitPoolType.MALE);
 		}
-		else if (!genericTraitPool.isNegativeEmpty())
+		else
 		{
-			traits.add(genericTraitPool.getNegativeTrait());
+			giveNegativeTrait(TraitPoolType.GENERIC);
 		}
 	}
 
@@ -248,7 +232,7 @@ public class PartyCharacter {
 	public boolean isAlive() {
 		return alive;
 	}
-	
+
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
@@ -283,7 +267,7 @@ public class PartyCharacter {
 		jobSkills.put(job, skill);
 	}
 
-	
+
 	//adds positive trait every 50 skill points the first four times
 	public void incrementSkill(Job job, int increment) {
 		for (int i = 1; i < 5; i++)
@@ -645,8 +629,8 @@ public class PartyCharacter {
 			t.act(this);	//Any other crazy changes to needs are done here.
 		}
 
-//		System.out.println(maxHealth + " " + trueMaxHealth);
-//		System.out.println(maxHunger + " " + trueMaxHunger);
+		//		System.out.println(maxHealth + " " + trueMaxHealth);
+		//		System.out.println(maxHunger + " " + trueMaxHunger);
 
 		if(isVitalNeed(Need.HEALTH) && health <= vitalNeedThreshold.get(Need.HEALTH)) {
 			setAlive(false, DeathType.DEATH, CauseOfDeath.HEALTH);
@@ -688,6 +672,7 @@ public class PartyCharacter {
 		}
 		return false;
 	}
+
 	public void setVitalNeed(Need need, boolean value, Integer threshold) {
 		switch (need)
 		{
@@ -745,4 +730,109 @@ public class PartyCharacter {
 		else
 			return "she";
 	}
+
+	public void giveTrait(TraitPoolType tPT) {
+		giveTrait(tPT, 100);
+	}
+	
+	public void giveTrait(TraitPoolType tPT, int percentageChance)
+	{
+		switch(tPT) {
+		case FOREST:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !forestTraitPool.isPosNeuEmpty())
+				traits.add(forestTraitPool.getRandomTrait());
+			break;
+		case ALCHEMIST:
+			break;
+		case BARD:
+			break;
+		case COOK:
+			break;
+		case HEALER:
+			break;
+		case MERCHANT:
+			break;
+		case MALE:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !maleTraitPool.isPosNeuEmpty())
+				traits.add(maleTraitPool.getRandomTrait());
+			break;
+		case FEMALE:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !femaleTraitPool.isPosNeuEmpty())
+				traits.add(femaleTraitPool.getRandomTrait());
+			break;
+		case GENERIC:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !genericTraitPool.isPosNeuEmpty())
+				traits.add(genericTraitPool.getRandomTrait());
+			break;
+		case MAGIC:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !magicTraitPool.isPosNeuEmpty())
+				traits.add(magicTraitPool.getRandomTrait());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void giveNegativeTrait(TraitPoolType tPT) {
+		giveNegativeTrait(tPT, 100);
+	}
+
+	public void giveNegativeTrait(TraitPoolType tPT, int percentageChance)
+	{
+		switch(tPT) {
+		case FOREST:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !forestTraitPool.isNegativeEmpty())
+				traits.add(forestTraitPool.getNegativeTrait());
+			break;
+		case ALCHEMIST:
+			break;
+		case BARD:
+			break;
+		case COOK:
+			break;
+		case HEALER:
+			break;
+		case MERCHANT:
+			break;
+		case MALE:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !maleTraitPool.isNegativeEmpty())
+				traits.add(maleTraitPool.getNegativeTrait());
+			break;
+		case FEMALE:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !femaleTraitPool.isNegativeEmpty())
+				traits.add(femaleTraitPool.getNegativeTrait());
+			break;
+		case GENERIC:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !genericTraitPool.isNegativeEmpty())
+				traits.add(genericTraitPool.getNegativeTrait());
+			break;
+		case MAGIC:
+			//20% chance of positive/neutral related trait
+			diceRoll = rn.nextInt(100);
+			if (diceRoll < percentageChance && !magicTraitPool.isNegativeEmpty())
+				traits.add(magicTraitPool.getNegativeTrait());
+			break;
+		default:
+			break;
+		}
+	}
+
 }
