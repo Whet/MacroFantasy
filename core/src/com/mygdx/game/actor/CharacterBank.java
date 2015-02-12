@@ -23,7 +23,7 @@ public class CharacterBank {
 	}
 	
 	
-	public CharacterBank() {
+	private CharacterBank() {
 		characters = new ArrayList<PartyCharacter>();
 
 		for(int i = 0; i < PARTY_MEMBERS; i++) {
