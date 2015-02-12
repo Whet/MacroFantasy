@@ -22,7 +22,7 @@ public class TextComponent extends Component {
 		this.text = text;
 		this.visible = true;
 		this.maxCharsPerLine = 40;
-		this.font = new BitmapFont(Gdx.files.internal("althea.fnt"), Gdx.files.internal("althea.png"), false);
-		this.font.setScale(0.7f);
+		this.font = new BitmapFont(Gdx.files.internal("font/apple.fnt"), Gdx.files.internal("font/apple.png"), false);
+		this.font.setScale(0.3f);
 	}
 }

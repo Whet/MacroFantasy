@@ -360,6 +360,16 @@ public class GameMenu extends Screen {
 	private void addCharacterImage(int x, int y, int index, List<TextureRegion> bodyRegions, PartyCharacter character) {
 
 		CharacterUi characterUI = new CharacterUi();
+		
+		//Adds character background
+		
+		Texture characterBackground = new Texture("characterBackground.png");
+		TextureRegion characterBackgroundTexture = new TextureRegion(characterBackground);
+
+		UiImageEntity characterBackgroundEntity = new UiImageEntity(x-52, y-100, characterBackgroundTexture);
+		characterBackgroundEntity.getComponent(TextureComponent.class).visible = true;
+		
+		engine.addEntity(characterBackgroundEntity);
 
 		//Shove bars up if character doesn't use magic
 		int manaBarDisplacement = 15;
@@ -561,8 +571,8 @@ public class GameMenu extends Screen {
 	}
 
 	private void createButtons() {
-		Texture btnUp = new Texture("btnUp.png");
-		Texture btnDown = new Texture("btnDown.png");
+		Texture btnUp = new Texture("stoneBtnUp.png");
+		Texture btnDown = new Texture("stoneBtnDown.png");
 		TextureRegion btnUpTextureRegion = new TextureRegion(btnUp);
 		TextureRegion btnDownTextureRegion = new TextureRegion(btnDown);
 		List<TextureRegion> btnRegions = new ArrayList<TextureRegion>();

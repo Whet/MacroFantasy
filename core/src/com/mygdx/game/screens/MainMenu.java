@@ -26,8 +26,8 @@ public class MainMenu extends Screen {
 		// Ui system handles drawing the ui objects and mouse events
 		engine.addSystem(new UiSystem(camera));
 
-		Texture btnUp = new Texture("btnUp.png");
-		Texture btnDown = new Texture("btnDown.png");
+		Texture btnUp = new Texture("stoneBtnUp.png");
+		Texture btnDown = new Texture("stoneBtnUp.png");
 		
 		Texture background = new Texture("mainMenuBackground.png");
 
