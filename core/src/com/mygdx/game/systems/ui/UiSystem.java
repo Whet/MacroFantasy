@@ -28,6 +28,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -121,8 +122,6 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 		stateTime += deltaTime;
 		exampleAnim.update(stateTime);
 		
-		BitmapFont font = new BitmapFont();
-
 		camera.update();
 
 		batch.begin();
@@ -164,7 +163,7 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 				batch.draw(region, position.x, position.y);
 				
 				if(text.visible) {
-					font.draw(batch, text.text, position.x + 15, position.y + 30);
+					text.font.draw(batch, text.text, position.x + 15, position.y + 30);
 				}
 			}
 		}
@@ -185,13 +184,13 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 						sb.append(text.text.charAt(index));
 					}
 					else {
-						font.draw(batch, sb.toString(), position.x, position.y - 20 * line);
+						text.font.draw(batch, sb.toString(), position.x, position.y - 20 * line);
 						sb = new StringBuffer();
 						line++;
 					}
 					index++;
 				}
-				font.draw(batch, sb.toString(), position.x, position.y - 20 * line);
+				text.font.draw(batch, sb.toString(), position.x, position.y - 20 * line);
 			}
 		}
 		for (int i = 0; i < bars.size(); ++i) {
@@ -388,11 +387,13 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			if(text.visible) {
 				MousePos mousePos = Mouse.getMouse();
 				
-				boolean isInBounds = position.x <= mousePos.x &&
-									 position.y <= mousePos.y &&
-									 position.x + 50 >= mousePos.x  &&
-									 position.y + 50 >= mousePos.y;
-									 
+				TextBounds bounds = text.font.getBounds(text.text);
+				
+				boolean isInBounds = mousePos.x > position.x &&
+						mousePos.y < position.y &&
+						mousePos.x < position.x + bounds.width &&
+						mousePos.y > position.y - bounds.height;
+						
 				TextButtonEntity btn = (TextButtonEntity) e;
 				
 				if(isInBounds && mouse.mouseActive) {
@@ -477,10 +478,12 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 			if(text.visible) {
 				MousePos mousePos = Mouse.getMouse();
 				
-				boolean isInBounds = position.x <= mousePos.x &&
-									 position.y <= mousePos.y &&
-									 position.x + 50 >= mousePos.x  &&
-									 position.y + 50 >= mousePos.y;
+				TextBounds bounds = text.font.getBounds(text.text);
+				
+				boolean isInBounds = mousePos.x > position.x &&
+						mousePos.y < position.y &&
+						mousePos.x < position.x + bounds.width &&
+						mousePos.y > position.y - bounds.height;
 									 
 				TextButtonEntity btn = (TextButtonEntity) e;
 				
