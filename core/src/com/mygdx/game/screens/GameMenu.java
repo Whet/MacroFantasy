@@ -191,10 +191,17 @@ public class GameMenu extends Screen {
 		bodyRegions.add(headTexture);
 
 		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(0));
-		addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(1));
-		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(2));
-		addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(3));
-		addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.getCharacters().get(4));
+		if(characterBank.getCharacters().size() > 1)
+			addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(1));
+		
+		if(characterBank.getCharacters().size() > 2)
+			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(2));
+		
+		if(characterBank.getCharacters().size() > 3)
+			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(3));
+		
+		if(characterBank.getCharacters().size() > 4)
+			addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.getCharacters().get(4));
 
 		characterStatMenu = new CharacterStatMenu();
 		Texture skillBackground = new Texture("statMenuBack.png");
@@ -831,7 +838,6 @@ public class GameMenu extends Screen {
 					break;
 				}
 				characterBank.removeCharacter(character);
-				characterBank.addCharacter(new PartyCharacter());
 				this.characterUis.remove(characterUi);
 			}
 			new PopUpMessage(message);
