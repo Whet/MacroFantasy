@@ -357,7 +357,7 @@ public class GameMenu extends Screen {
 		engine.addEntity(characterStatMenu.merchIcon);
 	}
 
-	private void addCharacterImage(int x, int y, List<TextureRegion> bodyRegions, PartyCharacter character) {
+	private void addCharacterImage(int x, int y, int index, List<TextureRegion> bodyRegions, PartyCharacter character) {
 
 		CharacterUi characterUI = new CharacterUi();
 
@@ -494,12 +494,7 @@ public class GameMenu extends Screen {
 		name.setCharacter(character);
 		engine.addEntity(name);
 
-		for(int i = 0; i < characterUis.length; i++) {
-			if(characterUis[i] == null) {
-				characterUis[i] = characterUI;
-				break;
-			}
-		}
+		characterUis[index] = characterUI;
 	}
 	
 	public void addNewCharacterUI() {
@@ -513,27 +508,27 @@ public class GameMenu extends Screen {
 		bodyRegions.add(headTexture);
 		
 		if(characterUis[0] == null && characterBank.getCharacters()[0] != null) {
-			addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters()[0]);
+			addCharacterImage(50, Gdx.graphics.getHeight() - 200, 0, bodyRegions, characterBank.getCharacters()[0]);
 			System.out.println("INDEX 0");
 		}
 		
 		if(characterUis[1] == null && characterBank.getCharacters()[1] != null) {
-			addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters()[1]);
+			addCharacterImage(50, Gdx.graphics.getHeight() - 600, 1, bodyRegions, characterBank.getCharacters()[1]);
 			System.out.println("INDEX 1");
 		}
 		
 		if(characterUis[2] == null && characterBank.getCharacters()[2] != null) {
-			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters()[2]);
+			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, 2, bodyRegions, characterBank.getCharacters()[2]);
 			System.out.println("INDEX 2");
 		}
 		
 		if(characterUis[3] == null && characterBank.getCharacters()[3] != null) {
-			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters()[3]);
+			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, 3, bodyRegions, characterBank.getCharacters()[3]);
 			System.out.println("INDEX 3");
 		}
 		
 		if(characterUis[4] == null && characterBank.getCharacters()[4] != null) {
-			addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.getCharacters()[4]);
+			addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, 4, bodyRegions, characterBank.getCharacters()[4]);
 			System.out.println("INDEX 4");
 		}
 	}
