@@ -360,8 +360,8 @@ public class GameMenu extends Screen {
 	private void addCharacterImage(int x, int y, int index, List<TextureRegion> bodyRegions, PartyCharacter character) {
 
 		CharacterUi characterUI = new CharacterUi();
-		
-		//Adds character background
+
+//Adds character background
 		
 		Texture characterBackground = new Texture("characterBackground.png");
 		TextureRegion characterBackgroundTexture = new TextureRegion(characterBackground);
