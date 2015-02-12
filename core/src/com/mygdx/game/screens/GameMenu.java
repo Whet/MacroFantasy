@@ -61,7 +61,7 @@ public class GameMenu extends Screen {
 
 	private TextEntity date;
 
-	private List<CharacterUi> characterUis;
+	private CharacterUi characterUis[];
 
 	private CharacterStatMenu characterStatMenu;
 
@@ -77,7 +77,7 @@ public class GameMenu extends Screen {
 		this.cardMechanics = new CardMechanics(this);
 		characterBank = CharacterBank.getInstance();
 		cardButtons = new ArrayList<TextButtonEntity>();
-		characterUis = new ArrayList<CharacterUi>();
+		characterUis = new CharacterUi[5];
 		this.location = location;
 	}
 
@@ -87,9 +87,7 @@ public class GameMenu extends Screen {
 		Texture background = new Texture("mainMenuBackground.png");
 		TextureRegion backgroundRegion = new TextureRegion(background);
 		backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
-		
 		setBackground();
-		
 		engine.addEntity(backgroundEntity);
 
 		roosterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/rooster.ogg"));
@@ -182,27 +180,9 @@ public class GameMenu extends Screen {
 	}
 
 	private void createCharacterInfo() {
-		Texture head = new Texture("headPlaceholder.png");
-		Texture body = new Texture("bodyPlaceholder.png");
-		TextureRegion headTexture = new TextureRegion(head);
-		TextureRegion bodyTexture = new TextureRegion(body);
-		List<TextureRegion> bodyRegions = new ArrayList<TextureRegion>();
-		bodyRegions.add(bodyTexture);
-		bodyRegions.add(headTexture);
 
-		addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(0));
-		if(characterBank.getCharacters().size() > 1)
-			addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(1));
+		addNewCharacterUI();
 		
-		if(characterBank.getCharacters().size() > 2)
-			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters().get(2));
-		
-		if(characterBank.getCharacters().size() > 3)
-			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters().get(3));
-		
-		if(characterBank.getCharacters().size() > 4)
-			addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.getCharacters().get(4));
-
 		characterStatMenu = new CharacterStatMenu();
 		Texture skillBackground = new Texture("statMenuBack.png");
 		TextureRegion skillBackgroundTexture = new TextureRegion(skillBackground);
@@ -514,10 +494,52 @@ public class GameMenu extends Screen {
 		name.setCharacter(character);
 		engine.addEntity(name);
 
-		this.characterUis.add(characterUI);
+		for(int i = 0; i < characterUis.length; i++) {
+			if(characterUis[i] == null) {
+				characterUis[i] = characterUI;
+				break;
+			}
+		}
+	}
+	
+	public void addNewCharacterUI() {
+		
+		Texture head = new Texture("headPlaceholder.png");
+		Texture body = new Texture("bodyPlaceholder.png");
+		TextureRegion headTexture = new TextureRegion(head);
+		TextureRegion bodyTexture = new TextureRegion(body);
+		List<TextureRegion> bodyRegions = new ArrayList<TextureRegion>();
+		bodyRegions.add(bodyTexture);
+		bodyRegions.add(headTexture);
+		
+		if(characterUis[0] == null && characterBank.getCharacters()[0] != null) {
+			addCharacterImage(50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters()[0]);
+			System.out.println("INDEX 0");
+		}
+		
+		if(characterUis[1] == null && characterBank.getCharacters()[1] != null) {
+			addCharacterImage(50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters()[1]);
+			System.out.println("INDEX 1");
+		}
+		
+		if(characterUis[2] == null && characterBank.getCharacters()[2] != null) {
+			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 200, bodyRegions, characterBank.getCharacters()[2]);
+			System.out.println("INDEX 2");
+		}
+		
+		if(characterUis[3] == null && characterBank.getCharacters()[3] != null) {
+			addCharacterImage(Gdx.graphics.getWidth() - bodyTexture.getRegionWidth() - 50, Gdx.graphics.getHeight() - 600, bodyRegions, characterBank.getCharacters()[3]);
+			System.out.println("INDEX 3");
+		}
+		
+		if(characterUis[4] == null && characterBank.getCharacters()[4] != null) {
+			addCharacterImage(Gdx.graphics.getWidth()/2 - bodyTexture.getRegionWidth()/2, 100, bodyRegions, characterBank.getCharacters()[4]);
+			System.out.println("INDEX 4");
+		}
 	}
 
 	private void removeCharacter(CharacterUi characterUi, PartyCharacter character) {
+		System.out.println("Removed " + character.getName());
 		engine.removeEntity(characterUi.healthBar);
 		engine.removeEntity(characterUi.healthLabel);
 		if (character.hasMagic()) {
@@ -532,6 +554,15 @@ public class GameMenu extends Screen {
 		engine.removeEntity(characterUi.goldLabel);
 		engine.removeEntity(characterUi.image);
 		engine.removeEntity(characterUi.name);
+		characterBank.removeCharacter(character);
+		
+		// Remove character
+		for(int i = 0; i < characterUis.length; i++) {
+			if(characterUis[i] == characterUi) {
+				System.out.println("INDEX " + i);
+				characterUis[i] = null;
+			}
+		}
 	}
 
 	private void createButtons() {
@@ -775,6 +806,10 @@ public class GameMenu extends Screen {
 		boolean characterGone = false;
 		ArrayList<CharacterUi> deadCharacterUis = new ArrayList<CharacterUi>();
 		for(CharacterUi characterUi:this.characterUis) {
+			
+			if(characterUi == null)
+				continue;
+			
 			PartyCharacter character = characterUi.image.getComponent(CharacterComponent.class).character;	
 			characterUi.name.setCharacter(characterUi.name.getComponent(CharacterComponent.class).character);
 			if(!character.isAlive()) {
@@ -837,8 +872,6 @@ public class GameMenu extends Screen {
 					characterUi.name.getComponent(TextComponent.class).text = character.getName() + " left the party :(";
 					break;
 				}
-				characterBank.removeCharacter(character);
-				this.characterUis.remove(characterUi);
 			}
 			new PopUpMessage(message);
 		}
@@ -995,6 +1028,5 @@ public class GameMenu extends Screen {
 
 		}
 	}
-
 
 }

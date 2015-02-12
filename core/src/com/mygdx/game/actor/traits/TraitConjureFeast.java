@@ -15,13 +15,13 @@ public class TraitConjureFeast extends AbstractTrait {
 	
 	public void act(PartyCharacter pc) {
 		boolean isSomeoneStarving = false;
-		for (PartyCharacter character : CharacterBank.getInstance().getCharacters()) {
+		for (PartyCharacter character : CharacterBank.getInstance().getIterableCharacters()) {
 			if (character.getTrueNeed(Need.HUNGER) < 10)
 				isSomeoneStarving = true;
 		}
 		if (isSomeoneStarving && pc.getBaseNeed(Need.MANA) > 20) {
 			pc.incrementNeed(Need.MANA, -20);
-			for (PartyCharacter character : CharacterBank.getInstance().getCharacters()) {
+			for (PartyCharacter character : CharacterBank.getInstance().getIterableCharacters()) {
 				if (character.getTrueNeed(Need.HUNGER) < 10)
 					character.incrementNeed(Need.HUNGER, 10);;
 			}

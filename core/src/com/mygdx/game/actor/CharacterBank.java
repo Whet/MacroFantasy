@@ -10,7 +10,7 @@ public class CharacterBank {
 
 	private static final int PARTY_MEMBERS = 5;
 
-	private List<PartyCharacter> characters;
+	private PartyCharacter[] characters;
 
 	private static CharacterBank instance;
 	
@@ -24,31 +24,52 @@ public class CharacterBank {
 	
 	
 	private CharacterBank() {
-		characters = new ArrayList<PartyCharacter>();
+		characters = new PartyCharacter[5];
 
 		for(int i = 0; i < PARTY_MEMBERS; i++) {
-			characters.add(new PartyCharacter());
+			characters[i] = new PartyCharacter();
 		}
 	}
 
 	public boolean isAssignedJob(Job job) {
-		for(PartyCharacter character:characters) {
+		for(PartyCharacter character:getIterableCharacters()) {
 			if(character.getJob() == job)
 				return true;
 		}
 		return false;
 	}
 
-	public List<PartyCharacter> getCharacters() {
+	public List<PartyCharacter> getIterableCharacters() {
+		List<PartyCharacter> characters = new ArrayList<PartyCharacter>();
+		
+		for(PartyCharacter character:this.characters) {
+			if(character != null)
+				characters.add(character);
+		}
+		
+		return characters;
+	}
+	
+	public PartyCharacter[] getCharacters() {
 		return characters;
 	}
 	
 	public void addCharacter(PartyCharacter character) {
-		characters.add(character);
+		for(int i = 0; i < characters.length; i++) {
+			if(characters[i] == null) {
+				characters[i] = character;
+				break;
+			}
+		}
 	}
 
 	public void removeCharacter(PartyCharacter character) {
-		characters.remove(character);
+		for(int i = 0; i < characters.length; i++) {
+			if(characters[i] == character) {
+				characters[i] = null;
+				break;
+			}
+		}
 	}
 
 }

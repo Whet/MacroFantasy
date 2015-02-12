@@ -3,7 +3,6 @@ package com.mygdx.game.cards;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.Need;
-import com.mygdx.game.screens.GameMenu;
 
 public class AdventureBuilder {
 	
@@ -28,7 +27,7 @@ public class AdventureBuilder {
 			@Override
 			public void act() {
 				cardMechanics.getChosenCharacter().incrementNeed(Need.GOLD, 10);
-				cardMechanics.getChosenCharacter().incrementNeed(Need.HEALTH, -10);
+				cardMechanics.getChosenCharacter().incrementNeed(Need.HEALTH, -100);
 			}
 		};
 		
@@ -60,15 +59,15 @@ public class AdventureBuilder {
 			
 			@Override
 			public void act() {
-				if(characterBank.getCharacters().size() < 5)
-					characterBank.addCharacter(new PartyCharacter());
+				if(characterBank.getIterableCharacters().size() < 5)
+					cardMechanics.addNewCharacter(new PartyCharacter());
 			}
 		}, new AdventureEffect() {
 			
 			@Override
 			public void act() {
-				if(characterBank.getCharacters().size() < 5)
-					characterBank.addCharacter(new PartyCharacter());
+				if(characterBank.getIterableCharacters().size() < 5)
+					cardMechanics.addNewCharacter(new PartyCharacter());
 			}
 		}){
 			@Override

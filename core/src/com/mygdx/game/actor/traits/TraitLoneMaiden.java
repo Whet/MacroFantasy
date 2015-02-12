@@ -16,7 +16,7 @@ public class TraitLoneMaiden extends AbstractTrait {
 
 	public void act(PartyCharacter pc) {
 		boolean onlyFemale = true;
-		for (PartyCharacter character : CharacterBank.getInstance().getCharacters()) {
+		for (PartyCharacter character : CharacterBank.getInstance().getIterableCharacters()) {
 			if (character.getGender() == Gender.FEMALE && !character.equals(pc)){
 				onlyFemale = false;
 			}

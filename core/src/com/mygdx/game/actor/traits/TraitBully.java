@@ -21,8 +21,8 @@ public class TraitBully extends AbstractTrait {
 	
 	public void act(PartyCharacter pc) {
 		CharacterBank instance = CharacterBank.getInstance();
-		PartyCharacter weakest = instance.getCharacters().get(0);
-		for (PartyCharacter character : instance.getCharacters()) {
+		PartyCharacter weakest = instance.getIterableCharacters().get(0);
+		for (PartyCharacter character : instance.getIterableCharacters()) {
 			if (character != weakest && character.getTrueNeed(Need.HEALTH) < weakest.getTrueNeed(Need.HEALTH))
 			{
 				weakest = character;

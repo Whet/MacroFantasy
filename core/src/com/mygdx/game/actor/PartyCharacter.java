@@ -645,8 +645,8 @@ public class PartyCharacter {
 			t.act(this);	//Any other crazy changes to needs are done here.
 		}
 
-		System.out.println(maxHealth + " " + trueMaxHealth);
-		System.out.println(maxHunger + " " + trueMaxHunger);
+//		System.out.println(maxHealth + " " + trueMaxHealth);
+//		System.out.println(maxHunger + " " + trueMaxHunger);
 
 		if(isVitalNeed(Need.HEALTH) && health <= vitalNeedThreshold.get(Need.HEALTH)) {
 			setAlive(false, DeathType.DEATH, CauseOfDeath.HEALTH);

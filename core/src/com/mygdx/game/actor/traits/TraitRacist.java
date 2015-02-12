@@ -15,7 +15,7 @@ public class TraitRacist extends AbstractTrait {
 
 	public void act(PartyCharacter pc) {
 		boolean otherRacePresent = false;
-		for (PartyCharacter character : CharacterBank.getInstance().getCharacters()) {
+		for (PartyCharacter character : CharacterBank.getInstance().getIterableCharacters()) {
 			if (character.getRace() != pc.getRace()){
 				otherRacePresent = true;
 			}

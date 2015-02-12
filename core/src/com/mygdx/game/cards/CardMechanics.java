@@ -1,5 +1,6 @@
 package com.mygdx.game.cards;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.actor.CharacterBank;
 import com.mygdx.game.actor.PartyCharacter;
 import com.mygdx.game.actor.enums.Job;
@@ -67,7 +68,8 @@ public class CardMechanics {
 		int happyBoost = 0;
 		int moneyBoost = 0;
 		
-		for (PartyCharacter character : characterBank.getCharacters()) {
+		for (PartyCharacter character : characterBank.getIterableCharacters()) {
+			
 			if(character.isAlive()) {
 				// Drain stats based on consumption rates
 				character.endTurn();
@@ -103,7 +105,7 @@ public class CardMechanics {
 		}
 		
 		// Go through all characters and give the bonuses
-		for (PartyCharacter character : characterBank.getCharacters()) {
+		for (PartyCharacter character : characterBank.getIterableCharacters()) {
 			if(character.isAlive()) {
 				character.incrementNeed(Need.HEALTH, healthBoost);
 				character.incrementNeed(Need.MANA, manaBoost);
@@ -116,6 +118,12 @@ public class CardMechanics {
 		// Update for characters dying and showing leaving message
 		gameMenu.updateCharacters();
 		gameMenu.generateNewCards();
+	}
+	
+	public void addNewCharacter(PartyCharacter character) {
+		System.out.println("Added " + character.getName());
+		characterBank.addCharacter(character);
+		gameMenu.addNewCharacterUI();
 	}
 	
 }
