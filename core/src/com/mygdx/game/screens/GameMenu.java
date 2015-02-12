@@ -361,13 +361,15 @@ public class GameMenu extends Screen {
 
 		CharacterUi characterUI = new CharacterUi();
 
-//Adds character background
+		//Adds character background
 		
 		Texture characterBackground = new Texture("characterBackground.png");
 		TextureRegion characterBackgroundTexture = new TextureRegion(characterBackground);
 
 		UiImageEntity characterBackgroundEntity = new UiImageEntity(x-52, y-100, characterBackgroundTexture);
 		characterBackgroundEntity.getComponent(TextureComponent.class).visible = true;
+		
+		characterUI.background = characterBackgroundEntity;
 		
 		engine.addEntity(characterBackgroundEntity);
 
@@ -559,6 +561,8 @@ public class GameMenu extends Screen {
 		engine.removeEntity(characterUi.goldLabel);
 		engine.removeEntity(characterUi.image);
 		engine.removeEntity(characterUi.name);
+		engine.removeEntity(characterUi.name);
+		engine.removeEntity(characterUi.background);
 		characterBank.removeCharacter(character);
 		
 		// Remove character
@@ -883,6 +887,7 @@ public class GameMenu extends Screen {
 	}
 
 	private static class CharacterUi {
+		public UiImageEntity background;
 		public TextEntity healthLabel, manaLabel, foodLabel, happyLabel, goldLabel;
 		public CharacterTextEntity name;
 		public CharacterImageEntity image;
