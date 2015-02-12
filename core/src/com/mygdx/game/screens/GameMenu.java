@@ -84,7 +84,7 @@ public class GameMenu extends Screen {
 	@Override
 	protected void loadSystem() {
 
-		Texture background = new Texture("mainMenuBackground.png");
+		Texture background = new Texture("images/bg/backgroundTutorial.png");
 		TextureRegion backgroundRegion = new TextureRegion(background);
 		backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
 		setBackground();
@@ -105,10 +105,10 @@ public class GameMenu extends Screen {
 		
 		switch(this.location) {
 			case FOREST:
-				background = new Texture("forestBackground.png");
+				background = new Texture("images/bg/backgroundForest.png");
 			break;
 			case TUTORIAL:
-				background = new Texture("mainMenuBackground.png");
+				background = new Texture("images/bg/backgroundTutorial.png");
 			break;
 			default:
 			break;
@@ -133,8 +133,8 @@ public class GameMenu extends Screen {
 	}
 
 	private void createCards() {
-		Texture cardOff = new Texture("cardBack.png");
-		Texture cardIn = new Texture("cardBackSelected.png");
+		Texture cardOff = new Texture("images/cardBack.png");
+		Texture cardIn = new Texture("images/cardBackSelected.png");
 		TextureRegion cardOffTexture = new TextureRegion(cardOff);
 		TextureRegion cardInTexture = new TextureRegion(cardIn);
 		List<TextureRegion> cardRegions = new ArrayList<TextureRegion>();
@@ -157,7 +157,7 @@ public class GameMenu extends Screen {
 			engine.addEntity(card);
 		}
 
-		Texture cardFront = new Texture("cardFront.png");
+		Texture cardFront = new Texture("images/cardFront.png");
 		TextureRegion cardFrontTexture = new TextureRegion(cardFront);
 		cardFrontEntity = new UiImageEntity(cardX + cardFrontTexture.getRegionWidth()/2, cardY - cardFrontTexture.getRegionHeight()/4, cardFrontTexture);
 		cardFrontEntity.getComponent(TextureComponent.class).visible = false;
@@ -184,7 +184,7 @@ public class GameMenu extends Screen {
 		addNewCharacterUI();
 		
 		characterStatMenu = new CharacterStatMenu();
-		Texture skillBackground = new Texture("statMenuBack.png");
+		Texture skillBackground = new Texture("images/character/statMenuBack.png");
 		TextureRegion skillBackgroundTexture = new TextureRegion(skillBackground);
 
 		int cardX = Gdx.graphics.getWidth()/2;
@@ -246,7 +246,7 @@ public class GameMenu extends Screen {
 		int iconY = y + characterStatMenu.background.getComponent(TextureComponent.class).region.getRegionHeight() - 98;
 
 		List<TextureRegion> region = new ArrayList<TextureRegion>();
-		Texture icon1 = new Texture("healerIcon.png");
+		Texture icon1 = new Texture("images/jobicons/healerIcon.png");
 		TextureRegion icon1Texture = new TextureRegion(icon1);
 		region.add(icon1Texture);
 		region.add(icon1Texture);
@@ -264,7 +264,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.healerIcon.getComponent(UiPositionComponent.class).y = iconY;
 
 		region = new ArrayList<TextureRegion>();
-		icon1 = new Texture("alchemistIcon.png");
+		icon1 = new Texture("images/jobicons/alchemistIcon.png");
 		icon1Texture = new TextureRegion(icon1);
 		region.add(icon1Texture);
 		region.add(icon1Texture);
@@ -282,7 +282,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.alchIcon.getComponent(UiPositionComponent.class).y = iconY - 40;
 
 		region = new ArrayList<TextureRegion>();
-		icon1 = new Texture("chefIcon.png");
+		icon1 = new Texture("images/jobicons/chefIcon.png");
 		icon1Texture = new TextureRegion(icon1);
 		region.add(icon1Texture);
 		region.add(icon1Texture);
@@ -300,7 +300,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.cookIcon.getComponent(UiPositionComponent.class).y = iconY - 80;
 
 		region = new ArrayList<TextureRegion>();
-		icon1 = new Texture("bardIcon.png");
+		icon1 = new Texture("images/jobicons/bardIcon.png");
 		icon1Texture = new TextureRegion(icon1);
 		region.add(icon1Texture);
 		region.add(icon1Texture);
@@ -318,7 +318,7 @@ public class GameMenu extends Screen {
 		characterStatMenu.bardIcon.getComponent(UiPositionComponent.class).y = iconY - 120;
 
 		region = new ArrayList<TextureRegion>();
-		icon1 = new Texture("merchantIcon.png");
+		icon1 = new Texture("images/jobicons/merchantIcon.png");
 		icon1Texture = new TextureRegion(icon1);
 		region.add(icon1Texture);
 		region.add(icon1Texture);
@@ -363,7 +363,7 @@ public class GameMenu extends Screen {
 
 		//Adds character background
 		
-		Texture characterBackground = new Texture("characterBackground.png");
+		Texture characterBackground = new Texture("images/character/characterBackground.png");
 		TextureRegion characterBackgroundTexture = new TextureRegion(characterBackground);
 
 		UiImageEntity characterBackgroundEntity = new UiImageEntity(x-52, y-100, characterBackgroundTexture);
@@ -511,8 +511,8 @@ public class GameMenu extends Screen {
 	
 	public void addNewCharacterUI() {
 		
-		Texture head = new Texture("headPlaceholder.png");
-		Texture body = new Texture("bodyPlaceholder.png");
+		Texture head = new Texture("images/character/headPlaceholder.png");
+		Texture body = new Texture("images/character/bodyPlaceholder.png");
 		TextureRegion headTexture = new TextureRegion(head);
 		TextureRegion bodyTexture = new TextureRegion(body);
 		List<TextureRegion> bodyRegions = new ArrayList<TextureRegion>();
@@ -575,8 +575,8 @@ public class GameMenu extends Screen {
 	}
 
 	private void createButtons() {
-		Texture btnUp = new Texture("stoneBtnUp.png");
-		Texture btnDown = new Texture("stoneBtnDown.png");
+		Texture btnUp = new Texture("images/btn/stoneBtnUp.png");
+		Texture btnDown = new Texture("images/btn/stoneBtnDown.png");
 		TextureRegion btnUpTextureRegion = new TextureRegion(btnUp);
 		TextureRegion btnDownTextureRegion = new TextureRegion(btnDown);
 		List<TextureRegion> btnRegions = new ArrayList<TextureRegion>();
@@ -981,7 +981,7 @@ public class GameMenu extends Screen {
 				buttons.get(i).getComponent(TextComponent.class).visible = false;
 			}
 
-			Texture skillBackground = new Texture("popUpBack.png");
+			Texture skillBackground = new Texture("images/popUpBack.png");
 			TextureRegion skillBackgroundTexture = new TextureRegion(skillBackground);
 
 			int x = Gdx.graphics.getWidth()/2 - skillBackgroundTexture.getRegionWidth()/2;

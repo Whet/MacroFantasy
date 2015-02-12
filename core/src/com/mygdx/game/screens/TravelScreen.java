@@ -21,15 +21,15 @@ public class TravelScreen extends Screen {
 
 	@Override
 	protected void loadSystem() {
-		Texture background = new Texture("travelBackground.png");
+		Texture background = new Texture("images/bg/backgroundTravel.png");
 		TextureRegion backgroundRegion = new TextureRegion(background);
 		backgroundEntity = new UiImageEntity(0, 0, backgroundRegion);
 		this.engine.addEntity(backgroundEntity);
 		
-		Texture travelNodeOn = new Texture("travelNodeOn.png");
+		Texture travelNodeOn = new Texture("images/travelNodeOn.png");
 		TextureRegion travelNodeOnRegion = new TextureRegion(travelNodeOn);
 		
-		Texture travelNodeOff = new Texture("travelNodeOff.png");
+		Texture travelNodeOff = new Texture("images/travelNodeOff.png");
 		TextureRegion travelNodeOffRegion = new TextureRegion(travelNodeOff);
 		
 		makeTravelButton(1000,80,Location.TUTORIAL, travelNodeOnRegion, travelNodeOffRegion);
