@@ -47,9 +47,8 @@ public class MainMenu extends Screen {
 			}
 			
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				System.exit(0);
-				return true;
 			}
 			
 		};
@@ -63,10 +62,9 @@ public class MainMenu extends Screen {
 			}
 			
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				GameMenu menu = new GameMenu(Location.TUTORIAL, engine, camera);
 				menu.load();
-				return true;
 			}
 			
 		};

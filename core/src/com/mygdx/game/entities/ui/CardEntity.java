@@ -15,12 +15,14 @@ public class CardEntity extends UiButtonEntity {
 	}
 	
 	@Override
-	public boolean mouseDown(int x, int y) {
+	public boolean mouseDown(int x, int y, int button) {
+		super.mouseDown(x, y, button);
 		return false;
 	}
 	
 	@Override
-	public boolean mouseUp(int x, int y) {
+	public boolean mouseUp(int x, int y, int button) {
+		super.mouseUp(x, y, button);
 		return false;
 	}
 	

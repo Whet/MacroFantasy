@@ -319,7 +319,6 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 	// Mouse down events
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		
 		UiPositionComponent position;
 		MultiTextureComponent multiVisual;
 		MultiRegionComponent multiRegion;
@@ -345,9 +344,10 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				UiButtonEntity btn = (UiButtonEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mouseDown(mousePos.x, mousePos.y))
+				if(isInBounds && mouse.mouseActive) {
+					if(btn.mouseDown(mousePos.x, mousePos.y, button)){
 						break;
+					}
 				}
 			}
 			
@@ -371,8 +371,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mouseDown(mousePos.x, mousePos.y))
+				if(isInBounds && mouse.mouseActive) {
+					if(btn.mouseDown(mousePos.x, mousePos.y, button))
 						break;
 				}
 			}
@@ -395,8 +395,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				TextButtonEntity btn = (TextButtonEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mouseDown(mousePos.x, mousePos.y))
+				if(isInBounds && mouse.mouseActive) {
+					if(btn.mouseDown(mousePos.x, mousePos.y, button))
 						break;
 				}
 			}
@@ -434,8 +434,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				UiButtonEntity btn = (UiButtonEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mouseUp(mousePos.x, mousePos.y))
+				if(isInBounds && mouse.mouseActive) {
+					if(btn.mouseUp(mousePos.x, mousePos.y, button))
 						break;
 				}
 			}
@@ -460,8 +460,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				UiMultiButtonEntity btn = (UiMultiButtonEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mouseUp(mousePos.x, mousePos.y))
+				if(isInBounds && mouse.mouseActive) {
+					if(btn.mouseUp(mousePos.x, mousePos.y, button))
 						break;
 				}
 			}
@@ -484,8 +484,8 @@ public class UiSystem extends EntitySystem implements InputProcessor {
 									 
 				TextButtonEntity btn = (TextButtonEntity) e;
 				
-				if(isInBounds && mouse.mouseActive && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					if(btn.mouseUp(mousePos.x, mousePos.y))
+				if(isInBounds && mouse.mouseActive) {
+					if(btn.mouseUp(mousePos.x, mousePos.y, button))
 						break;
 				}
 			}

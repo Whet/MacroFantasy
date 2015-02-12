@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.primitive.MultiRegionComponent;
 import com.mygdx.game.components.primitive.RemoveComponent;
 import com.mygdx.game.components.primitive.TextComponent;
+import com.mygdx.game.components.ui.UiButtonDownComponent;
 import com.mygdx.game.components.ui.UiMouseActivityComponent;
 import com.mygdx.game.components.ui.UiPositionComponent;
 
@@ -14,6 +15,7 @@ public class UiMultiButtonEntity extends Entity {
 
 	public UiMultiButtonEntity(int x, int y, List<TextureRegion> region) {
 		this.add(new UiPositionComponent(x, y));
+		this.add(new UiButtonDownComponent(false));
 		this.add(new MultiRegionComponent(region));
 		this.add(new UiMouseActivityComponent());
 		this.add(new TextComponent(""));
@@ -28,11 +30,15 @@ public class UiMultiButtonEntity extends Entity {
 		this.add(new RemoveComponent());
 	}
 	
-	public boolean mouseDown(int x, int y) {
+	public boolean mouseDown(int x, int y, int button) {
+		this.getComponent(UiButtonDownComponent.class).down = true;
 		return false;
 	}
 	
-	public boolean mouseUp(int x, int y) {
+	public boolean mouseUp(int x, int y, int button) {
+		if(this.getComponent(UiButtonDownComponent.class).down)
+			this.mouseClick(button);
+		this.getComponent(UiButtonDownComponent.class).down = false;
 		return false;
 	}
 	
@@ -42,4 +48,6 @@ public class UiMultiButtonEntity extends Entity {
 	public void mouseOut(int x, int y) {
 	}
 	
+	public void mouseClick(int button) {
+	}
 }

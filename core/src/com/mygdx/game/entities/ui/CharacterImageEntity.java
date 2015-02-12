@@ -21,10 +21,7 @@ public class CharacterImageEntity extends UiMultiButtonEntity {
 	}
 	
 	@Override
-	public boolean mouseDown(int x, int y) {
+	public void mouseClick(int button) {
 		cardMechanics.chooseCharacter(this.getComponent(CharacterComponent.class).character);
-		return false;
 	}
-	
-	
 }

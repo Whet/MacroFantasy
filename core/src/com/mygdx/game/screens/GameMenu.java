@@ -149,10 +149,10 @@ public class GameMenu extends Screen {
 		for(int i = 0; i < CARD_CHOICES; i++) {
 			CardEntity card = new CardEntity(cardX + (int)(cardOffTexture.getRegionWidth() * 1.5 * i), cardY, cardRegions) {
 				@Override
-				public boolean mouseDown(int x, int y) {
+				public boolean mouseDown(int x, int y, int button) {
 					cardMechanics.chooseCard(this.getComponent(CardDisplayComponent.class).card);
 					showChosenCard();
-					return super.mouseDown(x, y);
+					return super.mouseDown(x, y, button);
 				}
 			};
 			card.getComponent(MultiTextureComponent.class).visible = false;
@@ -239,9 +239,8 @@ public class GameMenu extends Screen {
 
 		characterStatMenu.closeText = new TextButtonEntity() {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				hideStatMenu();
-				return true;
 			}
 		};
 		characterStatMenu.closeText.getComponent(TextComponent.class).text = "Close";
@@ -266,13 +265,12 @@ public class GameMenu extends Screen {
 		region.add(icon1Texture);
 		characterStatMenu.healerIcon = new UiButtonEntity(x, y, region) {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				if(!characterBank.isAssignedJob(Job.HEALER)) {
 					characterStatMenu.getCharacter().assignJob(Job.HEALER);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
-				return true;
 			}
 		};
 		characterStatMenu.healerIcon.getComponent(UiPositionComponent.class).x = iconX;
@@ -285,13 +283,12 @@ public class GameMenu extends Screen {
 		region.add(icon1Texture);
 		characterStatMenu.alchIcon = new UiButtonEntity(x, y, region) {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				if(!characterBank.isAssignedJob(Job.ALCHEMIST)) {
 					characterStatMenu.getCharacter().assignJob(Job.ALCHEMIST);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
-				return true;
 			}
 		};
 		characterStatMenu.alchIcon.getComponent(UiPositionComponent.class).x = iconX;
@@ -304,13 +301,12 @@ public class GameMenu extends Screen {
 		region.add(icon1Texture);
 		characterStatMenu.cookIcon = new UiButtonEntity(x, y, region) {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				if(!characterBank.isAssignedJob(Job.COOK)) {
 					characterStatMenu.getCharacter().assignJob(Job.COOK);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
-				return true;
 			}
 		};
 		characterStatMenu.cookIcon.getComponent(UiPositionComponent.class).x = iconX;
@@ -323,13 +319,12 @@ public class GameMenu extends Screen {
 		region.add(icon1Texture);
 		characterStatMenu.bardIcon = new UiButtonEntity(x, y, region) {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				if(!characterBank.isAssignedJob(Job.BARD)) {
 					characterStatMenu.getCharacter().assignJob(Job.BARD);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
-				return true;
 			}
 		};
 		characterStatMenu.bardIcon.getComponent(UiPositionComponent.class).x = iconX;
@@ -342,13 +337,13 @@ public class GameMenu extends Screen {
 		region.add(icon1Texture);
 		characterStatMenu.merchIcon = new UiButtonEntity(x, y, region) {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				if(!characterBank.isAssignedJob(Job.MERCHANT)) {
 					characterStatMenu.getCharacter().assignJob(Job.MERCHANT);
 					characterStatMenu.updateIcons(characterBank);
 					updateCharacters();
 				}
-				return true;
+//				return true;
 			}
 		};
 		characterStatMenu.merchIcon.getComponent(UiPositionComponent.class).x = iconX;
@@ -551,9 +546,8 @@ public class GameMenu extends Screen {
 			}
 
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				showCards();
-				return true;
 			}
 
 		};
@@ -566,12 +560,9 @@ public class GameMenu extends Screen {
 			}
 
 			@Override
-			public boolean mouseDown(int x, int y) {
-				
+			public void mouseClick(int button) {
 				TravelScreen menu = new TravelScreen(engine, camera);
 				menu.load();
-				
-				return true;
 			}
 
 		};
@@ -584,13 +575,12 @@ public class GameMenu extends Screen {
 			}
 
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				cardMechanics.endTurn();
 				roosterSound.stop();
 				roosterSound.play();
 				Calendar.getInstance().incrementDay(1);
 				updateDate();
-				return true;
 			}
 
 		};
@@ -644,9 +634,8 @@ public class GameMenu extends Screen {
 				}
 
 				@Override
-				public boolean mouseDown(int x, int y) {
+				public void mouseClick(int button) {
 					cardMechanics.makeChoice(choiceFinal);
-					return true;
 				}
 			});
 		}
@@ -962,9 +951,8 @@ public class GameMenu extends Screen {
 
 			closeText = new TextButtonEntity() {
 				@Override
-				public boolean mouseDown(int x, int y) {
+				public void mouseClick(int button) {
 					hidePopUp();
-					return true;
 				}
 			};
 			closeText.getComponent(TextComponent.class).text = "Close";

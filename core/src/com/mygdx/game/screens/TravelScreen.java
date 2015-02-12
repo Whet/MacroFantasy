@@ -42,10 +42,9 @@ public class TravelScreen extends Screen {
 		regions.add(travelNodeOnRegion);
 		UiButtonEntity button = new UiButtonEntity(x, y, regions) {
 			@Override
-			public boolean mouseDown(int x, int y) {
+			public void mouseClick(int button) {
 				GameMenu gameMenu = new GameMenu(location, engine, camera);
 				gameMenu.load();
-				return true;
 			}
 		};
 		engine.addEntity(button);
